@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Сравнение стран — Геодезия за рубежом</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="layout">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="index.html" class="brand">🧭 Геодезия за рубежом</a>
+    <div class="site-nav-links">
+      <a href="index.html">Главная</a>
+      <a href="compare.html" class="active">Сравнение стран</a>
+      <a href="unis.html">Вузы и программы</a>
+      <a href="money.html">Деньги</a>
+      <a href="visa.html">Визы</a>
+      <a href="lang.html">Языки и экзамены</a>
+      <a href="video.html">Видео</a>
+      <a href="fx.html">Курс валют</a>
+    </div>
+  </div>
+</nav>
+
+<div class="doc">
+  <div class="section-num">01</div>
+  <h2>⚖️ Сравнение стран</h2>
+  <p class="lede">Суммы в рублях пересчитываются по текущему курсу (страница «Курс валют»).</p>
+
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>Страна</th>
+          <th>Программа</th>
+          <th>Язык</th>
+          <th>Шанс поступления*</th>
+          <th>Учёба, ₽ / год</th>
+          <th>Жизнь, ₽ / мес</th>
+          <th>Накопить минимум, ₽</th>
+          <th>Стипендии</th>
+          <th>Виза</th>
+          <th>Приоритет</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="crit">🇮🇹 Италия</td>
+          <td class="v-good">Geoinformatics EN</td>
+          <td class="v-good">Английский</td>
+          <td class="v-good">Хороший</td>
+          <td class="v-good num"><span class="rub" data-eur-min="0" data-eur-max="3900" data-note="с DSU ≈0">—</span></td>
+          <td class="num"><span class="rub" data-eur-min="800" data-eur-max="1500">—</span></td>
+          <td class="v-good num"><span class="rub" data-eur-min="3000" data-eur-max="5000">—</span></td>
+          <td class="v-good">DSU, Merit</td>
+          <td class="v-mid">Средняя +</td>
+          <td class="v-good">1</td>
+        </tr>
+        <tr>
+          <td class="crit">🇩🇪 Германия</td>
+          <td class="v-good">Geodesy EN</td>
+          <td class="v-good">Английский</td>
+          <td class="v-good">Хороший</td>
+          <td class="v-good num"><span class="rub" data-eur-min="300" data-eur-max="700">—</span></td>
+          <td class="num"><span class="rub" data-eur-min="850" data-eur-max="1200">—</span></td>
+          <td class="v-mid num"><span class="rub" data-eur-min="5000" data-eur-max="8000">—</span></td>
+          <td class="v-good">DAAD</td>
+          <td class="v-bad">Высокая сложность</td>
+          <td class="v-good">2</td>
+        </tr>
+        <tr>
+          <td class="crit">🇨🇳 Китай</td>
+          <td class="v-good">Surveying &amp; Mapping / GIS</td>
+          <td class="v-good">EN-трек / китайский</td>
+          <td class="v-good">Хороший</td>
+          <td class="v-good num"><span class="rub" data-usd-min="3000" data-usd-max="5000">—</span></td>
+          <td class="v-good num"><span class="rub" data-usd-min="400" data-usd-max="700">—</span></td>
+          <td class="v-good num"><span class="rub" data-usd-min="5000" data-usd-max="8000">—</span></td>
+          <td class="v-good">CSC, вузовские</td>
+          <td class="v-mid">Средняя</td>
+          <td class="v-good">3</td>
+        </tr>
+        <tr>
+          <td class="crit">🇵🇱 Польша</td>
+          <td class="v-good">Geodesy EN/PL</td>
+          <td class="v-good">Англ. / польский</td>
+          <td class="v-good">Хороший</td>
+          <td class="v-good num"><span class="rub" data-eur-min="0" data-eur-max="2500">—</span></td>
+          <td class="v-good num"><span class="rub" data-eur-min="500" data-eur-max="900">—</span></td>
+          <td class="v-good num"><span class="rub" data-eur-min="3000" data-eur-max="5000">—</span></td>
+          <td>Вузовские / гос.</td>
+          <td class="v-good">Проще (ЕС)</td>
+          <td class="v-good">4</td>
+        </tr>
+        <tr>
+          <td class="crit">🇨🇿 Чехия</td>
+          <td class="v-good">Geodesy EN</td>
+          <td class="v-good">Английский</td>
+          <td class="v-good">Хороший</td>
+          <td class="num"><span class="rub" data-eur-min="2000" data-eur-max="4000">—</span></td>
+          <td class="v-good num"><span class="rub" data-eur-min="500" data-eur-max="900">—</span></td>
+          <td class="v-good num"><span class="rub" data-eur-min="3000" data-eur-max="5000">—</span></td>
+          <td>Вузовские</td>
+          <td class="v-good">Проще (ЕС)</td>
+          <td>5</td>
+        </tr>
+        <tr>
+          <td class="crit">🇦🇷 Аргентина</td>
+          <td>Геодезия (исп.)</td>
+          <td>Испанский</td>
+          <td>Средний +</td>
+          <td class="v-good num"><span class="rub" data-usd-min="0" data-usd-max="500">—</span></td>
+          <td class="num"><span class="rub" data-usd-min="800" data-usd-max="1500">—</span></td>
+          <td class="v-good num"><span class="rub" data-usd-min="3000" data-usd-max="5000">—</span></td>
+          <td>Слабые</td>
+          <td>Средняя</td>
+          <td>6</td>
+        </tr>
+        <tr>
+          <td class="crit">🇵🇹 Португалия</td>
+          <td>Geospatial</td>
+          <td>Порт. / англ.</td>
+          <td>Средний</td>
+          <td class="num"><span class="rub" data-eur-min="1000" data-eur-max="3500">—</span></td>
+          <td class="v-good num"><span class="rub" data-eur-min="600" data-eur-max="1000">—</span></td>
+          <td class="num"><span class="rub" data-eur-min="4000" data-eur-max="7000">—</span></td>
+          <td>Ограниченно</td>
+          <td>Средняя</td>
+          <td>7</td>
+        </tr>
+        <tr>
+          <td class="crit">🇪🇸 Испания</td>
+          <td>Geodésica (исп.)</td>
+          <td>Испанский</td>
+          <td>Средний</td>
+          <td class="v-bad num"><span class="rub" data-eur-min="1500" data-eur-max="5000">—</span></td>
+          <td class="num"><span class="rub" data-eur-min="700" data-eur-max="1400">—</span></td>
+          <td class="v-bad num"><span class="rub" data-eur-min="6000" data-eur-max="9000">—</span></td>
+          <td>Средние</td>
+          <td class="v-mid">Средняя +</td>
+          <td>8</td>
+        </tr>
+        <tr>
+          <td class="crit">🇺🇸 США</td>
+          <td>Geodetic Science</td>
+          <td class="v-good">Английский</td>
+          <td class="v-mid">Конкурс выше</td>
+          <td class="v-bad num"><span class="rub" data-usd-min="28000" data-usd-max="40000" data-note="без ассистентства">—</span></td>
+          <td class="v-bad num"><span class="rub" data-usd-min="1200" data-usd-max="2000">—</span></td>
+          <td class="v-bad num"><span class="rub" data-usd-min="35000" data-usd-max="45000">—</span></td>
+          <td class="v-mid">GTA/GRA-ассистентства</td>
+          <td class="v-mid">Средняя +</td>
+          <td>9</td>
+        </tr>
+        <tr>
+          <td class="crit">🇳🇱 Нидерланды</td>
+          <td class="v-good">Geomatics EN</td>
+          <td class="v-good">Английский</td>
+          <td class="v-mid">Высокий конкурс</td>
+          <td class="v-bad num"><span class="rub" data-eur-min="10000" data-eur-max="24000">—</span></td>
+          <td class="v-bad num"><span class="rub" data-eur-min="1000" data-eur-max="1600">—</span></td>
+          <td class="v-bad num"><span class="rub" data-eur-min="15000" data-eur-max="20000">—</span></td>
+          <td>Ограниченно</td>
+          <td class="v-mid">Средняя +</td>
+          <td>10</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="table-note">* при наличии профильного инженерного бакалавриата (строительство, геодезия, картография, ГИС и смежные направления).</p>
+
+  <h3>Стоимость проживания в месяц — визуально</h3>
+  <div class="chart-box"><canvas id="chartLiving"></canvas></div>
+</div>
+</div>
+
+<footer>
+  Курсы: ЦБ РФ → open.er-api.com → currency-api (резервные источники, если основной недоступен).
+</footer>
+
+<script src="rates.js"></script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Курс валют — Геодезия за рубежом</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="layout">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="index.html" class="brand">🧭 Геодезия за рубежом</a>
+    <div class="site-nav-links">
+      <a href="index.html">Главная</a>
+      <a href="compare.html">Сравнение стран</a>
+      <a href="unis.html">Вузы и программы</a>
+      <a href="money.html">Деньги</a>
+      <a href="visa.html">Визы</a>
+      <a href="lang.html">Языки и экзамены</a>
+      <a href="video.html">Видео</a>
+      <a href="fx.html" class="active">Курс валют</a>
+    </div>
+  </div>
+</nav>
+
+<div class="doc">
+  <div class="section-num">06</div>
+  <h2>💱 Курс валют и конвертер</h2>
+  <p class="lede">Вспомогательный инструмент для пересчёта сумм — не влияет на основной план.</p>
+
+  <div class="fx-bar" id="ratesBar">
+    <div class="fx-rates">
+      <span>EUR → ₽ <span class="num" id="rateEur">—</span></span>
+      <span>USD → ₽ <span class="num" id="rateUsd">—</span></span>
+    </div>
+    <div class="fx-meta">
+      <span id="ratesUpdated">Загрузка курса…</span>
+      <span id="ratesSource"></span>
+      <button id="refreshRates" type="button">Обновить</button>
+    </div>
+  </div>
+  <div class="fx-error" id="ratesError" style="display:none"></div>
+
+  <div class="chart-box" style="height:220px"><canvas id="chartFx"></canvas></div>
+
+  <h3>Конвертер сумм</h3>
+  <div class="converter">
+    <div class="converter-row">
+      <div class="conv-field">
+        <label>Отдаёте</label>
+        <div class="row">
+          <input type="number" id="convFromAmt" value="1000" min="0" step="any" inputmode="decimal">
+          <select id="convFromCur">
+            <option value="RUB">₽ RUB</option>
+            <option value="EUR" selected>€ EUR</option>
+            <option value="USD">$ USD</option>
+          </select>
+        </div>
+      </div>
+      <div class="conv-swap"><button type="button" id="convSwap" title="Поменять местами">⇄</button></div>
+      <div class="conv-field">
+        <label>Получаете</label>
+        <div class="row">
+          <input type="number" id="convToAmt" readonly>
+          <select id="convToCur">
+            <option value="RUB" selected>₽ RUB</option>
+            <option value="EUR">€ EUR</option>
+            <option value="USD">$ USD</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="conv-result" id="convHint">1 EUR = — ₽ · 1 USD = — ₽</div>
+  </div>
+</div>
+</div>
+
+<footer>
+  Курсы: ЦБ РФ → open.er-api.com → currency-api (резервные источники, если основной недоступен).
+</footer>
+
+<script src="rates.js"></script>
+</body>
+</html>

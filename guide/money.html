@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Деньги и накопления — Геодезия за рубежом</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="layout">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="index.html" class="brand">🧭 Геодезия за рубежом</a>
+    <div class="site-nav-links">
+      <a href="index.html">Главная</a>
+      <a href="compare.html">Сравнение стран</a>
+      <a href="unis.html">Вузы и программы</a>
+      <a href="money.html" class="active">Деньги</a>
+      <a href="visa.html">Визы</a>
+      <a href="lang.html">Языки и экзамены</a>
+      <a href="video.html">Видео</a>
+      <a href="fx.html">Курс валют</a>
+    </div>
+  </div>
+</nav>
+
+<div class="doc">
+  <div class="section-num">03</div>
+  <h2>💰 Деньги и накопления</h2>
+  <p class="lede">Все суммы пересчитаны в рубли по текущему курсу <span id="moneyRateNote"></span>.</p>
+
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Страна</th><th>Учёба / год</th><th>Жизнь / мес</th><th>Накопить минимум</th><th>Комфортнее</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="crit">Италия + DSU</td>
+          <td class="v-good">часто ≈ 0</td>
+          <td class="num"><span class="rub" data-eur-min="800" data-eur-max="1500">—</span></td>
+          <td class="v-good num"><span class="rub" data-eur-min="3000" data-eur-max="5000">—</span></td>
+          <td class="num"><span class="rub" data-eur-min="6000" data-eur-max="8000">—</span></td>
+        </tr>
+        <tr>
+          <td class="crit">Германия</td>
+          <td class="v-good num"><span class="rub" data-eur-min="300" data-eur-max="700">—</span></td>
+          <td class="num"><span class="rub" data-eur-min="850" data-eur-max="1200">—</span></td>
+          <td class="v-mid num"><span class="rub" data-eur-min="5000" data-eur-max="8000">—</span></td>
+          <td class="num"><span class="rub" data-eur-min="10000" data-eur-max="12000">—</span></td>
+        </tr>
+        <tr>
+          <td class="crit">Польша</td>
+          <td class="v-good num"><span class="rub" data-eur-min="0" data-eur-max="2500">—</span></td>
+          <td class="v-good num"><span class="rub" data-eur-min="500" data-eur-max="900">—</span></td>
+          <td class="v-good num"><span class="rub" data-eur-min="3000" data-eur-max="5000">—</span></td>
+          <td class="num"><span class="rub" data-eur-min="5500" data-eur-max="6500">—</span></td>
+        </tr>
+        <tr>
+          <td class="crit">Чехия</td>
+          <td class="num"><span class="rub" data-eur-min="2000" data-eur-max="4000">—</span></td>
+          <td class="v-good num"><span class="rub" data-eur-min="500" data-eur-max="900">—</span></td>
+          <td class="v-good num"><span class="rub" data-eur-min="3000" data-eur-max="5000">—</span></td>
+          <td class="num"><span class="rub" data-eur-min="6000" data-eur-max="7000">—</span></td>
+        </tr>
+        <tr>
+          <td class="crit">Аргентина</td>
+          <td class="v-good num"><span class="rub" data-usd-min="0" data-usd-max="500">—</span></td>
+          <td class="num"><span class="rub" data-usd-min="800" data-usd-max="1500">—</span></td>
+          <td class="v-good num"><span class="rub" data-usd-min="3000" data-usd-max="5000">—</span></td>
+          <td class="num"><span class="rub" data-usd-min="6000" data-usd-max="7000">—</span></td>
+        </tr>
+        <tr>
+          <td class="crit">Португалия</td>
+          <td class="num"><span class="rub" data-eur-min="1000" data-eur-max="3500">—</span></td>
+          <td class="v-good num"><span class="rub" data-eur-min="600" data-eur-max="1000">—</span></td>
+          <td class="num"><span class="rub" data-eur-min="4000" data-eur-max="7000">—</span></td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td class="crit">Испания</td>
+          <td class="v-bad num"><span class="rub" data-eur-min="1500" data-eur-max="5000">—</span></td>
+          <td class="num"><span class="rub" data-eur-min="700" data-eur-max="1400">—</span></td>
+          <td class="v-bad num"><span class="rub" data-eur-min="6000" data-eur-max="9000">—</span></td>
+          <td class="num"><span class="rub" data-eur-min="10000" data-eur-max="12000">—</span></td>
+        </tr>
+        <tr>
+          <td class="crit">Нидерланды</td>
+          <td class="v-bad num"><span class="rub" data-eur-min="10000" data-eur-max="24000">—</span></td>
+          <td class="v-bad num"><span class="rub" data-eur-min="1000" data-eur-max="1600">—</span></td>
+          <td class="v-bad num"><span class="rub" data-eur-min="15000" data-eur-max="20000">—</span></td>
+          <td class="num"><span class="rub" data-eur-min="22000" data-eur-max="26000">—</span></td>
+        </tr>
+        <tr>
+          <td class="crit">США (без ассистентства)</td>
+          <td class="v-bad num"><span class="rub" data-usd-min="28000" data-usd-max="40000">—</span></td>
+          <td class="v-bad num"><span class="rub" data-usd-min="1200" data-usd-max="2000">—</span></td>
+          <td class="v-bad num"><span class="rub" data-usd-min="35000" data-usd-max="45000">—</span></td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td class="crit">Китай</td>
+          <td class="v-good num"><span class="rub" data-usd-min="3000" data-usd-max="5000">—</span></td>
+          <td class="v-good num"><span class="rub" data-usd-min="400" data-usd-max="700">—</span></td>
+          <td class="v-good num"><span class="rub" data-usd-min="5000" data-usd-max="8000">—</span></td>
+          <td class="num"><span class="rub" data-usd-min="8000" data-usd-max="10000">—</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Стипендии</h3>
+  <div class="grid grid-2">
+    <div class="callout">
+      <strong class="lead">DSU (Италия)</strong>
+      Главный инструмент при малом бюджете: покрывает обучение, даёт деньги на жизнь и место в общежитии. Нужны переведённые и апостилированные документы о доходах семьи.
+    </div>
+    <div class="callout">
+      <strong class="lead">DAAD (Германия)</strong>
+      Конкурентная стипендия для покрытия расходов на жизнь. Даже без неё обучение в TU Berlin остаётся дешёвым — основные расходы это переезд и blocked account.
+    </div>
+  </div>
+</div>
+</div>
+
+<footer>
+  Курсы: ЦБ РФ → open.er-api.com → currency-api (резервные источники, если основной недоступен).
+</footer>
+
+<script src="rates.js"></script>
+</body>
+</html>

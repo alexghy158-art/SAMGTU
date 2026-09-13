@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Визовые требования — Геодезия за рубежом</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="layout">
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="index.html" class="brand">🧭 Геодезия за рубежом</a>
+    <div class="site-nav-links">
+      <a href="index.html">Главная</a>
+      <a href="compare.html">Сравнение стран</a>
+      <a href="unis.html">Вузы и программы</a>
+      <a href="money.html">Деньги</a>
+      <a href="visa.html" class="active">Визы</a>
+      <a href="lang.html">Языки и экзамены</a>
+      <a href="video.html">Видео</a>
+      <a href="fx.html">Курс валют</a>
+    </div>
+  </div>
+</nav>
+
+<div class="doc">
+  <div class="section-num">04</div>
+  <h2>🛂 Визовые требования</h2>
+  <p class="lede">Proof of funds пересчитан в рубли по текущему курсу.</p>
+
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Страна</th><th>Тип визы</th><th>Proof of funds</th><th>В рублях</th><th>Сложность</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="crit">Германия</td>
+          <td>National D</td>
+          <td class="v-bad">Blocked ~11 208 €</td>
+          <td class="v-bad num"><span class="rub" data-eur-min="11208" data-eur-max="11208">—</span></td>
+          <td class="v-bad">Высокая</td>
+        </tr>
+        <tr>
+          <td class="crit">Испания</td>
+          <td>Tipo D → TIE</td>
+          <td>~7–10 тыс €/год</td>
+          <td class="num"><span class="rub" data-eur-min="7000" data-eur-max="10000">—</span></td>
+          <td class="v-mid">Средняя +</td>
+        </tr>
+        <tr>
+          <td class="crit">Италия</td>
+          <td>Tipo D → Permesso</td>
+          <td>~6–7 тыс €/год</td>
+          <td class="num"><span class="rub" data-eur-min="6000" data-eur-max="7000">—</span></td>
+          <td class="v-mid">Средняя +</td>
+        </tr>
+        <tr>
+          <td class="crit">Чехия</td>
+          <td>Long-term / student</td>
+          <td>~6–8 тыс €/год</td>
+          <td class="num"><span class="rub" data-eur-min="6000" data-eur-max="8000">—</span></td>
+          <td class="v-good">Средняя (ЕС)</td>
+        </tr>
+        <tr>
+          <td class="crit">Польша</td>
+          <td>National D / student</td>
+          <td>~5.5–6.5 тыс €/год</td>
+          <td class="num"><span class="rub" data-eur-min="5500" data-eur-max="6500">—</span></td>
+          <td class="v-good">Средняя (ЕС)</td>
+        </tr>
+        <tr>
+          <td class="crit">Португалия</td>
+          <td>Студенческая D</td>
+          <td>~7–9 тыс €</td>
+          <td class="num"><span class="rub" data-eur-min="7000" data-eur-max="9000">—</span></td>
+          <td>Средняя</td>
+        </tr>
+        <tr>
+          <td class="crit">Нидерланды</td>
+          <td>MVV / student residence permit</td>
+          <td>~11–13 тыс €/год</td>
+          <td class="v-bad num"><span class="rub" data-eur-min="11000" data-eur-max="13000">—</span></td>
+          <td class="v-mid">Средняя +</td>
+        </tr>
+        <tr>
+          <td class="crit">США</td>
+          <td>F-1 (студенческая)</td>
+          <td>~35–45 тыс $/год</td>
+          <td class="v-bad num"><span class="rub" data-usd-min="35000" data-usd-max="45000">—</span></td>
+          <td class="v-mid">Средняя +</td>
+        </tr>
+        <tr>
+          <td class="crit">Китай</td>
+          <td>X1 (студенческая)</td>
+          <td>~5–8 тыс $/год</td>
+          <td class="v-good num"><span class="rub" data-usd-min="5000" data-usd-max="8000">—</span></td>
+          <td>Средняя</td>
+        </tr>
+        <tr>
+          <td class="crit">Аргентина</td>
+          <td>Студенческая</td>
+          <td>~2–5 тыс USD</td>
+          <td class="num"><span class="rub" data-usd-min="2000" data-usd-max="5000">—</span></td>
+          <td class="v-good">Средняя</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+
+<footer>
+  Курсы: ЦБ РФ → open.er-api.com → currency-api (резервные источники, если основной недоступен).
+</footer>
+
+<script src="rates.js"></script>
+</body>
+</html>
