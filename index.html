@@ -1,14 +1,22 @@
 <!DOCTYPE html>
-<html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Трекер СамГТУ</title></head>
-<body><p style="font-family:system-ui;text-align:center;margin-top:25vh;color:#456">Загрузка трекера…</p>
-<script>
-(async()=>{
-  let s='';
-  for(let i=0;i<12;i++){
-    const r=await fetch('b'+i,{cache:'no-store'});
-    if(!r.ok) throw new Error('part '+i);
-    s+=await r.text();
-  }
-  document.open();document.write(s);document.close();
-})().catch(e=>{document.body.innerHTML='<p style="color:#c00;text-align:center">'+e+'</p>';});
-</script></body></html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Трекер СамГТУ</title>
+<style>
+  body{font-family:system-ui,sans-serif;background:linear-gradient(180deg,#eef3fb,#f7f9fc);margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;color:#0f1b2d}
+  .card{background:#fff;border-radius:20px;padding:32px;max-width:420px;box-shadow:0 12px 40px rgba(15,40,90,.1);text-align:center}
+  h1{margin:0 0 12px;font-size:1.4rem}
+  p{color:#5b6b86;line-height:1.5}
+  a{display:inline-block;margin-top:16px;background:#0055d4;color:#fff;text-decoration:none;padding:12px 20px;border-radius:12px;font-weight:700}
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>Трекер СамГТУ</h1>
+  <p>Обновлённая светлая версия готова. Открой файл <b>deploy_index.html</b> из чата или залей его в этот репозиторий как <code>index.html</code> через GitHub → Add file → Upload.</p>
+  <p style="font-size:.9rem">Твои отметки и смены в браузере <b>не пропадут</b> — они в localStorage.</p>
+</div>
+</body>
+</html>
