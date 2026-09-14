@@ -1,2 +1,11 @@
-Единый хаб: СамГТУ (пары, смены, ЗП, материалы) + магистратура геодезия (11 вузов, гайды).
-Залей index.html в GitHub SAMGTU. Папка guide/ — оригинальный гайд.
+ВАЖНО: загрузи index.html И папку guide/ вместе.
+
+Структура:
+  index.html
+  guide/
+    styles.css
+    polimi.html, tuberlin.html, ... (вузы с фото)
+    compare.html, money.html, visa.html, lang.html, video.html
+
+GitHub SAMGTU → Upload files → оба элемента в корень.
+Vercel подхватит автоматически.
