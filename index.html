@@ -1453,6 +1453,23 @@ table, .fin-table, .mag-table, .data-table {
 </div>
 
 
+
+<div class="modal-bg" id="lock-modal">
+  <div class="modal">
+    <h3>🔒 Закрытый раздел</h3>
+    <p class="muted" style="margin-bottom:12px">Введите пароль для доступа к <span id="lock-section-name">разделу</span></p>
+    <div class="field">
+      <label>Пароль</label>
+      <input type="password" id="lock-password" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <p id="lock-error" class="muted" style="color:var(--coral);min-height:1.2em;margin-top:6px"></p>
+    <div class="modal-actions">
+      <button class="btn secondary" type="button" onclick="closeLockModal()">Отмена</button>
+      <button class="btn" type="button" onclick="submitLockPassword()">Войти</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-bg" id="fin-modal">
   <div class="modal">
     <h3>Операция</h3>
@@ -2026,6 +2043,8 @@ function renderShifts() {
 }
 
 function openShiftModal(shift) {
+  if (!isPageUnlocked()) { openLockModal('shifts'); return; }
+
   document.getElementById('shift-modal').classList.add('open');
   document.getElementById('shift-modal-title').textContent = shift ? 'Редактировать смену' : 'Новая смена';
   document.getElementById('shift-id').value = shift ? shift.id : '';
@@ -2161,7 +2180,62 @@ function importData(ev) {
 // ===== Extra delight features =====
 function toggleFab() { document.getElementById('fab').classList.toggle('open'); }
 function closeFab() { document.getElementById('fab').classList.remove('open'); }
-function goPage(p) {
+
+const LOCKED_PAGES = { shifts: 'Смены', finance: 'Деньги' };
+const PAGE_PASSWORD = '20032003';
+const LOCK_SESSION_KEY = 'tracker_unlock_v1';
+
+function isPageUnlocked() {
+  try { return sessionStorage.getItem(LOCK_SESSION_KEY) === '1'; } catch (e) { return false; }
+}
+function setPageUnlocked() {
+  try { sessionStorage.setItem(LOCK_SESSION_KEY, '1'); } catch (e) {}
+}
+function lockRequires(page) {
+  return Object.prototype.hasOwnProperty.call(LOCKED_PAGES, page);
+}
+
+let _pendingLockPage = null;
+
+function openLockModal(page) {
+  _pendingLockPage = page;
+  const modal = document.getElementById('lock-modal');
+  const name = document.getElementById('lock-section-name');
+  const input = document.getElementById('lock-password');
+  const err = document.getElementById('lock-error');
+  if (name) name.textContent = LOCKED_PAGES[page] || page;
+  if (err) err.textContent = '';
+  if (input) { input.value = ''; }
+  if (modal) modal.classList.add('open');
+  setTimeout(() => { try { input && input.focus(); } catch(e) {} }, 50);
+}
+function closeLockModal() {
+  _pendingLockPage = null;
+  const modal = document.getElementById('lock-modal');
+  if (modal) modal.classList.remove('open');
+}
+function submitLockPassword() {
+  const input = document.getElementById('lock-password');
+  const err = document.getElementById('lock-error');
+  const val = (input && input.value) || '';
+  if (val === PAGE_PASSWORD) {
+    setPageUnlocked();
+    const page = _pendingLockPage;
+    closeLockModal();
+    if (page) goPage(page, true);
+    toast('Доступ открыт');
+  } else {
+    if (err) err.textContent = 'Неверный пароль';
+    if (input) { input.value = ''; input.focus(); }
+  }
+}
+
+function goPage(p, skipLock) {
+  if (!skipLock && lockRequires(p) && !isPageUnlocked()) {
+    openLockModal(p);
+    return;
+  }
+
   document.querySelectorAll('#nav button').forEach(b => {
     b.classList.toggle('active', b.dataset.page === p);
   });
@@ -3328,6 +3402,8 @@ function renderFinance() {
 }
 
 function openFinModal(preType) {
+  if (!isPageUnlocked()) { openLockModal('finance'); return; }
+
   ensureFinance();
   document.getElementById('fin-modal').classList.add('open');
   document.getElementById('fin-type').value = preType === 'income' ? 'income' : (preType === 'expense' ? 'expense' : (preType || 'expense'));
@@ -3435,6 +3511,16 @@ render();
     });
   });
 })();
+
+document.addEventListener('keydown', function(ev) {
+  if (ev.key !== 'Enter') return;
+  const modal = document.getElementById('lock-modal');
+  if (modal && modal.classList.contains('open')) {
+    ev.preventDefault();
+    submitLockPassword();
+  }
+});
+
 </script>
 </body>
 </html>
