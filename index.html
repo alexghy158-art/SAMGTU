@@ -165,11 +165,11 @@ body::before {
 .section::before {
   content: "";
   position: absolute;
-  left: 0; top: 0; bottom: 0;
-  width: 4px;
+  left: 0; top: 18px; bottom: 18px;
+  width: 3px;
   background: linear-gradient(180deg, var(--coral), var(--sage));
-  border-radius: 4px 0 0 4px;
-  opacity: .85;
+  border-radius: 4px;
+  opacity: .7;
 }
 .section h2 {
   font-family: var(--display);
@@ -476,6 +476,149 @@ table.mag-table, .fin-table {
 .att-row-nebyl, tr.nebyl { background: rgba(228,87,46,.08) !important; }
 ::-webkit-scrollbar { width: 8px; height: 8px; }
 ::-webkit-scrollbar-thumb { background: rgba(28,25,23,.15); border-radius: 8px; }
+
+
+/* === layout fixes === */
+.section { overflow: visible; }
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.card {
+  min-width: 0;
+  overflow: hidden;
+}
+.card .value {
+  font-size: 1.35rem;
+  word-break: break-word;
+}
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  align-items: start;
+}
+@media (max-width: 860px) {
+  .grid-2 { grid-template-columns: 1fr; }
+  .cards { grid-template-columns: repeat(2, 1fr); }
+}
+.lesson-time {
+  flex-shrink: 0;
+  font-family: var(--mono);
+  font-size: .75rem;
+  font-weight: 700;
+  color: var(--coral);
+  min-width: 64px;
+}
+.heat-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+.heat-cell {
+  aspect-ratio: 1;
+  border-radius: 10px;
+  background: #f0ebe4;
+  border: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .7rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+.heat-cell.good { background: #d8f3e7; color: var(--sage); border-color: rgba(47,111,94,.2); }
+.heat-cell.bad { background: #fde2dc; color: var(--coral); border-color: rgba(228,87,46,.2); }
+.heat-cell.mixed { background: #ffe8cc; color: var(--orange); }
+.heat-cell.empty { opacity: .45; }
+.progress-bar {
+  height: 12px;
+  background: #efeae4;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+.progress-bar > span, .progress-bar .fill {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--coral), var(--sand));
+  border-radius: 999px;
+}
+.goal-box input[type="number"] { max-width: 140px; }
+table, .fin-table, .mag-table, .data-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: .84rem;
+  min-width: 520px;
+}
+.table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--paper);
+}
+.fin-table th, .fin-table td, .mag-table th, .mag-table td, .data-table th, .data-table td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+  white-space: nowrap;
+}
+.fin-table td.wrap, .data-table td.wrap { white-space: normal; max-width: 180px; }
+.fin-table th, .mag-table th, .data-table th {
+  position: sticky;
+  top: 0;
+  background: #faf6f1;
+  font-size: .68rem;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--muted);
+  font-weight: 800;
+}
+.wallet-summary-table { min-width: 0 !important; }
+.wallet-summary-table th, .wallet-summary-table td { white-space: normal; }
+.day-col { min-height: 80px; }
+.day-col h3 { font-size: .85rem; margin-bottom: 8px; font-weight: 800; }
+.shortcut-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+}
+#dash-cards .card .value { font-size: 1.25rem; }
+.wallet-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 14px;
+}
+@media (max-width: 700px) {
+  .wallet-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+
+.progress-bar > div {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--coral), var(--sand));
+  border-radius: 999px;
+  min-width: 0;
+}
+.heat-cell.today { outline: 2px solid var(--coral); outline-offset: 1px; }
+.heat-cell.has { font-weight: 800; }
+.heat-cell.good { background: #d8f3e7; color: var(--sage); }
+.heat-cell.bad { background: #fde2dc; color: var(--coral); }
+.heat-cell.mixed { background: #ffe8cc; color: var(--orange); }
+.value.teal { color: var(--cyan); }
+#dash-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+}
+#dash-cards .progress-bar { margin-top: 8px; }
 
 </style>
 </head>
@@ -866,46 +1009,89 @@ table.mag-table, .fin-table {
   </div>
 
   
+  
   <div id="page-finance" class="hidden">
-    <div class="tip">Кошельки + доходы и расходы. Остатки можно править вручную. Операции меняют выбранный кошелёк.</div>
-    <div class="wallet-grid" id="wallet-grid"></div>
+    <div class="tip">Учёт денег: мелочь, карты, наличные, размен. Снизу — таблица доходов и расходов. Остатки можно править вручную; операции тоже меняют кошельки.</div>
+
+    <div class="section">
+      <h2>Кошельки</h2>
+      <div class="table-wrap">
+        <table class="data-table wallet-summary-table" id="wallet-summary-table">
+          <thead>
+            <tr>
+              <th>Мелочь</th>
+              <th>Карты</th>
+              <th>Наличные</th>
+              <th>Размен</th>
+              <th>Всего</th>
+            </tr>
+          </thead>
+          <tbody id="wallet-summary-body"></tbody>
+        </table>
+      </div>
+      <div class="wallet-grid" id="wallet-grid" style="margin-top:12px"></div>
+    </div>
+
     <div class="cards" id="fin-stats"></div>
-    <div class="grid-2">
-      <div class="section">
-        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px">
-          <h2 style="margin:0">Операции</h2>
-          <button class="btn green sm" type="button" onclick="openFinModal()">+ Операция</button>
-        </div>
-        <div class="filters">
-          <button class="btn sm secondary" type="button" onclick="setFinFilter('all')">Все</button>
-          <button class="btn sm secondary" type="button" onclick="setFinFilter('income')">Доходы</button>
-          <button class="btn sm secondary" type="button" onclick="setFinFilter('expense')">Расходы</button>
-        </div>
-        <div style="overflow-x:auto">
-          <table class="fin-table" id="fin-table">
-            <thead><tr><th>Дата</th><th>Тип</th><th>Категория</th><th>Кошелёк</th><th>Сумма</th><th></th></tr></thead>
-            <tbody id="fin-tbody"></tbody>
-          </table>
+
+    <div class="section">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+        <h2 style="margin:0">Доходы и расходы</h2>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button class="btn green sm" type="button" onclick="openFinModal('income')">+ Доход</button>
+          <button class="btn sm" type="button" onclick="openFinModal('expense')">+ Расход</button>
         </div>
       </div>
+      <div class="filters">
+        <button class="btn sm secondary" type="button" onclick="setFinFilter('all')">Все</button>
+        <button class="btn sm secondary" type="button" onclick="setFinFilter('income')">Только доходы</button>
+        <button class="btn sm secondary" type="button" onclick="setFinFilter('expense')">Только расходы</button>
+      </div>
+      <div class="table-wrap">
+        <table class="fin-table" id="fin-table">
+          <thead>
+            <tr>
+              <th>Дата</th>
+              <th>Описание</th>
+              <th>Доход</th>
+              <th>Расход</th>
+              <th>Откуда / куда</th>
+              <th>Мелочь</th>
+              <th>Карты</th>
+              <th>Наличные</th>
+              <th>Размен</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="fin-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="grid-2">
       <div class="section">
         <h2>Быстрый расход</h2>
-        <div class="field"><label>Сумма ₽</label><input type="number" id="fin-quick-amount" placeholder="200"></div>
-        <div class="field"><label>Куда</label><input id="fin-quick-cat" placeholder="еда / транспорт / размен"></div>
-        <div class="field"><label>Кошелёк</label>
-          <select id="fin-quick-wallet">
-            <option value="cash">Наличные</option>
-            <option value="card">Карты</option>
-            <option value="coins">Мелочь</option>
-            <option value="change">Размен</option>
-          </select>
+        <div class="field-row">
+          <div class="field"><label>Сумма ₽</label><input type="number" id="fin-quick-amount" placeholder="200"></div>
+          <div class="field"><label>Кошелёк</label>
+            <select id="fin-quick-wallet">
+              <option value="coins">Мелочь</option>
+              <option value="card">Карты</option>
+              <option value="cash">Наличные</option>
+              <option value="change">Размен</option>
+            </select>
+          </div>
         </div>
+        <div class="field"><label>На что</label><input id="fin-quick-cat" placeholder="еда / транспорт / кофе"></div>
         <button class="btn" type="button" onclick="quickExpense()">Списать</button>
-        <h2 style="margin-top:18px">По категориям (месяц)</h2>
+      </div>
+      <div class="section">
+        <h2>По категориям за месяц</h2>
         <div id="fin-by-cat" class="muted">—</div>
       </div>
     </div>
   </div>
+
 
   </main>
 </div>
@@ -1087,9 +1273,9 @@ table.mag-table, .fin-table {
     </div>
     <div class="field"><label>Кошелёк</label>
       <select id="fin-wallet">
-        <option value="cash">Наличные</option>
-        <option value="card">Карты</option>
         <option value="coins">Мелочь</option>
+        <option value="card">Карты</option>
+        <option value="cash">Наличные</option>
         <option value="change">Размен</option>
       </select>
     </div>
@@ -2695,44 +2881,76 @@ function renderFinance() {
   ensureFinance();
   const F = state.finance;
   const w = F.wallets;
+  const total = walletTotal();
+
+  const sumBody = document.getElementById('wallet-summary-body');
+  if (sumBody) {
+    sumBody.innerHTML = `<tr>
+      <td><strong>${fmtMoney(w.coins)} ₽</strong></td>
+      <td><strong>${fmtMoney(w.card)} ₽</strong></td>
+      <td><strong>${fmtMoney(w.cash)} ₽</strong></td>
+      <td><strong>${fmtMoney(w.change)} ₽</strong></td>
+      <td><strong>${fmtMoney(total)} ₽</strong></td>
+    </tr>`;
+  }
+
   const grid = document.getElementById('wallet-grid');
   if (grid) {
-    const styles = { cash: 'sage', card: 'sky', coins: 'coral', change: '' };
-    grid.innerHTML = ['cash','card','coins','change'].map(k => `
+    const styles = { coins: 'coral', card: 'sky', cash: 'sage', change: '' };
+    grid.innerHTML = ['coins','card','cash','change'].map(k => `
       <div class="wallet-card ${styles[k]||''}">
         <div class="w-label">${WALLET_LABELS[k]}</div>
         <div class="w-val">${fmtMoney(w[k]||0)} ₽</div>
-        <input type="number" value="${Number(w[k])||0}" onchange="updateWallet('${k}', this.value)" title="Править остаток">
+        <input type="number" value="${Number(w[k])||0}" onchange="updateWallet('${k}', this.value)">
       </div>`).join('');
   }
+
   const now = new Date();
-  const ym = now.toISOString().slice(0,7);
+  const ym = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0');
   const monthOps = (F.ops||[]).filter(o => (o.date||'').startsWith(ym));
   const inc = monthOps.filter(o => o.type==='income').reduce((s,o)=>s+Number(o.amount||0),0);
   const exp = monthOps.filter(o => o.type==='expense').reduce((s,o)=>s+Number(o.amount||0),0);
   const st = document.getElementById('fin-stats');
   if (st) {
     st.innerHTML = `
-      <div class="card"><div class="label">Всего</div><div class="value">${fmtMoney(walletTotal())}</div></div>
-      <div class="card"><div class="label">Доход (мес.)</div><div class="value green">${fmtMoney(inc)}</div></div>
-      <div class="card"><div class="label">Расход (мес.)</div><div class="value red">${fmtMoney(exp)}</div></div>
-      <div class="card"><div class="label">Баланс мес.</div><div class="value ${inc-exp>=0?'green':'red'}">${fmtMoney(inc-exp)}</div></div>`;
+      <div class="card"><div class="label">Всего денег</div><div class="value">${fmtMoney(total)}</div></div>
+      <div class="card"><div class="label">Доходы мес.</div><div class="value green">+${fmtMoney(inc)}</div></div>
+      <div class="card"><div class="label">Расходы мес.</div><div class="value red">−${fmtMoney(exp)}</div></div>
+      <div class="card"><div class="label">Итог мес.</div><div class="value ${inc-exp>=0?'green':'red'}">${fmtMoney(inc-exp)}</div></div>`;
   }
+
   let ops = (F.ops||[]).slice().sort((a,b)=>(b.date||'').localeCompare(a.date||'') || (b.id-a.id));
   if (F.filter === 'income') ops = ops.filter(o => o.type==='income');
   if (F.filter === 'expense') ops = ops.filter(o => o.type==='expense');
+
+  // running wallet snapshot after each op (from oldest to newest), then display newest first
+  const base = { coins:0, card:0, cash:0, change:0 };
+  // reconstruct: start from current wallets and reverse ops to get initial, then replay
+  const sortedAsc = (F.ops||[]).slice().sort((a,b)=>(a.date||'').localeCompare(b.date||'') || (a.id-b.id));
+  // simpler: show op amounts in wallet columns only for the wallet touched
   const tb = document.getElementById('fin-tbody');
   if (tb) {
-    tb.innerHTML = ops.length ? ops.slice(0,80).map(o => `
-      <tr>
+    tb.innerHTML = ops.length ? ops.slice(0,100).map(o => {
+      const isIn = o.type === 'income';
+      const amt = Number(o.amount||0);
+      const cells = { coins:'', card:'', cash:'', change:'' };
+      const sign = isIn ? '+' : '−';
+      if (cells[o.wallet] !== undefined) cells[o.wallet] = sign + fmtMoney(amt);
+      return `<tr>
         <td>${o.date||'—'}</td>
-        <td>${o.type==='income'?'Доход':'Расход'}</td>
-        <td>${o.category||'—'}</td>
+        <td class="wrap">${o.category||'—'}${o.note ? ' · '+o.note : ''}</td>
+        <td class="fin-pos">${isIn ? fmtMoney(amt)+' ₽' : ''}</td>
+        <td class="fin-neg">${!isIn ? fmtMoney(amt)+' ₽' : ''}</td>
         <td>${WALLET_LABELS[o.wallet]||o.wallet||'—'}</td>
-        <td class="${o.type==='income'?'fin-pos':'fin-neg'}">${o.type==='income'?'+':'-'}${fmtMoney(o.amount)} ₽</td>
+        <td>${cells.coins}</td>
+        <td>${cells.card}</td>
+        <td>${cells.cash}</td>
+        <td>${cells.change}</td>
         <td><button class="btn sm danger" type="button" onclick="delFinOp(${o.id})">×</button></td>
-      </tr>`).join('') : '<tr><td colspan="6" class="muted">Пока нет операций</td></tr>';
+      </tr>`;
+    }).join('') : '<tr><td colspan="10" class="muted">Пока нет доходов и расходов — нажми «+ Доход» или «+ Расход»</td></tr>';
   }
+
   const byCat = {};
   monthOps.filter(o=>o.type==='expense').forEach(o => {
     const c = o.category || 'прочее';
@@ -2746,27 +2964,17 @@ function renderFinance() {
       : '<span class="muted">Расходов за месяц нет</span>';
   }
 }
-function fmtMoney(n) {
-  n = Math.round(Number(n)||0);
-  return n.toLocaleString('ru-RU');
-}
-function updateWallet(key, val) {
-  ensureFinance();
-  state.finance.wallets[key] = Math.max(0, Number(val)||0);
-  save();
-  renderFinance();
-  toast('Остаток обновлён');
-}
-function openFinModal() {
+function openFinModal(preType) {
   ensureFinance();
   document.getElementById('fin-modal').classList.add('open');
-  document.getElementById('fin-type').value = 'expense';
+  document.getElementById('fin-type').value = preType === 'income' ? 'income' : 'expense';
   document.getElementById('fin-amount').value = '';
   document.getElementById('fin-date').value = new Date().toISOString().slice(0,10);
   document.getElementById('fin-wallet').value = 'cash';
   document.getElementById('fin-cat').value = '';
   document.getElementById('fin-note').value = '';
 }
+
 function closeFinModal() { document.getElementById('fin-modal').classList.remove('open'); }
 function saveFinOp() {
   ensureFinance();
