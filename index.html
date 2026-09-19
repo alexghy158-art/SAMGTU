@@ -3035,8 +3035,12 @@ function defaultFinance() {
 function ensureFinance() {
   if (!state.finance) state.finance = defaultFinance();
   if (!state.finance.wallets) state.finance.wallets = { cash: 0, card: 0, coins: 0, change: 0 };
-  if (!state.finance.ops) state.finance.ops = [];
-  if (!state.finance.nextId) state.finance.nextId = 1;
+  ['cash','card','coins','change'].forEach(k => {
+    if (state.finance.wallets[k] == null) state.finance.wallets[k] = 0;
+  });
+  if (!Array.isArray(state.finance.ops)) state.finance.ops = [];
+  const maxId = state.finance.ops.reduce((m, o) => Math.max(m, Number(o.id)||0), 0);
+  if (!state.finance.nextId || state.finance.nextId <= maxId) state.finance.nextId = maxId + 1;
   if (!state.finance.filter) state.finance.filter = 'all';
 }
 const WALLET_LABELS = { cash: 'Наличные', card: 'Карты', coins: 'Мелочь', change: 'Размен' };
@@ -3045,6 +3049,19 @@ function walletTotal() {
   const w = state.finance.wallets;
   return (Number(w.cash)||0) + (Number(w.card)||0) + (Number(w.coins)||0) + (Number(w.change)||0);
 }
+
+function fmtMoney(n) {
+  n = Math.round(Number(n) || 0);
+  return n.toLocaleString('ru-RU');
+}
+function updateWallet(key, val) {
+  ensureFinance();
+  state.finance.wallets[key] = Math.max(0, Number(val) || 0);
+  save();
+  renderFinance();
+  toast('Остаток обновлён');
+}
+
 function setFinFilter(f) {
   ensureFinance();
   state.finance.filter = f;
@@ -3150,28 +3167,35 @@ function openFinModal(preType) {
 
 function closeFinModal() { document.getElementById('fin-modal').classList.remove('open'); }
 function saveFinOp() {
-  ensureFinance();
-  const amount = Number(document.getElementById('fin-amount').value);
-  if (!amount || amount <= 0) return alert('Укажи сумму');
-  const type = document.getElementById('fin-type').value;
-  const wallet = document.getElementById('fin-wallet').value;
-  const op = {
-    id: state.finance.nextId++,
-    type,
-    amount,
-    date: document.getElementById('fin-date').value || new Date().toISOString().slice(0,10),
-    wallet,
-    category: document.getElementById('fin-cat').value.trim() || (type==='income'?'доход':'прочее'),
-    note: document.getElementById('fin-note').value.trim(),
-  };
-  const w = state.finance.wallets;
-  if (type === 'income') w[wallet] = (Number(w[wallet])||0) + amount;
-  else w[wallet] = Math.max(0, (Number(w[wallet])||0) - amount);
-  state.finance.ops.push(op);
-  save();
-  closeFinModal();
-  renderFinance();
-  toast(type==='income'?'Доход учтён':'Расход учтён');
+  try {
+    ensureFinance();
+    if (!Array.isArray(state.finance.ops)) state.finance.ops = [];
+    if (!state.finance.nextId || state.finance.nextId < 1) state.finance.nextId = 1;
+    const amount = Number(document.getElementById('fin-amount').value);
+    if (!amount || amount <= 0) return alert('Укажи сумму');
+    const type = document.getElementById('fin-type').value;
+    const wallet = document.getElementById('fin-wallet').value || 'cash';
+    const op = {
+      id: state.finance.nextId++,
+      type,
+      amount,
+      date: document.getElementById('fin-date').value || new Date().toISOString().slice(0,10),
+      wallet,
+      category: (document.getElementById('fin-cat').value || '').trim() || (type==='income'?'доход':'прочее'),
+      note: (document.getElementById('fin-note').value || '').trim(),
+    };
+    const w = state.finance.wallets;
+    if (type === 'income') w[wallet] = (Number(w[wallet])||0) + amount;
+    else w[wallet] = Math.max(0, (Number(w[wallet])||0) - amount);
+    state.finance.ops.push(op);
+    save();
+    closeFinModal();
+    renderFinance();
+    toast(type==='income' ? 'Доход учтён' : 'Расход учтён');
+  } catch (e) {
+    console.error(e);
+    alert('Ошибка сохранения: ' + e.message);
+  }
 }
 function quickExpense() {
   ensureFinance();
