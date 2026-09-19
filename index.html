@@ -1181,7 +1181,22 @@ table, .fin-table, .mag-table, .data-table {
   
   
   <div id="page-finance" class="hidden">
-    <div class="tip">Учёт денег: мелочь, карты, наличные, размен. Снизу — таблица доходов и расходов. Остатки можно править вручную; операции тоже меняют кошельки.</div>
+    <div class="tip">Учёт денег: мелочь, карты, наличные, размен. Аванс и зарплата — два разных платежа: укажи дни месяца и вноси доходы с категорией «Аванс» или «Зарплата» — появится лимит трат в день.</div>
+
+    <div class="section">
+      <h2>Аванс и зарплата</h2>
+      <div class="field-row">
+        <div class="field"><label>День аванса (число месяца)</label>
+          <input type="number" id="fin-advance-day" min="1" max="28" value="25" onchange="savePayrollDays()">
+        </div>
+        <div class="field"><label>День зарплаты (число месяца)</label>
+          <input type="number" id="fin-salary-day" min="1" max="28" value="10" onchange="savePayrollDays()">
+        </div>
+      </div>
+      <div id="payroll-info" class="muted">—</div>
+      <div class="cards" id="daily-budget-cards" style="margin-top:12px"></div>
+      <p class="muted" style="margin-top:8px">Когда приходят деньги: добавь <strong>+ Доход</strong> и в категории напиши <strong>Аванс</strong> или <strong>Зарплата</strong> — дневной лимит пересчитается.</p>
+    </div>
 
     <div class="section">
       <h2>Кошельки</h2>
@@ -1208,7 +1223,9 @@ table, .fin-table, .mag-table, .data-table {
       <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px">
         <h2 style="margin:0">Доходы и расходы</h2>
         <div style="display:flex;gap:6px;flex-wrap:wrap">
-          <button class="btn green sm" type="button" onclick="openFinModal('income')">+ Доход</button>
+          <button class="btn green sm" type="button" onclick="openFinModal('advance')">+ Аванс</button>
+          <button class="btn green sm" type="button" onclick="openFinModal('salary')">+ Зарплата</button>
+          <button class="btn sm secondary" type="button" onclick="openFinModal('income')">+ Доход</button>
           <button class="btn sm" type="button" onclick="openFinModal('expense')">+ Расход</button>
         </div>
       </div>
@@ -1450,7 +1467,7 @@ table, .fin-table, .mag-table, .data-table {
         <option value="change">Размен</option>
       </select>
     </div>
-    <div class="field"><label>Категория</label><input id="fin-cat" placeholder="еда, смена, стипендия…"></div>
+    <div class="field"><label>Категория</label><input id="fin-cat" placeholder="Аванс / Зарплата / еда / транспорт…"></div>
     <div class="field"><label>Комментарий</label><input id="fin-note" placeholder="необязательно"></div>
     <div class="modal-actions">
       <button class="btn secondary" type="button" onclick="closeFinModal()">Отмена</button>
@@ -1723,6 +1740,10 @@ function renderDashboard() {
         <div class="card"><div class="label">Мелочь+размен</div><div class="value orange">${fmtMoney((Number(w.coins)||0)+(Number(w.change)||0))}</div></div>
       </div>
       <p class="muted" style="margin-top:8px"><a href="#" onclick="goPage('finance');return false;" style="color:var(--coral);font-weight:800">открыть учёт →</a></p>`;
+      try {
+        const dbi = dailyBudgetInfo();
+        dbel.innerHTML += `<p class="muted" style="margin-top:6px">На день ≈ <strong style="color:var(--sage)">${fmtMoney(dbi.dailyRemain)} ₽</strong> · до ${dbi.nextPayKind}: ${dbi.daysLeft} дн.</p>`;
+      } catch(e2) {}
     }
   } catch(e) {}
 
@@ -3030,6 +3051,9 @@ function defaultFinance() {
     ops: [],
     nextId: 1,
     filter: 'all',
+    // день месяца: аванс и зарплата (типично РФ)
+    advanceDay: 25,
+    salaryDay: 10,
   };
 }
 function ensureFinance() {
@@ -3042,6 +3066,8 @@ function ensureFinance() {
   const maxId = state.finance.ops.reduce((m, o) => Math.max(m, Number(o.id)||0), 0);
   if (!state.finance.nextId || state.finance.nextId <= maxId) state.finance.nextId = maxId + 1;
   if (!state.finance.filter) state.finance.filter = 'all';
+  if (!state.finance.advanceDay) state.finance.advanceDay = 25;
+  if (!state.finance.salaryDay) state.finance.salaryDay = 10;
 }
 const WALLET_LABELS = { cash: 'Наличные', card: 'Карты', coins: 'Мелочь', change: 'Размен' };
 function walletTotal() {
@@ -3067,13 +3093,184 @@ function setFinFilter(f) {
   state.finance.filter = f;
   renderFinance();
 }
+
+function daysInMonth(y, m) { // m: 1-12
+  return new Date(y, m, 0).getDate();
+}
+function clampDay(y, m, day) {
+  return Math.min(day, daysInMonth(y, m));
+}
+/** Следующие даты аванса и зарплаты от «сегодня» */
+function nextPayrollDates() {
+  ensureFinance();
+  const advD = Number(state.finance.advanceDay) || 25;
+  const salD = Number(state.finance.salaryDay) || 10;
+  const now = new Date();
+  now.setHours(12,0,0,0);
+  const y = now.getFullYear();
+  const m = now.getMonth() + 1; // 1-12
+  const d = now.getDate();
+
+  function make(y0, m0, day) {
+    const dd = clampDay(y0, m0, day);
+    return new Date(y0, m0 - 1, dd, 12, 0, 0);
+  }
+  function nextDate(day) {
+    let dt = make(y, m, day);
+    if (dt < now) {
+      let nm = m + 1, ny = y;
+      if (nm > 12) { nm = 1; ny++; }
+      dt = make(ny, nm, day);
+    }
+    return dt;
+  }
+  const nextAdv = nextDate(advD);
+  const nextSal = nextDate(salD);
+  // предыдущие выплаты (для оценки периода)
+  function prevDate(day) {
+    let dt = make(y, m, day);
+    if (dt > now) {
+      let pm = m - 1, py = y;
+      if (pm < 1) { pm = 12; py--; }
+      dt = make(py, pm, day);
+    }
+    return dt;
+  }
+  return {
+    nextAdvance: nextAdv,
+    nextSalary: nextSal,
+    prevAdvance: prevDate(advD),
+    prevSalary: prevDate(salD),
+    advanceDay: advD,
+    salaryDay: salD,
+  };
+}
+function isoDate(d) {
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+function daysBetween(a, b) {
+  const ms = b.setHours(12,0,0,0) - a.setHours(12,0,0,0);
+  return Math.max(1, Math.round(ms / 86400000));
+}
+/**
+ * Дневной бюджет:
+ * - берём сумму последних «аванс»/«зарплата» (категория или пометка)
+ * - либо если нет — весь баланс кошельков
+ * - делим на дни до следующей выплаты (ближайшей из аванс/зарплата)
+ */
+function dailyBudgetInfo() {
+  ensureFinance();
+  const pay = nextPayrollDates();
+  const now = new Date();
+  now.setHours(12,0,0,0);
+  const nextPay = pay.nextAdvance <= pay.nextSalary ? pay.nextAdvance : pay.nextSalary;
+  const nextPayKind = pay.nextAdvance <= pay.nextSalary ? 'аванс' : 'зарплата';
+  const daysLeft = daysBetween(new Date(now), new Date(nextPay));
+
+  // суммы последних доходов с категориями аванс/зарплата
+  const ops = (state.finance.ops || []).filter(o => o.type === 'income').slice().sort((a,b)=>(b.date||'').localeCompare(a.date||'') || (b.id-a.id));
+  function findLast(kind) {
+    const k = kind.toLowerCase();
+    return ops.find(o => (o.category||'').toLowerCase().includes(k) || (o.note||'').toLowerCase().includes(k));
+  }
+  const lastAdv = findLast('аванс');
+  const lastSal = findLast('зарплат');
+
+  // период: от последней выплаты до следующей
+  // если последняя выплата — аванс, период до зарплаты; если зарплата — до аванса
+  let periodDays = daysLeft;
+  let pool = walletTotal();
+  let source = 'все кошельки';
+
+  // если есть явное поступление аванса/ЗП — рекомендуемый дневной лимит от этой суммы
+  const lastPay = [lastAdv, lastSal].filter(Boolean).sort((a,b)=>(b.date||'').localeCompare(a.date||''))[0];
+  if (lastPay) {
+    pool = Number(lastPay.amount) || pool;
+    source = (lastPay.category || 'последняя выплата') + ' (' + fmtMoney(lastPay.amount) + ' ₽)';
+    // дней в периоде между авансом и зарплатой (примерно)
+    const adv = pay.advanceDay;
+    const sal = pay.salaryDay;
+    // от аванса до зарплаты и от зарплаты до аванса
+    if ((lastPay.category||'').toLowerCase().includes('аванс')) {
+      // до зарплаты
+      periodDays = daysBetween(new Date(now), new Date(pay.nextSalary));
+    } else if ((lastPay.category||'').toLowerCase().includes('зарплат')) {
+      periodDays = daysBetween(new Date(now), new Date(pay.nextAdvance));
+    }
+  }
+
+  const daily = Math.floor(pool / Math.max(periodDays, 1));
+  // сколько уже потратили с последней выплаты
+  let spent = 0;
+  if (lastPay && lastPay.date) {
+    spent = (state.finance.ops || [])
+      .filter(o => o.type === 'expense' && (o.date || '') >= lastPay.date)
+      .reduce((s, o) => s + (Number(o.amount) || 0), 0);
+  }
+  const remain = Math.max(0, pool - spent);
+  const dailyRemain = Math.floor(remain / Math.max(periodDays, 1));
+
+  return {
+    nextPay,
+    nextPayKind,
+    daysLeft: periodDays,
+    pool,
+    source,
+    daily,
+    spent,
+    remain,
+    dailyRemain,
+    lastAdv,
+    lastSal,
+    pay,
+  };
+}
+function savePayrollDays() {
+  ensureFinance();
+  state.finance.advanceDay = Math.min(28, Math.max(1, parseInt(document.getElementById('fin-advance-day').value, 10) || 25));
+  state.finance.salaryDay = Math.min(28, Math.max(1, parseInt(document.getElementById('fin-salary-day').value, 10) || 10));
+  save();
+  renderFinance();
+  toast('Даты выплат сохранены');
+}
+
 function renderFinance() {
   ensureFinance();
   const F = state.finance;
   const w = F.wallets;
   const total = walletTotal();
 
-  const sumBody = document.getElementById('wallet-summary-body');
+  
+  // payroll days inputs
+  const advIn = document.getElementById('fin-advance-day');
+  const salIn = document.getElementById('fin-salary-day');
+  if (advIn) advIn.value = state.finance.advanceDay || 25;
+  if (salIn) salIn.value = state.finance.salaryDay || 10;
+
+  try {
+    const info = dailyBudgetInfo();
+    const payEl = document.getElementById('payroll-info');
+    if (payEl) {
+      const na = isoDate(info.pay.nextAdvance);
+      const ns = isoDate(info.pay.nextSalary);
+      payEl.innerHTML = `
+        <div style="display:grid;gap:6px;margin-top:8px">
+          <div>📅 Ближайший <strong>аванс</strong>: <strong>${na}</strong> (каждый месяц ${info.pay.advanceDay}-го)</div>
+          <div>📅 Ближайшая <strong>зарплата</strong>: <strong>${ns}</strong> (каждый месяц ${info.pay.salaryDay}-го)</div>
+          <div>⏳ До следующей выплаты (<strong>${info.nextPayKind}</strong>): <strong>${info.daysLeft}</strong> дн. (примерно ${isoDate(info.nextPay)})</div>
+        </div>`;
+    }
+    const db = document.getElementById('daily-budget-cards');
+    if (db) {
+      db.innerHTML = `
+        <div class="card"><div class="label">Можно в день</div><div class="value green">${fmtMoney(info.dailyRemain)} ₽</div></div>
+        <div class="card"><div class="label">На период</div><div class="value">${fmtMoney(info.remain)} ₽</div></div>
+        <div class="card"><div class="label">Уже потрачено</div><div class="value orange">${fmtMoney(info.spent)} ₽</div></div>
+        <div class="card"><div class="label">Дней до выплаты</div><div class="value blue">${info.daysLeft}</div></div>`;
+    }
+  } catch (e) { console.warn(e); }
+
+const sumBody = document.getElementById('wallet-summary-body');
   if (sumBody) {
     sumBody.innerHTML = `<tr>
       <td><strong>${fmtMoney(w.coins)} ₽</strong></td>
@@ -3157,11 +3354,14 @@ function renderFinance() {
 function openFinModal(preType) {
   ensureFinance();
   document.getElementById('fin-modal').classList.add('open');
-  document.getElementById('fin-type').value = preType === 'income' ? 'income' : 'expense';
+  document.getElementById('fin-type').value = preType === 'income' ? 'income' : (preType === 'expense' ? 'expense' : (preType || 'expense'));
   document.getElementById('fin-amount').value = '';
   document.getElementById('fin-date').value = new Date().toISOString().slice(0,10);
-  document.getElementById('fin-wallet').value = 'cash';
-  document.getElementById('fin-cat').value = '';
+  document.getElementById('fin-wallet').value = 'card';
+  let cat = '';
+  if (preType === 'advance') { document.getElementById('fin-type').value = 'income'; cat = 'Аванс'; }
+  if (preType === 'salary') { document.getElementById('fin-type').value = 'income'; cat = 'Зарплата'; }
+  document.getElementById('fin-cat').value = cat;
   document.getElementById('fin-note').value = '';
 }
 
