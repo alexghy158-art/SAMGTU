@@ -1198,7 +1198,7 @@ table, .fin-table, .mag-table, .data-table {
       </div>
       <div id="payroll-info" class="muted" style="margin-top:8px">—</div>
       <div class="cards" id="daily-budget-cards" style="margin-top:12px"></div>
-      <p class="muted" style="margin-top:8px">Когда пришли деньги: <strong>+ Аванс</strong> или <strong>+ Зарплата</strong> — дневной лимит пересчитается.</p>
+      <p class="muted" style="margin-top:8px">Когда пришли деньги: <strong>+ Аванс</strong> или <strong>+ Зарплата</strong> — дневной лимит пересчитается. <strong>Мелочь в расчёт «на день» не входит</strong> (домашний запас).</p>
     </div>
 
     <div class="section">
@@ -3079,6 +3079,12 @@ function walletTotal() {
   const w = state.finance.wallets;
   return (Number(w.cash)||0) + (Number(w.card)||0) + (Number(w.coins)||0) + (Number(w.change)||0);
 }
+/** Для дневного лимита: без мелочи (лежит дома, не тратится) */
+function spendableTotal() {
+  ensureFinance();
+  const w = state.finance.wallets;
+  return (Number(w.cash)||0) + (Number(w.card)||0) + (Number(w.change)||0);
+}
 
 function fmtMoney(n) {
   n = Math.round(Number(n) || 0);
@@ -3160,11 +3166,18 @@ function dailyBudgetInfo() {
   const lastPay = [lastAdv, lastSal].filter(Boolean)
     .sort((a,b) => (b.date||'').localeCompare(a.date||''))[0];
 
-  let pool = walletTotal();
-  let source = 'все кошельки';
+  // Мелочь не входит в дневной лимит — лежит дома
+  let pool = spendableTotal();
+  let source = 'карты + наличные + размен (без мелочи)';
   if (lastPay) {
-    pool = Number(lastPay.amount) || pool;
-    source = (lastPay.category || 'выплата') + ' · ' + fmtMoney(lastPay.amount) + ' ₽';
+    // если выплата легла на мелочь — в дневной пул не берём
+    if (lastPay.wallet === 'coins') {
+      pool = spendableTotal();
+      source = 'без мелочи (выплата была в мелочь)';
+    } else {
+      pool = Number(lastPay.amount) || pool;
+      source = (lastPay.category || 'выплата') + ' · ' + fmtMoney(lastPay.amount) + ' ₽ · без мелочи';
+    }
     const cat = (lastPay.category || '').toLowerCase();
     if (cat.includes('аванс')) periodDays = daysBetween(now, pay.nextSalary);
     else if (cat.includes('зарплат')) periodDays = daysBetween(now, pay.nextAdvance);
@@ -3173,8 +3186,11 @@ function dailyBudgetInfo() {
   let spent = 0;
   if (lastPay && lastPay.date) {
     spent = (state.finance.ops || [])
-      .filter(o => o.type === 'expense' && (o.date || '') >= lastPay.date)
+      .filter(o => o.type === 'expense' && (o.date || '') >= lastPay.date && o.wallet !== 'coins')
       .reduce((s, o) => s + (Number(o.amount) || 0), 0);
+  } else {
+    // без привязки к выплате — расходы не из мелочи за текущий период не считаем здесь отдельно
+    spent = 0;
   }
   const remain = Math.max(0, pool - spent);
   const dailyRemain = Math.floor(remain / Math.max(periodDays, 1));
