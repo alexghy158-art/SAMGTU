@@ -753,6 +753,96 @@ body.site-locked #fab { display: none !important; }
   .page-hero { height: 96px; }
 }
 
+
+/* === watch cards === */
+.watch-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+}
+.watch-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: transform .18s, box-shadow .18s;
+}
+.watch-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+.watch-card.rated-flash {
+  animation: ratedFlash .7s ease;
+}
+@keyframes ratedFlash {
+  0% { box-shadow: 0 0 0 0 rgba(37,99,235,.5); }
+  40% { box-shadow: 0 0 0 6px rgba(37,99,235,.2); }
+  100% { box-shadow: var(--shadow); }
+}
+.watch-poster {
+  position: relative;
+  height: 160px;
+  background: linear-gradient(135deg, #1e293b, #334155);
+  overflow: hidden;
+}
+.watch-poster img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.watch-poster .ph {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.5rem; opacity: .5;
+}
+.watch-body { padding: 14px 14px 12px; flex: 1; display: flex; flex-direction: column; gap: 8px; }
+.watch-plot {
+  font-size: .8rem;
+  color: var(--muted);
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.star-rate {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  margin-top: 2px;
+}
+.star-rate button {
+  width: 26px; height: 26px;
+  border: 1px solid var(--line);
+  background: #f8fafc;
+  border-radius: 8px;
+  font-size: .72rem;
+  font-weight: 700;
+  font-family: var(--font);
+  color: var(--muted);
+  cursor: pointer;
+  padding: 0;
+  transition: transform .15s, background .15s, color .15s, border-color .15s;
+}
+.star-rate button:hover { border-color: #fbbf24; color: #d97706; }
+.star-rate button.on {
+  background: linear-gradient(145deg, #fbbf24, #f59e0b);
+  border-color: #f59e0b;
+  color: #78350f;
+}
+.star-rate.just-rated button.on {
+  animation: starPop .45s ease;
+}
+@keyframes starPop {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.35); }
+  100% { transform: scale(1); }
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/appwrite@15.0.0"></script>
 </head>
@@ -817,7 +907,7 @@ body.site-locked #fab { display: none !important; }
   <main>
   <div id="page-dashboard" class="page-enter">
     <div class="page-hero">
-      <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1200&q=80&auto=format&fit=crop" alt="" loading="lazy" referrerpolicy="no-referrer">
+      <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1200&q=80&auto=format&fit=crop" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.opacity=\'0.3\'" onerror="this.style.opacity='0.25'">
       <div class="hero-caption"><strong>Сегодня</strong><span>Учёба, смены и планы на день</span></div>
     </div>
 
@@ -876,7 +966,7 @@ body.site-locked #fab { display: none !important; }
 
   <div id="page-schedule" class="hidden">
     <div class="page-hero">
-      <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1200&q=80&auto=format&fit=crop" alt="" loading="lazy" referrerpolicy="no-referrer">
+      <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1200&q=80&auto=format&fit=crop" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.opacity=\'0.3\'" onerror="this.style.opacity='0.25'">
       <div class="hero-caption"><strong>Расписание</strong><span>Пары на неделю</span></div>
     </div>
 
@@ -898,7 +988,7 @@ body.site-locked #fab { display: none !important; }
 
   <div id="page-attendance" class="hidden">
     <div class="page-hero">
-      <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1200&q=80&auto=format&fit=crop" alt="" loading="lazy" referrerpolicy="no-referrer">
+      <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1200&q=80&auto=format&fit=crop" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.opacity=\'0.3\'" onerror="this.style.opacity='0.25'">
       <div class="hero-caption"><strong>Посещаемость</strong><span>Отметки и пропуски</span></div>
     </div>
 
@@ -938,7 +1028,7 @@ body.site-locked #fab { display: none !important; }
 
   <div id="page-shifts" class="hidden">
     <div class="page-hero">
-      <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=1200&q=80&auto=format&fit=crop" alt="" loading="lazy" referrerpolicy="no-referrer">
+      <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=1200&q=80&auto=format&fit=crop" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.opacity=\'0.3\'" onerror="this.style.opacity='0.25'">
       <div class="hero-caption"><strong>Смены</strong><span>Работа и зарплата</span></div>
     </div>
 
@@ -972,7 +1062,7 @@ body.site-locked #fab { display: none !important; }
 
   <div id="page-tasks" class="hidden">
     <div class="page-hero">
-      <img src="https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=1200&q=80&auto=format&fit=crop" alt="" loading="lazy" referrerpolicy="no-referrer">
+      <img src="https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=1200&q=80&auto=format&fit=crop" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.opacity=\'0.3\'" onerror="this.style.opacity='0.25'">
       <div class="hero-caption"><strong>Задания</strong><span>Дедлайны и дела</span></div>
     </div>
 
@@ -994,7 +1084,7 @@ body.site-locked #fab { display: none !important; }
 
   <div id="page-materials" class="hidden">
     <div class="page-hero">
-      <img src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=1200&q=80&auto=format&fit=crop" alt="" loading="lazy" referrerpolicy="no-referrer">
+      <img src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=1200&q=80&auto=format&fit=crop" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.opacity=\'0.3\'" onerror="this.style.opacity='0.25'">
       <div class="hero-caption"><strong>Материалы</strong><span>Видео и методички</span></div>
     </div>
 
@@ -1028,7 +1118,7 @@ body.site-locked #fab { display: none !important; }
   
   <div id="page-magistr" class="hidden">
     <div class="page-hero">
-      <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1200&q=80&auto=format&fit=crop" alt="" loading="lazy" referrerpolicy="no-referrer">
+      <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1200&q=80&auto=format&fit=crop" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.opacity=\'0.3\'" onerror="this.style.opacity='0.25'">
       <div class="hero-caption"><strong>Магистратура</strong><span>Вузы и документы</span></div>
     </div>
 
@@ -1110,11 +1200,11 @@ body.site-locked #fab { display: none !important; }
   
   <div id="page-watch" class="hidden">
     <div class="page-hero">
-      <img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3dd?w=1200&q=80&auto=format&fit=crop" alt="" loading="lazy" referrerpolicy="no-referrer">
+      <img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3dd?w=1200&q=80&auto=format&fit=crop" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.opacity=\'0.3\'" onerror="this.style.opacity='0.25'">
       <div class="hero-caption"><strong>Кино</strong><span>Фильмы и сериалы</span></div>
     </div>
 
-    <div class="tip">Трекер фильмов, сериалов и аниме. Статусы: Хочу / Смотрю / Посмотрел / Бросил. Оценка 1–10.</div>
+    <div class="tip">Постеры и описания подгружаются сами (TVMaze + Wikipedia). Оценка 1–10 — нажми число, повторный клик сбрасывает.</div>
     <div class="cards" id="watch-stats"></div>
     <div class="filters" style="margin-bottom:12px;flex-wrap:wrap;gap:6px;display:flex">
       <button class="btn sm" type="button" id="wf-all" onclick="setWatchFilter('all')">Все</button>
@@ -1141,7 +1231,7 @@ body.site-locked #fab { display: none !important; }
   
   <div id="page-finance" class="hidden">
     <div class="page-hero">
-      <img src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=1200&q=80&auto=format&fit=crop" alt="" loading="lazy" referrerpolicy="no-referrer">
+      <img src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=1200&q=80&auto=format&fit=crop" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.opacity=\'0.3\'" onerror="this.style.opacity='0.25'">
       <div class="hero-caption"><strong>Деньги</strong><span>Кошельки и расходы</span></div>
     </div>
 
@@ -3161,7 +3251,6 @@ function renderWatch() {
   let list = items.slice();
   if (W.filter && W.filter !== 'all') list = list.filter(x => x.status === W.filter);
   if (W.typeFilter && W.typeFilter !== 'all') list = list.filter(x => x.type === W.typeFilter);
-  // sort: Смотрю, Хочу, Посмотрел, Бросил then title
   const order = { 'Смотрю': 0, 'Хочу': 1, 'Посмотрел': 2, 'Бросил': 3 };
   list.sort((a, b) => (order[a.status] ?? 9) - (order[b.status] ?? 9) || (a.title || '').localeCompare(b.title || '', 'ru'));
   const box = document.getElementById('watch-list');
@@ -3170,30 +3259,52 @@ function renderWatch() {
     box.innerHTML = '<p class="muted">Пусто. Добавь тайтл или смени фильтр.</p>';
     return;
   }
+  box.className = 'watch-grid';
   box.innerHTML = list.map(w => {
-    const stars = w.rating > 0 ? ` · ★ ${w.rating}/10` : '';
     const year = w.year ? ` · ${w.year}` : '';
-    return `<div class="lesson-card" style="flex-direction:column">
-      <div style="display:flex;justify-content:space-between;gap:8px;width:100%;align-items:flex-start">
+    const emoji = w.type === 'Сериал' ? '📺' : (w.type === 'Аниме' ? '🎌' : '🎬');
+    const poster = w.poster
+      ? `<div class="watch-poster"><img src="${String(w.poster).replace(/"/g,'')}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none';var p=this.parentElement.querySelector('.ph');if(p)p.style.display='flex'"><div class="ph" style="display:none">${emoji}</div></div>`
+      : `<div class="watch-poster"><div class="ph">${emoji}</div></div>`;
+    const plot = w.plot
+      ? `<div class="watch-plot">${String(w.plot).replace(/</g,'&lt;')}</div>`
+      : `<div class="watch-plot" style="font-style:italic;opacity:.75">${w._fetching ? 'Загрузка описания…' : 'Описание подгрузится…'}</div>`;
+    let stars = '<div class="star-rate" id="stars-' + w.id + '">';
+    const r = Number(w.rating) || 0;
+    for (let n = 1; n <= 10; n++) {
+      stars += `<button type="button" class="${r >= n ? 'on' : ''}" onclick="setWatchRating(${w.id},${n})" title="${n}/10">${n}</button>`;
+    }
+    stars += '</div>';
+    return `<div class="watch-card" id="watch-card-${w.id}">
+      ${poster}
+      <div class="watch-body">
+        <div style="display:flex;justify-content:space-between;gap:8px;align-items:flex-start">
+          <div>
+            <div class="lesson-title">${String(w.title||'').replace(/</g,'&lt;')}</div>
+            <div class="muted" style="font-size:.8rem">${w.type}${year}</div>
+            <div style="margin-top:4px">${watchBadge(w.status)}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <button class="btn sm secondary" type="button" onclick="editWatch(${w.id})">✎</button>
+            <button class="btn sm danger" type="button" onclick="delWatch(${w.id})">×</button>
+          </div>
+        </div>
+        ${plot}
+        ${w.notes ? `<div class="muted" style="font-size:.78rem">📝 ${String(w.notes).replace(/</g,'&lt;')}</div>` : ''}
         <div>
-          <div class="lesson-title">${w.title}</div>
-          <div class="muted" style="font-size:.82rem">${w.type}${year}${stars}</div>
-          <div style="margin-top:4px">${watchBadge(w.status)}</div>
-          ${w.notes ? `<div class="muted" style="margin-top:4px;font-size:.8rem">${w.notes}</div>` : ''}
+          <div class="muted" style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px">Оценка</div>
+          ${stars}
         </div>
-        <div style="display:flex;flex-direction:column;gap:4px">
-          <button class="btn sm secondary" type="button" onclick="editWatch(${w.id})">✎</button>
-          <button class="btn sm danger" type="button" onclick="delWatch(${w.id})">×</button>
+        <div class="quick-actions">
+          <button class="btn sm secondary" type="button" onclick="quickWatchStatus(${w.id},'Хочу')">Хочу</button>
+          <button class="btn sm" type="button" onclick="quickWatchStatus(${w.id},'Смотрю')">Смотрю</button>
+          <button class="btn sm green" type="button" onclick="quickWatchStatus(${w.id},'Посмотрел')">Посмотрел</button>
+          <button class="btn sm danger" type="button" onclick="quickWatchStatus(${w.id},'Бросил')">Бросил</button>
         </div>
-      </div>
-      <div class="quick-actions" style="margin-top:8px">
-        <button class="btn sm secondary" type="button" onclick="quickWatchStatus(${w.id},'Хочу')">Хочу</button>
-        <button class="btn sm" type="button" onclick="quickWatchStatus(${w.id},'Смотрю')">Смотрю</button>
-        <button class="btn sm green" type="button" onclick="quickWatchStatus(${w.id},'Посмотрел')">Посмотрел</button>
-        <button class="btn sm danger" type="button" onclick="quickWatchStatus(${w.id},'Бросил')">Бросил</button>
       </div>
     </div>`;
   }).join('');
+  list.filter(w => !w.poster || !w.plot).slice(0, 10).forEach(w => enrichWatchMeta(w.id));
 }
 function openWatchModal(item) {
   document.getElementById('watch-modal').classList.add('open');
@@ -3254,6 +3365,77 @@ function quickWatchStatus(id, status) {
   renderWatch();
 }
 
+
+
+async function enrichWatchMeta(id) {
+  ensureWatch();
+  const it = state.watch.items.find(x => x.id === id);
+  if (!it || it._fetching) return;
+  if (it.poster && it.plot) return;
+  it._fetching = true;
+  try {
+    const title = (it.title || '').trim();
+    if (!title) return;
+    try {
+      const r = await fetch('https://api.tvmaze.com/singlesearch/shows?q=' + encodeURIComponent(title));
+      if (r.ok) {
+        const d = await r.json();
+        if (d) {
+          if (!it.poster && d.image) it.poster = d.image.medium || d.image.original || '';
+          if (!it.plot && d.summary) it.plot = String(d.summary).replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim().slice(0, 320);
+          if (!it.year && d.premiered) it.year = String(d.premiered).slice(0, 4);
+        }
+      }
+    } catch (e) {}
+    if (!it.poster || !it.plot) {
+      for (const lang of ['ru', 'en']) {
+        try {
+          const r = await fetch('https://' + lang + '.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(title));
+          if (!r.ok) continue;
+          const d = await r.json();
+          if (d.type === 'disambiguation') continue;
+          if (!it.plot && d.extract) it.plot = String(d.extract).slice(0, 320);
+          if (!it.poster && d.thumbnail && d.thumbnail.source) it.poster = d.thumbnail.source;
+          if (it.plot || it.poster) break;
+        } catch (e) {}
+      }
+    }
+    if ((!it.poster || !it.plot) && title.length > 2) {
+      try {
+        const r = await fetch('https://api.tvmaze.com/search/shows?q=' + encodeURIComponent(title));
+        if (r.ok) {
+          const arr = await r.json();
+          const d = arr && arr[0] && arr[0].show;
+          if (d) {
+            if (!it.poster && d.image) it.poster = d.image.medium || d.image.original || '';
+            if (!it.plot && d.summary) it.plot = String(d.summary).replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim().slice(0, 320);
+          }
+        }
+      } catch (e) {}
+    }
+    save();
+    if (document.getElementById('watch-list')) renderWatch();
+  } finally {
+    it._fetching = false;
+  }
+}
+
+function setWatchRating(id, n) {
+  ensureWatch();
+  const it = state.watch.items.find(x => x.id === id);
+  if (!it) return;
+  const val = Math.max(0, Math.min(10, Number(n) || 0));
+  it.rating = (it.rating === val) ? 0 : val;
+  save();
+  renderWatch();
+  requestAnimationFrame(() => {
+    const stars = document.getElementById('stars-' + id);
+    const card = document.getElementById('watch-card-' + id);
+    if (stars) { stars.classList.remove('just-rated'); void stars.offsetWidth; stars.classList.add('just-rated'); }
+    if (card) { card.classList.remove('rated-flash'); void card.offsetWidth; card.classList.add('rated-flash'); }
+  });
+  if (it.rating > 0) toast('Оценка: ' + it.rating + '/10');
+}
 
 function defaultFinance() {
   return {
