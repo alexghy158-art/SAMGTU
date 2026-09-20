@@ -6,44 +6,44 @@
 <title>Трекер · СамГТУ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 
 :root {
-  /* --- поверхности: тёплая бумага --- */
-  --bg: #eef0e7;
-  --paper: #f5f6f0;
-  --paper2: #e7eadd;
-  --paper3: #dde1d0;
-  --ink: #252a1f;
-  --muted: #6c7362;
-  --muted2: #9aa08c;
-  --line: #cfd3c0;
-  --line2: #b9beab;
+  /* --- поверхности: почти чёрный, кино-журнал --- */
+  --bg: #101014;
+  --paper: #17171d;
+  --paper2: #1e1e26;
+  --paper3: #262630;
+  --ink: #f2f1ee;
+  --muted: #a4a3ad;
+  --muted2: #6d6c78;
+  --line: #2a2a34;
+  --line2: #35353f;
 
-  /* --- акцент: синие чернила (цвет чертежей в геодезии) --- */
-  --accent: #2f4d63;
-  --accent-ink: #f5f6f0;
-  --accent-soft: rgba(47,77,99,.10);
+  /* --- акцент: один яркий вермилион --- */
+  --accent: #ff5a36;
+  --accent-ink: #1a0a05;
+  --accent-soft: rgba(255,90,54,.14);
 
   /* --- статусные цвета --- */
-  --green: #4f7a4a;
-  --green-soft: rgba(79,122,74,.12);
-  --red: #a6432f;
-  --red-soft: rgba(166,67,47,.12);
-  --orange: #a8702f;
-  --orange-soft: rgba(168,112,47,.12);
-  --purple: #6d5a8f;
-  --purple-soft: rgba(109,90,143,.12);
-  --teal: #3f7d78;
-  --teal-soft: rgba(63,125,120,.12);
+  --green: #5fd692;
+  --green-soft: rgba(95,214,146,.14);
+  --red: #ff6b5e;
+  --red-soft: rgba(255,107,94,.14);
+  --orange: #ffb648;
+  --orange-soft: rgba(255,182,72,.14);
+  --purple: #b891ff;
+  --purple-soft: rgba(184,145,255,.14);
+  --teal: #4fd6cf;
+  --teal-soft: rgba(79,214,207,.14);
 
-  --radius: 10px;
-  --radius-sm: 7px;
-  --shadow: 0 1px 2px rgba(37,42,31,.06);
-  --shadow-lg: 0 18px 40px -18px rgba(37,42,31,.35);
-  --font: "Public Sans", system-ui, -apple-system, sans-serif;
-  --font-serif: "Source Serif 4", Georgia, serif;
+  --radius: 14px;
+  --radius-sm: 10px;
+  --shadow: 0 4px 14px rgba(0,0,0,.35);
+  --shadow-lg: 0 24px 50px -20px rgba(0,0,0,.75);
+  --font: "Inter", system-ui, -apple-system, sans-serif;
+  --font-serif: "Fraunces", Georgia, serif;
   --mono: "IBM Plex Mono", ui-monospace, monospace;
 
   /* aliases used in JS/old markup — не трогать имена, только значения */
@@ -64,7 +64,7 @@
   --stroke2: var(--line2);
   --blue-dim: var(--accent-soft);
 
-  color-scheme: light;
+  color-scheme: dark;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; scroll-padding-top: env(safe-area-inset-top,0px); }
@@ -643,13 +643,13 @@ tr.row-ushyol .status-select { border-color: var(--orange); color: var(--orange)
   position: relative;
   border-radius: var(--radius);
   overflow: hidden;
-  min-height: 140px;
-  margin-bottom: 14px;
-  box-shadow: var(--shadow);
+  min-height: 200px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-lg);
   cursor: pointer;
   transition: transform .2s ease, box-shadow .2s ease;
 }
-.uni-teaser:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+.uni-teaser:hover { transform: translateY(-3px); }
 .uni-teaser img {
   position: absolute; inset: 0; width: 100%; height: 100%;
   object-fit: cover; transition: transform .5s cubic-bezier(.2,.7,.3,1);
@@ -657,19 +657,48 @@ tr.row-ushyol .status-select { border-color: var(--orange); color: var(--orange)
 .uni-teaser:hover img { transform: scale(1.06); }
 .uni-teaser .scrim {
   position: absolute; inset: 0;
-  background: linear-gradient(0deg, rgba(10,14,8,.82) 0%, rgba(10,14,8,.35) 45%, rgba(10,14,8,.05) 75%);
+  background: linear-gradient(0deg, rgba(10,10,12,.94) 0%, rgba(10,10,12,.4) 50%, transparent 82%);
 }
 .uni-teaser .content {
   position: relative; z-index: 1;
   display: flex; flex-direction: column; justify-content: flex-end;
-  height: 100%; padding: 14px 16px; color: #f3f4ec;
+  height: 100%; padding: 16px 18px; color: #f2f1ee;
 }
 .uni-teaser .tag {
-  font-size: .72rem; font-weight: 600; letter-spacing: .01em;
-  color: #f3f4ec; opacity: .9; margin-bottom: 3px;
+  font-family: var(--mono); font-size: .7rem; font-weight: 600; letter-spacing: .02em;
+  color: var(--accent); margin-bottom: 5px;
 }
-.uni-teaser h3 { font-family: var(--font-serif); font-size: 1.1rem; font-weight: 600; margin: 0 0 2px; color: #fff; }
-.uni-teaser p { font-size: .78rem; color: rgba(243,244,236,.85); margin: 0; }
+.uni-teaser h3 { font-family: var(--font-serif); font-size: 1.3rem; font-weight: 600; margin: 0 0 3px; color: #fff; }
+.uni-teaser p { font-size: .8rem; color: rgba(242,241,238,.8); margin: 0; }
+
+/* Горизонтальная лента вузов со своим фото — как сторис */
+.uni-strip { display: flex; gap: 10px; overflow-x: auto; margin: 0 -14px 16px; padding: 0 14px 4px; scrollbar-width: none; }
+.uni-strip::-webkit-scrollbar { display: none; }
+.uni-mini {
+  position: relative; flex: 0 0 118px; height: 148px;
+  border-radius: var(--radius-sm); overflow: hidden; cursor: pointer;
+  transition: transform .18s ease;
+}
+.uni-mini:hover { transform: translateY(-2px); }
+.uni-mini img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.uni-mini .scrim3 { position: absolute; inset: 0; background: linear-gradient(0deg, rgba(10,10,12,.9), transparent 62%); }
+.uni-mini .t { position: absolute; left: 0; right: 0; bottom: 0; padding: 8px 9px; font-size: .74rem; font-weight: 600; line-height: 1.25; color: #fff; }
+
+/* Дуотон-обложка для разделов без реальных фото */
+.cover-band {
+  position: relative; overflow: hidden;
+  border-radius: var(--radius); min-height: 108px;
+  margin-bottom: 14px; padding: 16px 18px; display: flex;
+  flex-direction: column; justify-content: flex-end; color: #fff;
+}
+.cover-band .ic { position: absolute; right: 14px; top: 14px; font-size: 34px; opacity: .35; }
+.cover-band .ic svg.icon { width: 1em; height: 1em; }
+.cover-band h2 { font-family: var(--font-serif); font-size: 1.25rem; font-weight: 600; margin: 0; color: #fff; }
+.cover-band p { font-size: .78rem; color: rgba(255,255,255,.8); margin: 2px 0 0; }
+.cover-band.cv-study { background: linear-gradient(135deg, #1e3a5f, #0f2440); }
+.cover-band.cv-life  { background: linear-gradient(135deg, #6b3a1e, #3a1d0f); }
+.cover-band.cv-watch { background: linear-gradient(135deg, #4a1e5f, #200a2c); }
+.cover-band.cv-finance { background: linear-gradient(135deg, #1e5f45, #0d2b1f); }
 .uni-photo-card h3 { font-family: var(--font-serif); font-size: 1rem; font-weight: 600; color: var(--ink); }
 .mag-list { margin: 0; padding-left: 1.2rem; color: var(--ink); }
 .mag-list li { margin-bottom: 8px; }
@@ -696,20 +725,29 @@ svg.icon {
 .today-head .day { font-family: var(--font-serif); font-size: 1.55rem; font-weight: 600; letter-spacing: -.01em; }
 .today-head .rest { color: var(--muted); font-size: .85rem; margin-top: 2px; }
 
-/* Карточка "сейчас/дальше" */
+/* Карточка "сейчас/дальше" — полноэкранное фото-обложка */
 .now-entry {
-  background: var(--paper);
-  border: 1px solid var(--line);
-  border-left: 3px solid var(--accent);
-  border-radius: 0 var(--radius) var(--radius) 0;
-  box-shadow: var(--shadow);
-  padding: 14px 16px;
-  margin-bottom: 14px;
+  position: relative;
+  overflow: hidden;
+  min-height: 260px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  padding: 18px 18px 20px;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background-image:
+    linear-gradient(180deg, rgba(16,16,20,.12) 0%, rgba(16,16,20,.15) 32%, rgba(16,16,20,.72) 70%, rgba(16,16,20,.96) 100%),
+    url('https://commons.wikimedia.org/wiki/Special:FilePath/A%20student%20using%20a%20Theodolite%20in%20field.jpg?width=900');
+  background-size: cover;
+  background-position: center 30%;
+  color: #fff;
 }
-.now-entry .tag { display: block; font-size: .74rem; color: var(--accent); font-weight: 600; margin-bottom: 4px; }
-.now-entry h2 { font-family: var(--font-serif); font-size: 1.25rem; font-weight: 600; margin: 0 0 3px; }
-.now-entry .where { color: var(--muted); font-size: .85rem; margin-bottom: 6px; }
-.now-entry .when { font-family: var(--mono); font-size: .8rem; color: var(--ink); }
+.now-entry .tag { display: block; font-family: var(--mono); font-size: .72rem; letter-spacing: .02em; color: var(--accent); font-weight: 600; margin-bottom: 8px; }
+.now-entry h2 { font-family: var(--font-serif); font-size: 1.6rem; font-weight: 600; margin: 0 0 4px; letter-spacing: -.01em; color: #fff; }
+.now-entry .where { color: rgba(255,255,255,.72); font-size: .85rem; margin-bottom: 8px; }
+.now-entry .when { font-family: var(--mono); font-size: .78rem; color: rgba(255,255,255,.9); }
 .now-entry .when b { color: var(--orange); font-weight: 600; }
 
 /* Компактный список дел на сегодня */
@@ -1138,6 +1176,11 @@ body.site-locked #fab { display: none !important; }
   </div>
 
   <div id="page-schedule" class="hidden">
+    <div class="cover-band cv-study">
+      <span class="ic"><svg class="icon"><use href="#i-cap"/></svg></span>
+      <h2>Учёба</h2>
+      <p>Расписание, посещаемость, задания и материалы</p>
+    </div>
     <div class="section">
       <h2>Расписание на неделю <span class="sub" id="week-label"></span></h2>
       <div class="filters">
@@ -1205,6 +1248,11 @@ body.site-locked #fab { display: none !important; }
   </div>
 
   <div id="page-shifts" class="hidden">
+    <div class="cover-band cv-life">
+      <span class="ic"><svg class="icon"><use href="#i-case"/></svg></span>
+      <h2>Жизнь</h2>
+      <p>Смены, деньги и кино — вне учёбы</p>
+    </div>
     <div class="cards" id="shift-cards"></div>
     <div class="section">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
@@ -1281,6 +1329,7 @@ body.site-locked #fab { display: none !important; }
   
   <div id="page-magistr" class="hidden">
     <div id="magistr-hero"></div>
+    <div class="uni-strip" id="magistr-strip"></div>
     <div class="tip">Геодезия / геоинформатика abroad · 11 вузов из твоего гайда + личный трекер подачи. Учёба в СамГТУ — во вкладках рядом.</div>
     <div class="cards" id="mag-stats"></div>
     <div class="filters" style="margin-bottom:12px">
@@ -1358,7 +1407,11 @@ body.site-locked #fab { display: none !important; }
 
   
   <div id="page-watch" class="hidden">
-    <div class="tip">Трекер фильмов, сериалов и аниме. Статусы: Хочу / Смотрю / Посмотрел / Бросил. Оценка 1–10.</div>
+    <div class="cover-band cv-watch">
+      <span class="ic"><svg class="icon"><use href="#i-film"/></svg></span>
+      <h2>Кино</h2>
+      <p>Хочу / Смотрю / Посмотрел / Бросил</p>
+    </div>
     <div class="cards" id="watch-stats"></div>
     <div class="filters" style="margin-bottom:12px;flex-wrap:wrap;gap:6px;display:flex">
       <button class="btn sm" type="button" id="wf-all" onclick="setWatchFilter('all')">Все</button>
@@ -1384,6 +1437,11 @@ body.site-locked #fab { display: none !important; }
   
   
   <div id="page-finance" class="hidden">
+    <div class="cover-band cv-finance">
+      <span class="ic"><svg class="icon"><use href="#i-wallet"/></svg></span>
+      <h2>Деньги</h2>
+      <p>Кошельки, аванс, зарплата и дневной лимит</p>
+    </div>
     <div class="tip">Мелочь, карты, наличные, размен. Аванс и зарплата — разные платежи: укажи дни месяца и вноси «+ Аванс» / «+ Зарплата», чтобы считать, сколько можно тратить в день.</div>
 
     <div class="section">
@@ -3392,6 +3450,19 @@ function buildUniTeaserHTML(featuredOnly) {
   </div>`;
 }
 
+function renderUniStrip() {
+  const box = document.getElementById('magistr-strip');
+  if (!box || typeof MAGISTR_CATALOG === 'undefined') return;
+  box.innerHTML = MAGISTR_CATALOG.map(u => {
+    if (!u.img) return '';
+    return `<div class="uni-mini" onclick="showCatalogDetail('${u.id}')">
+      <img src="${u.img}" alt="" loading="lazy" referrerpolicy="no-referrer">
+      <div class="scrim3"></div>
+      <div class="t">${u.flag || ''} ${u.name}</div>
+    </div>`;
+  }).join('');
+}
+
 function renderMagistr() {
   ensureMagistr();
   const M = state.magistr;
@@ -3399,6 +3470,7 @@ function renderMagistr() {
   if (teaserToday) teaserToday.innerHTML = buildUniTeaserHTML(false);
   const teaserHero = document.getElementById('magistr-hero');
   if (teaserHero) teaserHero.innerHTML = buildUniTeaserHTML(false);
+  renderUniStrip();
   const docsDone = M.docs.filter(d => d.done).length;
   document.getElementById('mag-stats').innerHTML = `
     <div class="card"><div class="label">Программ</div><div class="value blue">${M.unis.length}</div></div>
