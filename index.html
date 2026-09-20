@@ -6,43 +6,44 @@
 <title>Трекер · СамГТУ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 
 :root {
-  /* --- поверхности --- */
-  --bg: #0f151c;
-  --paper: #161e27;
-  --paper2: #1c2632;
-  --paper3: #232f3d;
-  --ink: #e7edf3;
-  --muted: #8494a6;
-  --muted2: #5d6c7d;
-  --line: #26313e;
-  --line2: #324053;
+  /* --- поверхности: тёплая бумага --- */
+  --bg: #eef0e7;
+  --paper: #f5f6f0;
+  --paper2: #e7eadd;
+  --paper3: #dde1d0;
+  --ink: #252a1f;
+  --muted: #6c7362;
+  --muted2: #9aa08c;
+  --line: #cfd3c0;
+  --line2: #b9beab;
 
-  /* --- акцент (один, охра) --- */
-  --accent: #e0a44b;
-  --accent-ink: #1a1207;
-  --accent-soft: rgba(224,164,75,.14);
+  /* --- акцент: синие чернила (цвет чертежей в геодезии) --- */
+  --accent: #2f4d63;
+  --accent-ink: #f5f6f0;
+  --accent-soft: rgba(47,77,99,.10);
 
   /* --- статусные цвета --- */
-  --green: #5fb98c;
-  --green-soft: rgba(95,185,140,.14);
-  --red: #e2655c;
-  --red-soft: rgba(226,101,92,.14);
-  --orange: #e0a44b;
-  --orange-soft: rgba(224,164,75,.14);
-  --purple: #b48ad6;
-  --purple-soft: rgba(180,138,214,.14);
-  --teal: #5ec2c0;
-  --teal-soft: rgba(94,194,192,.14);
+  --green: #4f7a4a;
+  --green-soft: rgba(79,122,74,.12);
+  --red: #a6432f;
+  --red-soft: rgba(166,67,47,.12);
+  --orange: #a8702f;
+  --orange-soft: rgba(168,112,47,.12);
+  --purple: #6d5a8f;
+  --purple-soft: rgba(109,90,143,.12);
+  --teal: #3f7d78;
+  --teal-soft: rgba(63,125,120,.12);
 
-  --radius: 12px;
-  --radius-sm: 8px;
-  --shadow: 0 1px 2px rgba(0,0,0,.35);
-  --shadow-lg: 0 18px 40px -16px rgba(0,0,0,.7);
-  --font: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+  --radius: 10px;
+  --radius-sm: 7px;
+  --shadow: 0 1px 2px rgba(37,42,31,.06);
+  --shadow-lg: 0 18px 40px -18px rgba(37,42,31,.35);
+  --font: "Public Sans", system-ui, -apple-system, sans-serif;
+  --font-serif: "Source Serif 4", Georgia, serif;
   --mono: "IBM Plex Mono", ui-monospace, monospace;
 
   /* aliases used in JS/old markup — не трогать имена, только значения */
@@ -63,7 +64,7 @@
   --stroke2: var(--line2);
   --blue-dim: var(--accent-soft);
 
-  color-scheme: dark;
+  color-scheme: light;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; scroll-padding-top: env(safe-area-inset-top,0px); }
@@ -82,7 +83,7 @@ body::before, .orb { display: none !important; }
 :focus-visible { outline: none; box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent); border-radius: var(--radius-sm); }
 
 .app {
-  max-width: 1080px;
+  max-width: 640px;
   margin: 0 auto;
   padding: 16px 14px 96px;
 }
@@ -97,15 +98,16 @@ body::before, .orb { display: none !important; }
 .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
 .logo {
   width: 42px; height: 42px;
-  border-radius: 10px;
+  border-radius: 9px;
   background: var(--accent);
   color: var(--accent-ink);
-  font-weight: 700;
-  font-size: 1.1rem;
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 1.15rem;
   display: grid; place-items: center;
 }
 .logo::after { display: none; }
-.brand h1 { font-size: 1.1rem; font-weight: 600; letter-spacing: -0.01em; color: var(--ink); }
+.brand h1 { font-family: var(--font-serif); font-size: 1.15rem; font-weight: 600; letter-spacing: -0.01em; color: var(--ink); }
 .brand p { font-size: .75rem; color: var(--muted); font-weight: 400; margin-top: 1px; }
 .nav {
   display: flex;
@@ -118,7 +120,7 @@ body::before, .orb { display: none !important; }
   color: var(--muted);
   font-family: var(--font);
   font-weight: 500;
-  font-size: .8rem;
+  font-size: .82rem;
   padding: 8px 12px;
   border-radius: var(--radius-sm);
   cursor: pointer;
@@ -126,8 +128,8 @@ body::before, .orb { display: none !important; }
 }
 .nav button:hover { background: var(--paper2); color: var(--ink); }
 .nav button.active {
-  background: var(--paper3);
-  color: var(--ink);
+  background: var(--accent);
+  color: var(--accent-ink);
 }
 .nav button.lock::after {
   content: " \1F512";
@@ -177,7 +179,8 @@ body::before, .orb { display: none !important; }
 }
 .section::before { display: none; }
 .section h2 {
-  font-size: 1rem;
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
   font-weight: 600;
   margin-bottom: 12px;
   letter-spacing: -0.01em;
@@ -185,9 +188,10 @@ body::before, .orb { display: none !important; }
   align-items: center;
   gap: 8px;
 }
-.section h2 svg.icon { color: var(--accent); font-size: 1.05em; }
+.section h2 svg.icon { color: var(--accent); font-size: .9em; }
 .section h2 .sub {
-  font-size: .72rem;
+  font-family: var(--font);
+  font-size: .7rem;
   font-weight: 500;
   color: var(--muted);
   margin-left: 4px;
@@ -209,9 +213,9 @@ body::before, .orb { display: none !important; }
 }
 .card .value {
   font-family: var(--mono);
-  font-size: 1.3rem;
+  font-size: 1.25rem;
   font-weight: 500;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
   word-break: break-word;
 }
 .card .value.green { color: var(--green); }
@@ -298,8 +302,8 @@ body::before, .orb { display: none !important; }
   border: 1px solid var(--line);
 }
 .btn.secondary:hover { background: var(--paper2); color: var(--ink); }
-.btn.green { background: var(--green); border-color: var(--green); color: #08221a; font-weight: 600; }
-.btn.danger { background: var(--red); border-color: var(--red); color: #2a0d0b; font-weight: 600; }
+.btn.green { background: var(--green); border-color: var(--green); color: #fff; font-weight: 600; }
+.btn.danger { background: var(--red); border-color: var(--red); color: #fff; font-weight: 600; }
 .btn.sm { padding: 6px 10px; font-size: .75rem; border-radius: 6px; }
 
 .field { margin-bottom: 10px; }
@@ -316,7 +320,7 @@ body::before, .orb { display: none !important; }
 input, select, textarea {
   width: 100%;
   border: 1px solid var(--line);
-  background: var(--paper2);
+  background: var(--paper);
   border-radius: var(--radius-sm);
   padding: 9px 11px;
   font-family: var(--font);
@@ -340,8 +344,8 @@ input:focus, select:focus, textarea:focus {
 
 .modal-bg {
   position: fixed; inset: 0;
-  background: rgba(6,10,14,.72);
-  backdrop-filter: blur(4px);
+  background: rgba(37,42,31,.45);
+  backdrop-filter: blur(3px);
   z-index: 100;
   display: none;
   align-items: center;
@@ -359,7 +363,7 @@ input:focus, select:focus, textarea:focus {
   box-shadow: var(--shadow-lg);
   border: 1px solid var(--line);
 }
-.modal h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 12px; color: var(--ink); }
+.modal h3 { font-family: var(--font-serif); font-size: 1.15rem; font-weight: 600; margin-bottom: 12px; color: var(--ink); }
 .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 12px; }
 
 .toast {
@@ -367,9 +371,8 @@ input:focus, select:focus, textarea:focus {
   bottom: 22px;
   left: 50%;
   transform: translateX(-50%) translateY(16px);
-  background: var(--paper3);
-  border: 1px solid var(--line2);
-  color: var(--ink);
+  background: var(--ink);
+  color: var(--paper);
   padding: 10px 16px;
   border-radius: 999px;
   font-weight: 500;
@@ -398,8 +401,8 @@ input:focus, select:focus, textarea:focus {
   transition: .12s;
 }
 .shortcut:hover { border-color: var(--accent); background: var(--accent-soft); }
-.s-ico { font-size: 1.15rem; margin-bottom: 6px; color: var(--accent); line-height: 1; }
-.s-ico svg.icon { width: 1.15em; height: 1.15em; }
+.s-ico { font-size: 1.1rem; margin-bottom: 6px; color: var(--accent); line-height: 1; }
+.s-ico svg.icon { width: 1.1em; height: 1.1em; }
 .s-title { font-weight: 500; font-size: .88rem; color: var(--ink); }
 .s-sub { font-size: .74rem; color: var(--muted); font-weight: 400; }
 .quick-actions { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -446,7 +449,7 @@ input:focus, select:focus, textarea:focus {
 .fin-neg { color: var(--red); font-weight: 600; }
 td.wrap { white-space: normal; max-width: 180px; }
 
-/* attendance colors */
+/* attendance colors (old full table, kept for the "полная таблица" fallback) */
 #att-body tr.row-byl td, tr.row-byl td { background: var(--green-soft) !important; }
 #att-body tr.row-nebyl td, tr.row-nebyl td { background: var(--red-soft) !important; }
 #att-body tr.row-ushyol td, tr.row-ushyol td { background: var(--orange-soft) !important; }
@@ -463,9 +466,9 @@ td.wrap { white-space: normal; max-width: 180px; }
   font-weight: 500;
   color: var(--ink);
 }
-tr.row-byl .status-select { border-color: var(--green); background: var(--paper); color: var(--green); }
-tr.row-nebyl .status-select { border-color: var(--red); background: var(--paper); color: var(--red); }
-tr.row-ushyol .status-select { border-color: var(--orange); background: var(--paper); color: var(--orange); }
+tr.row-byl .status-select { border-color: var(--green); color: var(--green); }
+tr.row-nebyl .status-select { border-color: var(--red); color: var(--red); }
+tr.row-ushyol .status-select { border-color: var(--orange); color: var(--orange); }
 
 /* subject bars */
 .subj-row {
@@ -488,7 +491,7 @@ tr.row-ushyol .status-select { border-color: var(--orange); background: var(--pa
   .subj-row .bar { grid-area: bar; }
 }
 
-/* heatmap / calendar */
+/* heatmap / calendar (moved into "ещё" on Today) */
 .heat-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
 .heat-cell {
   aspect-ratio: 1;
@@ -540,7 +543,7 @@ tr.row-ushyol .status-select { border-color: var(--orange); background: var(--pa
 @media (max-width: 700px) { .wallet-grid { grid-template-columns: repeat(2, 1fr); } }
 .wallet-card { padding: 14px; }
 .wallet-card .w-label { font-size: .68rem; font-weight: 600; text-transform: none; letter-spacing: .01em; color: var(--muted); }
-.wallet-card .w-val { font-family: var(--mono); font-size: 1.2rem; font-weight: 500; margin-top: 4px; color: var(--ink); }
+.wallet-card .w-val { font-family: var(--mono); font-size: 1.15rem; font-weight: 500; margin-top: 4px; color: var(--ink); }
 .wallet-card input { margin-top: 8px; font-weight: 500; }
 .wallet-card.coral { background: var(--red-soft); }
 .wallet-card.sage { background: var(--green-soft); }
@@ -606,7 +609,7 @@ tr.row-ushyol .status-select { border-color: var(--orange); background: var(--pa
 }
 .uni-photo-card { overflow: hidden; }
 .uni-photo-card .body { padding: 12px; }
-.uni-photo-card h3 { font-size: .95rem; font-weight: 600; color: var(--ink); }
+.uni-photo-card h3 { font-family: var(--font-serif); font-size: 1rem; font-weight: 600; color: var(--ink); }
 .mag-list { margin: 0; padding-left: 1.2rem; color: var(--ink); }
 .mag-list li { margin-bottom: 8px; }
 .goal-box input[type="number"] { max-width: 140px; }
@@ -619,9 +622,103 @@ tr.row-ushyol .status-select { border-color: var(--orange); background: var(--pa
 svg.icon {
   width: 1em; height: 1em; flex: none; display: inline-block;
   vertical-align: -.125em;
-  fill: none; stroke: currentColor; stroke-width: 1.7;
+  fill: none; stroke: currentColor; stroke-width: 1.6;
   stroke-linecap: round; stroke-linejoin: round;
 }
+
+/* ============================================================
+   НОВОЕ — «Полевой журнал»: главный экран и посещаемость
+   ============================================================ */
+
+/* Заголовок дня на "Сегодня" */
+.today-head { margin-bottom: 4px; }
+.today-head .day { font-family: var(--font-serif); font-size: 1.55rem; font-weight: 600; letter-spacing: -.01em; }
+.today-head .rest { color: var(--muted); font-size: .85rem; margin-top: 2px; }
+
+/* Карточка "сейчас/дальше" */
+.now-entry {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  box-shadow: var(--shadow);
+  padding: 14px 16px;
+  margin-bottom: 14px;
+}
+.now-entry .tag { display: block; font-size: .74rem; color: var(--accent); font-weight: 600; margin-bottom: 4px; }
+.now-entry h2 { font-family: var(--font-serif); font-size: 1.25rem; font-weight: 600; margin: 0 0 3px; }
+.now-entry .where { color: var(--muted); font-size: .85rem; margin-bottom: 6px; }
+.now-entry .when { font-family: var(--mono); font-size: .8rem; color: var(--ink); }
+.now-entry .when b { color: var(--orange); font-weight: 600; }
+
+/* Компактный список дел на сегодня */
+.agenda-row {
+  display: flex; gap: 12px; padding: 9px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: .88rem;
+}
+.agenda-row:last-child { border-bottom: 0; }
+.agenda-row time { font-family: var(--mono); font-size: .78rem; color: var(--muted); flex: none; width: 42px; padding-top: 1px; }
+.agenda-row .what { flex: 1; }
+.agenda-row .what b { font-weight: 600; }
+.agenda-row .what span { display: block; color: var(--muted); font-size: .78rem; }
+
+/* Тонкая строка-статистика вместо стены плиток */
+.stat-strip { display: flex; gap: 20px; flex-wrap: wrap; padding-top: 2px; }
+.stat-strip .stat { font-size: .82rem; color: var(--muted); }
+.stat-strip .stat b { font-family: var(--mono); color: var(--ink); font-weight: 600; font-size: .92rem; }
+
+/* Свёрнутый блок "Показать больше" */
+details.more { margin-top: 4px; }
+details.more > summary {
+  list-style: none; cursor: pointer;
+  display: flex; align-items: center; gap: 8px;
+  padding: 12px 14px; margin-bottom: 12px;
+  background: var(--paper2); border: 1px solid var(--line); border-radius: var(--radius);
+  font-size: .85rem; font-weight: 500; color: var(--muted);
+}
+details.more > summary::-webkit-details-marker { display: none; }
+details.more > summary::before { content: '▸'; color: var(--accent); }
+details.more[open] > summary::before { content: '▾'; }
+details.more[open] > summary { margin-bottom: 12px; }
+
+/* Посещаемость по неделям */
+.att-week-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+.att-week-head h2 { margin-bottom: 0; }
+.wk-nav { display: flex; align-items: center; gap: 8px; }
+.wk-nav button {
+  width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--line);
+  background: var(--paper); color: var(--ink); cursor: pointer; font-size: .8rem; line-height: 1; padding: 0;
+}
+.wk-nav button:hover { border-color: var(--accent); color: var(--accent); }
+.wk-nav span { font-family: var(--mono); font-size: .78rem; color: var(--muted); }
+
+.att-legend { font-size: .78rem; color: var(--muted); margin: 6px 0 10px; }
+
+.day-block { padding: 11px 0; border-bottom: 1px solid var(--line); }
+.day-block:last-child { border-bottom: 0; }
+.day-block .d-head { display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px; }
+.day-block .d-name { font-weight: 600; font-size: .86rem; }
+.day-block .d-date { font-family: var(--mono); font-size: .76rem; color: var(--muted); }
+.day-block.is-today .d-name { color: var(--accent); }
+.day-block .d-empty { font-size: .8rem; color: var(--muted2); font-style: italic; }
+
+.att-chips { display: flex; flex-wrap: wrap; gap: 7px; }
+.att-chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 1px solid var(--line); background: var(--paper);
+  border-radius: var(--radius-sm); padding: 7px 10px; cursor: pointer;
+  font: inherit; font-size: .8rem; color: var(--ink);
+}
+.att-chip:hover { border-color: var(--accent); }
+.att-chip .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--line2); flex: none; }
+.att-chip.byl { background: var(--green-soft); border-color: transparent; }
+.att-chip.byl .dot { background: var(--green); }
+.att-chip.nebyl { background: var(--red-soft); border-color: transparent; }
+.att-chip.nebyl .dot { background: var(--red); }
+.att-chip.ushyol { background: var(--orange-soft); border-color: transparent; }
+.att-chip.ushyol .dot { background: var(--orange); }
+.att-chip time { font-family: var(--mono); font-size: .72rem; color: var(--muted); }
 
 /* === site auth gate === */
 .auth-gate {
@@ -633,7 +730,7 @@ svg.icon {
   justify-content: center;
   padding: 20px;
   background:
-    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(224,164,75,.10), transparent 50%),
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(47,77,99,.08), transparent 50%),
     var(--bg);
 }
 .auth-gate.hidden { display: none !important; }
@@ -652,12 +749,14 @@ svg.icon {
   border-radius: 14px;
   background: var(--accent);
   color: var(--accent-ink);
-  font-weight: 700;
+  font-family: var(--font-serif);
+  font-weight: 600;
   font-size: 1.4rem;
   display: grid;
   place-items: center;
 }
 .auth-card h1 {
+  font-family: var(--font-serif);
   font-size: 1.35rem;
   font-weight: 600;
   letter-spacing: -0.01em;
@@ -671,7 +770,7 @@ svg.icon {
 }
 .auth-card .field { text-align: left; margin-bottom: 8px; }
 .auth-btn { width: 100%; margin-top: 8px; padding: 12px; font-size: .95rem; background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
-.auth-btn:hover { background: #eab35f; }
+.auth-btn:hover { background: #253f52; }
 .auth-error {
   min-height: 1.25em;
   color: var(--red);
@@ -703,7 +802,7 @@ body.site-locked #fab { display: none !important; }
   color: var(--muted);
 }
 .auth-tab.active {
-  background: var(--paper3);
+  background: var(--paper);
   color: var(--ink);
 }
 .auth-info {
@@ -818,9 +917,7 @@ body.site-locked #fab { display: none !important; }
     <nav class="nav" id="nav">
       <button data-page="dashboard" class="active">Сегодня</button>
       <button data-page="study">Учёба</button>
-      <button data-page="shifts">Смены</button>
-      <button data-page="finance">Деньги</button>
-      <button data-page="watch">Кино</button>
+      <button data-page="life">Жизнь</button>
       <button data-page="magistr">Магистратура</button>
     </nav>
     <div class="subnav" id="study-subnav">
@@ -829,138 +926,152 @@ body.site-locked #fab { display: none !important; }
       <button type="button" data-sub="tasks" onclick="goPage('tasks')">Задания</button>
       <button type="button" data-sub="materials" onclick="goPage('materials')">Материалы</button>
     </div>
+    <div class="subnav" id="life-subnav">
+      <button type="button" data-sub="shifts" onclick="goPage('shifts')">Смены</button>
+      <button type="button" data-sub="finance" onclick="goPage('finance')">Деньги</button>
+      <button type="button" data-sub="watch" onclick="goPage('watch')">Кино</button>
+    </div>
   </header>
 
   <main>
   <div id="page-dashboard" class="page-enter">
+
+    <div class="today-head">
+      <div class="day" id="today-day-title"></div>
+      <div class="rest" id="today-rest-label"></div>
+    </div>
+
+    <div class="now-entry" id="now-next"></div>
+
     <div class="tip" id="daily-tip"></div>
-    <div class="cards" id="dash-cards"></div>
 
     <div class="section">
-      <h2><svg class="icon"><use href="#i-target"/></svg> Быстрый доступ</h2>
-      <div class="shortcut-grid">
-        <button class="shortcut" type="button" onclick="goPage('attendance')">
-          <div class="s-ico"><svg class="icon"><use href="#i-check"/></svg></div>
-          <div class="s-title">Отметить пары</div>
-          <div class="s-sub">Посещаемость</div>
-        </button>
-        <button class="shortcut" type="button" onclick="openShiftModal()">
-          <div class="s-ico"><svg class="icon"><use href="#i-case"/></svg></div>
-          <div class="s-title">Добавить смену</div>
-          <div class="s-sub">После работы</div>
-        </button>
-        <button class="shortcut" type="button" onclick="goPage('materials')">
-          <div class="s-ico"><svg class="icon"><use href="#i-book"/></svg></div>
-          <div class="s-title">Материалы</div>
-          <div class="s-sub">Видео и методички</div>
-        </button>
-        <button class="shortcut" type="button" onclick="goPage('tasks')">
-          <div class="s-ico"><svg class="icon"><use href="#i-task"/></svg></div>
-          <div class="s-title">Задания</div>
-          <div class="s-sub">Дедлайны</div>
-        </button>
-        <button class="shortcut" type="button" onclick="goPage('schedule')">
-          <div class="s-ico"><svg class="icon"><use href="#i-week"/></svg></div>
-          <div class="s-title">Расписание</div>
-          <div class="s-sub">Неделя</div>
-        </button>
-        <button class="shortcut" type="button" onclick="document.getElementById('import-file').click()">
-          <div class="s-ico"><svg class="icon"><use href="#i-save"/></svg></div>
-          <div class="s-title">Backup</div>
-          <div class="s-sub">Загрузить JSON</div>
-        </button>
-      </div>
+      <h2><svg class="icon"><use href="#i-cap"/></svg> Дальше сегодня <span class="sub" id="today-date-label"></span></h2>
+      <div id="today-lessons"></div>
+      <div class="stat-strip" id="today-strip" style="margin-top:10px"></div>
     </div>
 
-    <div class="section">
-      <h2><svg class="icon"><use href="#i-calendar"/></svg> Календарь посещаемости <span class="sub">текущий месяц</span></h2>
-      <div class="heat-grid" id="heat-grid"></div>
-      <p class="muted" style="margin-top:10px">Зелёный — был, красный — пропуск, оранжевый — смешанный день</p>
+    <div class="quick-actions" style="margin-bottom:14px">
+      <button class="btn" type="button" onclick="goPage('attendance')"><svg class="icon"><use href="#i-check"/></svg> Отметить пары</button>
+      <button class="btn" type="button" onclick="openShiftModal()"><svg class="icon"><use href="#i-case"/></svg> Добавить смену</button>
     </div>
 
+    <details class="more">
+      <summary>Показать больше</summary>
 
-    <div class="grid-2">
       <div class="section">
-        <h2><svg class="icon"><use href="#i-target"/></svg> Цель по зарплате за месяц</h2>
-        <div class="goal-box">
-          <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px">
-            <span class="muted">Цель на текущий месяц:</span>
-            <input type="number" id="salary-goal" min="0" step="1000" onchange="saveGoal()" placeholder="30000">
-            <span class="muted">₽</span>
-          </div>
-          <div id="goal-progress"></div>
+        <h2><svg class="icon"><use href="#i-target"/></svg> Быстрый доступ</h2>
+        <div class="shortcut-grid">
+          <button class="shortcut" type="button" onclick="goPage('materials')">
+            <div class="s-ico"><svg class="icon"><use href="#i-book"/></svg></div>
+            <div class="s-title">Материалы</div>
+            <div class="s-sub">Видео и методички</div>
+          </button>
+          <button class="shortcut" type="button" onclick="goPage('tasks')">
+            <div class="s-ico"><svg class="icon"><use href="#i-task"/></svg></div>
+            <div class="s-title">Задания</div>
+            <div class="s-sub">Дедлайны</div>
+          </button>
+          <button class="shortcut" type="button" onclick="goPage('schedule')">
+            <div class="s-ico"><svg class="icon"><use href="#i-week"/></svg></div>
+            <div class="s-title">Расписание</div>
+            <div class="s-sub">Неделя</div>
+          </button>
+          <button class="shortcut" type="button" onclick="document.getElementById('import-file').click()">
+            <div class="s-ico"><svg class="icon"><use href="#i-save"/></svg></div>
+            <div class="s-title">Backup</div>
+            <div class="s-sub">Загрузить JSON</div>
+          </button>
         </div>
       </div>
+
+      <div class="cards" id="dash-cards"></div>
+
       <div class="section">
-        <h2><svg class="icon"><use href="#i-pen"/></svg> Заметка на сегодня</h2>
-        <textarea class="note-area" id="day-note" style="width:100%;min-height:90px" placeholder="Что важно сегодня? Что догнать после смены?"></textarea>
-        <div style="margin-top:8px"><button class="btn sm" onclick="saveDayNote()">Сохранить заметку</button></div>
+        <h2><svg class="icon"><use href="#i-calendar"/></svg> Календарь посещаемости <span class="sub">текущий месяц</span></h2>
+        <div class="heat-grid" id="heat-grid"></div>
+        <p class="muted" style="margin-top:10px">Зелёный — был, красный — пропуск, оранжевый — смешанный день</p>
       </div>
-    </div>
 
-    <div class="grid-2">
+      <div class="grid-2">
+        <div class="section">
+          <h2><svg class="icon"><use href="#i-target"/></svg> Цель по зарплате за месяц</h2>
+          <div class="goal-box">
+            <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px">
+              <span class="muted">Цель на текущий месяц:</span>
+              <input type="number" id="salary-goal" min="0" step="1000" onchange="saveGoal()" placeholder="30000">
+              <span class="muted">₽</span>
+            </div>
+            <div id="goal-progress"></div>
+          </div>
+        </div>
+        <div class="section">
+          <h2><svg class="icon"><use href="#i-pen"/></svg> Заметка на сегодня</h2>
+          <textarea class="note-area" id="day-note" style="width:100%;min-height:90px" placeholder="Что важно сегодня? Что догнать после смены?"></textarea>
+          <div style="margin-top:8px"><button class="btn sm" onclick="saveDayNote()">Сохранить заметку</button></div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="section">
+          <h2><svg class="icon"><use href="#i-week"/></svg> Завтра</h2>
+          <div id="tomorrow-lessons"></div>
+          <h2 style="margin-top:16px"><svg class="icon"><use href="#i-case"/></svg> Ближайшая смена</h2>
+          <div id="next-shift" class="muted">—</div>
+        </div>
+        <div class="section">
+          <h2><svg class="icon"><use href="#i-flag"/></svg> Дедлайны на 7 дней</h2>
+          <div id="upcoming-deadlines" class="muted">Нет</div>
+        </div>
+      </div>
+
       <div class="section">
-        <h2><svg class="icon"><use href="#i-cap"/></svg> Пары сегодня <span class="sub" id="today-date-label"></span></h2>
-        <div id="today-lessons"></div>
+        <h2><svg class="icon"><use href="#i-trend"/></svg> По предметам</h2>
+        <div id="subj-stats"></div>
+      </div>
+
+      <div class="section">
+        <h2><svg class="icon"><use href="#i-trophy"/></svg> Ачивки</h2>
+        <div class="ach-grid" id="achievements"></div>
+      </div>
+
+      <div class="section">
+        <h2><svg class="icon"><use href="#i-week"/></svg> Итог этой недели</h2>
+        <div class="week-summary" id="week-summary"></div>
+      </div>
+
+      <div class="section">
+        <h2><svg class="icon"><use href="#i-wallet"/></svg> Зарплата по месяцам</h2>
+        <div class="cards" id="dash-salary"></div>
+      </div>
+
+      <div class="section">
+        <h2><svg class="icon"><use href="#i-wallet"/></svg> Деньги <span class="sub">кошельки</span></h2>
+        <div id="dash-finance" class="muted">—</div>
       </div>
       <div class="section">
-        <h2><svg class="icon"><use href="#i-week"/></svg> Завтра</h2>
-        <div id="tomorrow-lessons"></div>
-        <h2 style="margin-top:16px"><svg class="icon"><use href="#i-case"/></svg> Ближайшая смена</h2>
-        <div id="next-shift" class="muted">—</div>
-        <h2 style="margin-top:16px"><svg class="icon"><use href="#i-flag"/></svg> Дедлайны на 7 дней</h2>
-        <div id="upcoming-deadlines" class="muted">Нет</div>
+        <h2><svg class="icon"><use href="#i-film"/></svg> Кино <span class="sub">кратко</span></h2>
+        <div id="dash-watch" class="muted">—</div>
       </div>
-    </div>
 
-    <div class="section">
-      <h2><svg class="icon"><use href="#i-trend"/></svg> По предметам</h2>
-      <div id="subj-stats"></div>
-    </div>
+      <div class="section">
+        <h2><svg class="icon"><use href="#i-globe"/></svg> Магистратура <span class="sub">кратко</span></h2>
+        <div id="dash-magistr" class="muted">—</div>
+      </div>
 
-    <div class="section">
-      <h2><svg class="icon"><use href="#i-trophy"/></svg> Ачивки</h2>
-      <div class="ach-grid" id="achievements"></div>
-    </div>
+      <div class="section">
+        <h2><svg class="icon"><use href="#i-alert"/></svg> Пары под угрозой из-за работы</h2>
+        <div id="dash-conflicts" class="muted">Нет</div>
+      </div>
 
-    <div class="section">
-      <h2><svg class="icon"><use href="#i-week"/></svg> Итог этой недели</h2>
-      <div class="week-summary" id="week-summary"></div>
-    </div>
-
-    <div class="section">
-      <h2><svg class="icon"><use href="#i-wallet"/></svg> Зарплата по месяцам</h2>
-      <div class="cards" id="dash-salary"></div>
-    </div>
-
-
-
-    <div class="section">
-      <h2><svg class="icon"><use href="#i-wallet"/></svg> Деньги <span class="sub">кошельки</span></h2>
-      <div id="dash-finance" class="muted">—</div>
-    </div>
-    <div class="section">
-      <h2><svg class="icon"><use href="#i-film"/></svg> Кино <span class="sub">кратко</span></h2>
-      <div id="dash-watch" class="muted">—</div>
-    </div>
-
-    <div class="section">
-      <h2><svg class="icon"><use href="#i-globe"/></svg> Магистратура <span class="sub">кратко</span></h2>
-      <div id="dash-magistr" class="muted">—</div>
-    </div>
-
-    <div class="section">
-      <h2><svg class="icon"><use href="#i-alert"/></svg> Пары под угрозой из-за работы</h2>
-      <div id="dash-conflicts" class="muted">Нет</div>
-    </div>
-
-    <div class="section">
-      <h2><svg class="icon"><use href="#i-gear"/></svg> Данные</h2>
-      <p class="muted" style="margin-bottom:10px">Сохраняется в браузере. Скачай backup, если меняешь устройство.</p>
-      <button class="btn secondary" onclick="exportData()">Скачать backup</button>
-      <button class="btn secondary" onclick="document.getElementById('import-file').click()">Загрузить backup</button>
-      <input type="file" id="import-file" accept=".json" class="hidden" onchange="importData(event)">
-    </div>
+      <div class="section">
+        <h2><svg class="icon"><use href="#i-gear"/></svg> Данные</h2>
+        <p class="muted" style="margin-bottom:10px">Сохраняется в браузере. Скачай backup, если меняешь устройство.</p>
+        <button class="btn secondary" onclick="exportData()">Скачать backup</button>
+        <button class="btn secondary" onclick="document.getElementById('import-file').click()">Загрузить backup</button>
+        <input type="file" id="import-file" accept=".json" class="hidden" onchange="importData(event)">
+      </div>
+    </details>
   </div>
 
   <div id="page-schedule" class="hidden">
@@ -982,37 +1093,52 @@ body.site-locked #fab { display: none !important; }
 
   <div id="page-attendance" class="hidden">
     <div class="section">
-      <h2>Посещаемость</h2>
-      <div class="filters">
-        <label>Месяц</label>
-        <select id="att-month">
-          <option value="">Все</option>
-          <option value="Сентябрь">Сентябрь</option>
-          <option value="Октябрь">Октябрь</option>
-          <option value="Ноябрь">Ноябрь</option>
-          <option value="Декабрь">Декабрь</option>
-        </select>
-        <label>Статус</label>
-        <select id="att-status">
-          <option value="">Все</option>
-          <option value="Был">Был</option>
-          <option value="Не был">Не был</option>
-          <option value="Ушёл">Ушёл</option>
-          <option value="Отменена">Отменена</option>
-          <option value="__empty">Не отмечено</option>
-          <option value="__work">Из-за работы</option>
-        </select>
-        <input type="search" id="att-search" placeholder="Поиск по предмету..." style="min-width:180px">
+      <div class="att-week-head">
+        <h2>Посещаемость</h2>
+        <div class="wk-nav">
+          <button type="button" aria-label="Прошлая неделя" onclick="shiftAttWeek(-1)">‹</button>
+          <span id="att-week-label"></span>
+          <button type="button" aria-label="Следующая неделя" onclick="shiftAttWeek(1)">›</button>
+        </div>
       </div>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr><th>Дата</th><th>Время</th><th>Предмет</th><th>Тип</th><th>Преподаватель</th><th>Статус</th><th>Причина</th><th>Работа</th></tr>
-          </thead>
-          <tbody id="att-body"></tbody>
-        </table>
-      </div>
+      <div class="att-legend">Тап по паре меняет статус: не отмечено → был → не был → ушёл</div>
+      <div id="att-week-body"></div>
     </div>
+
+    <details class="more">
+      <summary>Полная таблица и фильтры</summary>
+      <div class="section">
+        <div class="filters">
+          <label>Месяц</label>
+          <select id="att-month">
+            <option value="">Все</option>
+            <option value="Сентябрь">Сентябрь</option>
+            <option value="Октябрь">Октябрь</option>
+            <option value="Ноябрь">Ноябрь</option>
+            <option value="Декабрь">Декабрь</option>
+          </select>
+          <label>Статус</label>
+          <select id="att-status">
+            <option value="">Все</option>
+            <option value="Был">Был</option>
+            <option value="Не был">Не был</option>
+            <option value="Ушёл">Ушёл</option>
+            <option value="Отменена">Отменена</option>
+            <option value="__empty">Не отмечено</option>
+            <option value="__work">Из-за работы</option>
+          </select>
+          <input type="search" id="att-search" placeholder="Поиск по предмету..." style="min-width:180px">
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Дата</th><th>Время</th><th>Предмет</th><th>Тип</th><th>Преподаватель</th><th>Статус</th><th>Причина</th><th>Работа</th></tr>
+            </thead>
+            <tbody id="att-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </details>
   </div>
 
   <div id="page-shifts" class="hidden">
@@ -1609,6 +1735,7 @@ if (!state.watch) state.watch = defaultWatch();
 if (!state.finance) state.finance = defaultFinance();
 if (!state.magistr) state.magistr = defaultMagistr();
 let weekOffset = 0;
+let attWeekOffset = 0;
 
 function save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
 
@@ -1892,6 +2019,80 @@ function renderDashboard() {
     : 'Нет пересечений впереди';
 }
 
+function renderTodayHero() {
+  const today = todayISO();
+  const tDate = new Date(today + 'T12:00:00');
+  const dEl = document.getElementById('today-day-title');
+  if (dEl) dEl.textContent = DAY_NAMES_FULL[tDate.getDay()] + ', ' + fmtDate(today);
+
+  const lessonsToday = classesOn(today);
+  const shiftsToday = state.shifts.filter(s => s.startDate === today);
+  const rEl = document.getElementById('today-rest-label');
+  if (rEl) {
+    const parts = [];
+    if (lessonsToday.length) parts.push(lessonsToday.length + (lessonsToday.length === 1 ? ' пара' : ' пары'));
+    if (shiftsToday.length) parts.push('смена');
+    rEl.textContent = parts.length ? parts.join(' · ') : 'Свободный день';
+  }
+
+  const items = [
+    ...lessonsToday.map(c => ({ start: c.start, end: c.end, title: c.subject, where: [c.type, c.teacher].filter(Boolean).join(' · ') })),
+    ...shiftsToday.map(s => ({ start: s.startTime, end: s.endTime, title: 'Смена «' + (s.type || 'Смена') + '»', where: (s.endDate && s.endDate !== s.startDate) ? ('до ' + fmtDate(s.endDate) + ' ' + s.endTime) : '' }))
+  ].sort((a, b) => timeToMin(a.start) - timeToMin(b.start));
+
+  function overlapNote(item) {
+    const clash = items.find(x => x !== item && timeToMin(x.start) < timeToMin(item.end) && timeToMin(x.end) > timeToMin(item.start));
+    return clash ? ('пересекается с «' + clash.title + '», ' + clash.start + '–' + clash.end) : '';
+  }
+
+  const nowMin = nowMinutes();
+  const current = items.find(i => timeToMin(i.start) <= nowMin && nowMin < timeToMin(i.end));
+  const next = items.find(i => timeToMin(i.start) > nowMin);
+  const nEl = document.getElementById('now-next');
+  if (nEl) {
+    if (current) {
+      const left = timeToMin(current.end) - nowMin;
+      const ov = overlapNote(current);
+      nEl.innerHTML = `<span class="tag">Сейчас идёт${left > 0 ? ' · ' + left + ' мин до конца' : ''}</span>
+        <h2>${current.title}</h2>
+        ${current.where ? `<div class="where">${current.where}</div>` : ''}
+        <div class="when">${current.start}–${current.end}${ov ? ' <b>· ' + ov + '</b>' : ''}</div>`;
+    } else if (next) {
+      const until = timeToMin(next.start) - nowMin;
+      const untilTxt = until >= 60 ? Math.round(until / 60) + ' ч' : until + ' мин';
+      const ov = overlapNote(next);
+      nEl.innerHTML = `<span class="tag">Дальше сегодня · через ${untilTxt}</span>
+        <h2>${next.title}</h2>
+        ${next.where ? `<div class="where">${next.where}</div>` : ''}
+        <div class="when">${next.start}–${next.end}${ov ? ' <b>· ' + ov + '</b>' : ''}</div>`;
+    } else {
+      nEl.innerHTML = `<span class="tag">На сегодня всё</span><h2>Пар и смен больше нет</h2><div class="where">Можно выдохнуть.</div>`;
+    }
+  }
+
+  const sEl = document.getElementById('today-strip');
+  if (sEl) {
+    try {
+      const was = state.classes.filter(c => c.status === 'Был').length;
+      const miss = state.classes.filter(c => c.status === 'Не был' || c.status === 'Ушёл').length;
+      const pct = (was + miss) ? Math.round(was / (was + miss) * 100) : 0;
+      let dailyTxt = '—';
+      try { const dbi = dailyBudgetInfo(); dailyTxt = fmtMoney(dbi.dailyRemain) + ' ₽'; } catch (e) {}
+      let magTxt = '—';
+      try {
+        ensureMagistr();
+        const M = state.magistr;
+        const docsDone = (M.docs || []).filter(d => d.done).length;
+        magTxt = docsDone + ' / ' + ((M.docs || []).length || 9);
+      } catch (e) {}
+      sEl.innerHTML = `
+        <span class="stat">Посещаемость <b>${pct}%</b></span>
+        <span class="stat">В день можно <b>${dailyTxt}</b></span>
+        <span class="stat">Магистратура <b>${magTxt}</b></span>`;
+    } catch (e) {}
+  }
+}
+
 // Schedule week view
 function mondayOf(offsetWeeks) {
   const d = new Date();
@@ -2015,6 +2216,52 @@ function setReason(id, val) {
 document.getElementById('att-month').addEventListener('change', renderAttendance);
 document.getElementById('att-status').addEventListener('change', renderAttendance);
 document.getElementById('att-search').addEventListener('input', renderAttendance);
+
+function shiftAttWeek(dir) {
+  attWeekOffset += dir;
+  renderAttendanceWeek();
+}
+
+function cycleAttStatus(id) {
+  const c = state.classes.find(x => x.id === id);
+  if (!c) return;
+  const order = ['', 'Был', 'Не был', 'Ушёл'];
+  const idx = order.indexOf(c.status || '');
+  const next = order[(idx + 1) % order.length];
+  setStatus(id, next);
+}
+
+function renderAttendanceWeek() {
+  const labelEl = document.getElementById('att-week-label');
+  const bodyEl = document.getElementById('att-week-body');
+  if (!bodyEl) return;
+
+  const mon = mondayOf(attWeekOffset);
+  const days = [];
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(mon);
+    d.setDate(mon.getDate() + i);
+    const iso = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    days.push({ d, iso });
+  }
+  if (labelEl) labelEl.textContent = fmtDate(days[0].iso) + '–' + fmtDate(days[6].iso);
+
+  const today = todayISO();
+  bodyEl.innerHTML = days.map(({ d, iso }) => {
+    const list = classesOn(iso);
+    const isToday = iso === today;
+    const chips = list.map(c => {
+      const stClass = c.status === 'Был' ? 'byl' : c.status === 'Не был' ? 'nebyl' : c.status === 'Ушёл' ? 'ushyol' : '';
+      return `<button type="button" class="att-chip ${stClass}" onclick="cycleAttStatus(${c.id})">
+        <span class="dot"></span>${c.subject} <time>${c.start}</time>
+      </button>`;
+    }).join('');
+    return `<div class="day-block ${isToday ? 'is-today' : ''}">
+      <div class="d-head"><span class="d-name">${isToday ? 'Сегодня, ' + DAY_NAMES_FULL[d.getDay()].toLowerCase() : DAY_NAMES_FULL[d.getDay()]}</span><span class="d-date">${fmtDate(iso)}</span></div>
+      ${list.length ? `<div class="att-chips">${chips}</div>` : '<div class="d-empty">Пар нет</div>'}
+    </div>`;
+  }).join('');
+}
 
 function renderShifts() {
   const byMonth = { 9:0, 10:0, 11:0, 12:0 };
@@ -2395,19 +2642,29 @@ function goPage(p, skipLock) {
     return;
   }
   if (p === 'study') p = 'schedule';
+  if (p === 'life') p = 'shifts';
   // Смены и Деньги доступны после входа на сайт (тот же пароль)
 
   const STUDY = ['schedule','attendance','tasks','materials'];
+  const LIFE = ['shifts','finance','watch'];
   const isStudy = STUDY.includes(p);
+  const isLife = LIFE.includes(p);
   document.querySelectorAll('#nav button').forEach(b => {
     const page = b.dataset.page;
-    const active = page === p || (page === 'study' && isStudy);
+    const active = page === p || (page === 'study' && isStudy) || (page === 'life' && isLife);
     b.classList.toggle('active', active);
   });
   const sub = document.getElementById('study-subnav');
   if (sub) {
     sub.classList.toggle('show', isStudy);
     sub.querySelectorAll('button').forEach(b => {
+      b.classList.toggle('active', b.dataset.sub === p);
+    });
+  }
+  const subLife = document.getElementById('life-subnav');
+  if (subLife) {
+    subLife.classList.toggle('show', isLife);
+    subLife.querySelectorAll('button').forEach(b => {
       b.classList.toggle('active', b.dataset.sub === p);
     });
   }
@@ -3657,8 +3914,10 @@ function delFinOp(id) {
 
 function render() {
   renderDashboard();
+  renderTodayHero();
   renderSchedule();
   renderAttendance();
+  renderAttendanceWeek();
   renderShifts();
   renderTasks();
   renderMaterials();
