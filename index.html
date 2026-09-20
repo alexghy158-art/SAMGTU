@@ -6,47 +6,35 @@
 <title>Трекер · СамГТУ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
 
 :root {
-  /* --- поверхности: почти чёрный, кино-журнал --- */
-  --bg: #101014;
-  --paper: #17171d;
-  --paper2: #1e1e26;
-  --paper3: #262630;
-  --ink: #f2f1ee;
-  --muted: #a4a3ad;
-  --muted2: #6d6c78;
-  --line: #2a2a34;
-  --line2: #35353f;
-
-  /* --- акцент: один яркий вермилион --- */
-  --accent: #ff5a36;
-  --accent-ink: #1a0a05;
-  --accent-soft: rgba(255,90,54,.14);
-
-  /* --- статусные цвета --- */
-  --green: #5fd692;
-  --green-soft: rgba(95,214,146,.14);
-  --red: #ff6b5e;
-  --red-soft: rgba(255,107,94,.14);
-  --orange: #ffb648;
-  --orange-soft: rgba(255,182,72,.14);
-  --purple: #b891ff;
-  --purple-soft: rgba(184,145,255,.14);
-  --teal: #4fd6cf;
-  --teal-soft: rgba(79,214,207,.14);
-
-  --radius: 14px;
-  --radius-sm: 10px;
-  --shadow: 0 4px 14px rgba(0,0,0,.35);
-  --shadow-lg: 0 24px 50px -20px rgba(0,0,0,.75);
-  --font: "Inter", system-ui, -apple-system, sans-serif;
-  --font-serif: "Fraunces", Georgia, serif;
-  --mono: "IBM Plex Mono", ui-monospace, monospace;
-
-  /* aliases used in JS/old markup — не трогать имена, только значения */
+  --bg: #f8fafc;
+  --bg-elevated: #ffffff;
+  --paper: #ffffff;
+  --ink: #0f172a;
+  --muted: #64748b;
+  --line: #e2e8f0;
+  --line2: #cbd5e1;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --accent-soft: #eff6ff;
+  --green: #059669;
+  --green-soft: #ecfdf5;
+  --red: #dc2626;
+  --red-soft: #fef2f2;
+  --orange: #d97706;
+  --orange-soft: #fffbeb;
+  --purple: #7c3aed;
+  --purple-soft: #f5f3ff;
+  --teal: #0d9488;
+  --radius: 20px;
+  --radius-sm: 12px;
+  --shadow: 0 1px 2px rgba(15,23,42,.04), 0 8px 24px rgba(15,23,42,.04);
+  --shadow-lg: 0 4px 6px rgba(15,23,42,.03), 0 20px 40px rgba(15,23,42,.06);
+  --font: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, monospace;
   --text: var(--ink);
   --border: var(--line);
   --card: var(--paper);
@@ -55,138 +43,126 @@
   --coral: var(--red);
   --sage: var(--green);
   --cyan: var(--teal);
-  --sand-soft: var(--paper2);
+  --sand-soft: #f1f5f9;
   --bg0: var(--bg);
   --bg1: var(--bg);
   --bg2: var(--paper);
-  --glass: var(--paper);
+  --glass: #fff;
   --stroke: var(--line);
   --stroke2: var(--line2);
   --blue-dim: var(--accent-soft);
-
-  color-scheme: dark;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; scroll-padding-top: env(safe-area-inset-top,0px); }
+html { scroll-behavior: smooth; }
 body {
   font-family: var(--font);
   color: var(--ink);
-  background:
-    radial-gradient(1100px 480px at 12% -10%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 60%),
-    radial-gradient(900px 420px at 100% 0%, color-mix(in srgb, var(--green) 8%, transparent), transparent 55%),
-    var(--bg);
-  background-attachment: fixed;
+  background: var(--bg);
   min-height: 100vh;
-  line-height: 1.5;
+  line-height: 1.55;
   -webkit-font-smoothing: antialiased;
-  padding-top: env(safe-area-inset-top,0px);
-  padding-bottom: env(safe-area-inset-bottom,0px);
 }
 body::before, .orb { display: none !important; }
-::selection { background: var(--accent); color: var(--accent-ink); }
-:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent); border-radius: var(--radius-sm); }
-
-/* нативные переходы между страницами (View Transitions API) */
-::view-transition-old(root) { animation: vt-out .22s ease both; }
-::view-transition-new(root) { animation: vt-in .28s ease both; }
-@keyframes vt-out { to { opacity: 0; transform: translateY(-6px) scale(.99); } }
-@keyframes vt-in { from { opacity: 0; transform: translateY(6px) scale(.99); } to { opacity: 1; transform: none; } }
-
 .app {
-  max-width: 640px;
+  max-width: 1120px;
   margin: 0 auto;
-  padding: 16px 14px 96px;
+  padding: 24px 20px 120px;
 }
 .topbar {
-  background: color-mix(in srgb, var(--paper) 82%, transparent);
-  backdrop-filter: blur(14px) saturate(1.4);
-  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+  background: rgba(255,255,255,.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--line);
-  border-radius: 18px;
-  padding: 14px 16px;
-  margin-bottom: 16px;
+  border-radius: 24px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
   box-shadow: var(--shadow);
   position: sticky;
-  top: calc(env(safe-area-inset-top,0px) + 8px);
+  top: 12px;
   z-index: 40;
 }
-.brand { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.topbar-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.topbar-row .brand { margin-bottom: 0; flex: 1; }
+.brand { display: flex; align-items: center; gap: 14px; }
 .logo {
-  width: 42px; height: 42px;
-  border-radius: 12px;
-  background: linear-gradient(150deg, var(--accent), color-mix(in srgb, var(--accent) 60%, var(--green)));
-  color: var(--accent-ink);
-  font-family: var(--font-serif);
-  font-weight: 600;
-  font-size: 1.15rem;
+  width: 44px; height: 44px;
+  border-radius: 14px;
+  background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%);
+  color: #fff;
+  font-weight: 800;
+  font-size: 1.05rem;
   display: grid; place-items: center;
-  box-shadow: 0 6px 16px -6px color-mix(in srgb, var(--accent) 60%, transparent);
+  box-shadow: 0 4px 12px rgba(15,23,42,.2);
 }
 .logo::after { display: none; }
-.brand h1 { font-family: var(--font-serif); font-size: 1.15rem; font-weight: 600; letter-spacing: -0.01em; color: var(--ink); }
-.brand p { font-size: .75rem; color: var(--muted); font-weight: 400; margin-top: 1px; }
+.brand h1 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+}
+.brand p {
+  font-size: .75rem;
+  color: var(--muted);
+  font-weight: 500;
+  margin-top: 2px;
+}
 .nav {
   display: flex;
   flex-wrap: wrap;
-  gap: 3px;
-  background: var(--paper2);
+  gap: 4px;
   padding: 4px;
-  border-radius: 999px;
-  border: 1px solid var(--line);
+  background: #f1f5f9;
+  border-radius: 14px;
 }
 .nav button {
-  flex: 1;
-  border: 1px solid transparent;
+  border: none;
   background: transparent;
   color: var(--muted);
   font-family: var(--font);
-  font-weight: 500;
-  font-size: .82rem;
-  padding: 8px 12px;
-  border-radius: 999px;
+  font-weight: 600;
+  font-size: .8rem;
+  padding: 9px 14px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: background .18s ease, color .18s ease, transform .12s ease, box-shadow .18s ease;
-  white-space: nowrap;
+  transition: .15s ease;
 }
-.nav button:hover { background: var(--paper3); color: var(--ink); }
-.nav button:active { transform: scale(.96); }
+.nav button:hover { color: var(--ink); background: rgba(255,255,255,.6); }
 .nav button.active {
-  background: var(--accent);
-  color: var(--accent-ink);
-  box-shadow: 0 4px 14px -4px color-mix(in srgb, var(--accent) 70%, transparent);
-}
-.nav button.lock::after {
-  content: " \1F512";
-  font-size: .7em;
-  opacity: .6;
+  background: #fff;
+  color: var(--ink);
+  box-shadow: 0 1px 3px rgba(15,23,42,.08);
 }
 .subnav {
   display: none;
   flex-wrap: wrap;
   gap: 6px;
-  margin: -6px 0 16px;
-  padding: 10px 12px;
-  background: var(--paper);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
+  margin: 0 0 20px;
+  padding: 0;
 }
 .subnav.show { display: flex; }
 .subnav button {
   border: 1px solid var(--line);
-  background: var(--paper2);
+  background: #fff;
   color: var(--muted);
   font-family: var(--font);
-  font-weight: 500;
+  font-weight: 600;
   font-size: .78rem;
-  padding: 7px 12px;
+  padding: 8px 14px;
   border-radius: 999px;
   cursor: pointer;
+  transition: .15s;
 }
 .subnav button:hover { border-color: var(--line2); color: var(--ink); }
 .subnav button.active {
-  background: var(--accent-soft);
+  background: var(--accent);
   border-color: var(--accent);
-  color: var(--accent);
+  color: #fff;
 }
 
 .section, .card, .lesson-card, .mat-card, .day-col, .ach, .goal-box, .uni-photo-card, .wallet-card {
@@ -196,51 +172,55 @@ body::before, .orb { display: none !important; }
   box-shadow: var(--shadow);
 }
 .section {
-  padding: 16px;
-  margin-bottom: 12px;
+  padding: 22px;
+  margin-bottom: 16px;
   position: relative;
   overflow: visible;
 }
 .section::before { display: none; }
 .section h2 {
-  font-family: var(--font-serif);
   font-size: 1.05rem;
-  font-weight: 600;
-  margin-bottom: 12px;
-  letter-spacing: -0.01em;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  font-weight: 800;
+  margin-bottom: 16px;
+  letter-spacing: -0.03em;
+  color: var(--ink);
 }
-.section h2 svg.icon { color: var(--accent); font-size: .9em; }
 .section h2 .sub {
-  font-family: var(--font);
-  font-size: .7rem;
-  font-weight: 500;
+  font-size: .72rem;
+  font-weight: 600;
   color: var(--muted);
-  margin-left: 4px;
+  margin-left: 8px;
+  letter-spacing: 0;
 }
 .cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
-  gap: 10px;
-  margin-bottom: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
 }
-.card { padding: 14px; min-width: 0; }
+.card {
+  padding: 16px 18px;
+  min-width: 0;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.card:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-lg);
+}
 .card .label {
   font-size: .68rem;
-  font-weight: 600;
-  text-transform: none;
-  letter-spacing: .01em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .05em;
   color: var(--muted);
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 .card .value {
-  font-family: var(--mono);
-  font-size: 1.25rem;
-  font-weight: 500;
-  letter-spacing: -0.01em;
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
   word-break: break-word;
+  color: var(--ink);
 }
 .card .value.green { color: var(--green); }
 .card .value.red { color: var(--red); }
@@ -251,48 +231,51 @@ body::before, .orb { display: none !important; }
 .grid-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: 16px;
   align-items: start;
 }
 @media (max-width: 860px) {
   .grid-2 { grid-template-columns: 1fr; }
   .cards { grid-template-columns: repeat(2, 1fr); }
+  .app { padding: 16px 14px 100px; }
 }
 .tip {
-  background: var(--accent-soft);
-  border: 1px solid transparent;
-  border-left: 3px solid var(--accent);
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-  padding: 11px 14px;
-  font-size: .86rem;
-  font-weight: 400;
-  color: var(--ink);
-  margin-bottom: 12px;
+  background: linear-gradient(135deg, #eff6ff 0%, #f0f9ff 100%);
+  border: 1px solid #dbeafe;
+  border-radius: 16px;
+  padding: 14px 18px;
+  font-size: .88rem;
+  font-weight: 500;
+  color: #1e40af;
+  margin-bottom: 16px;
 }
 .muted { color: var(--muted); font-size: .85rem; }
 .lesson-card {
-  padding: 12px 14px;
-  margin-bottom: 8px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
   display: flex;
-  gap: 12px;
+  gap: 14px;
   align-items: flex-start;
+  transition: border-color .15s;
 }
-.lesson-title { font-weight: 500; font-size: .9rem; color: var(--ink); }
+.lesson-card:hover { border-color: var(--line2); }
+.lesson-title { font-weight: 700; font-size: .92rem; letter-spacing: -0.01em; }
 .lesson-time {
   flex-shrink: 0;
   font-family: var(--mono);
-  font-size: .75rem;
-  font-weight: 500;
+  font-size: .72rem;
+  font-weight: 700;
   color: var(--accent);
-  min-width: 64px;
+  min-width: 68px;
+  padding-top: 2px;
 }
 .badge {
   display: inline-block;
   font-size: .68rem;
-  font-weight: 600;
-  padding: 3px 8px;
-  border-radius: var(--radius-sm);
-  background: var(--paper2);
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #f1f5f9;
   color: var(--muted);
 }
 .badge.byl { background: var(--green-soft); color: var(--green); }
@@ -300,7 +283,7 @@ body::before, .orb { display: none !important; }
 .badge.ushyol { background: var(--orange-soft); color: var(--orange); }
 .badge.live { background: var(--accent-soft); color: var(--accent); }
 .badge.soon { background: var(--purple-soft); color: var(--purple); }
-.badge.empty { background: var(--paper2); color: var(--muted); }
+.badge.empty { background: #f1f5f9; color: var(--muted); }
 .badge.propusk { background: var(--red-soft); color: var(--red); }
 
 .btn {
@@ -308,69 +291,70 @@ body::before, .orb { display: none !important; }
   align-items: center;
   justify-content: center;
   gap: 6px;
-  border: 1px solid var(--line);
-  background: var(--paper2);
-  color: var(--ink);
+  border: none;
+  background: var(--ink);
+  color: #fff;
   font-family: var(--font);
-  font-weight: 500;
-  font-size: .82rem;
-  padding: 9px 14px;
-  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: .84rem;
+  padding: 10px 16px;
+  border-radius: 12px;
   cursor: pointer;
-  transition: .12s ease;
+  transition: .15s ease;
 }
-.btn:hover { background: var(--paper3); border-color: var(--line2); transform: translateY(-1px); }
-.btn:active { transform: scale(.96); }
+.btn:hover { background: #1e293b; transform: translateY(-1px); }
 .btn.secondary {
-  background: transparent;
-  color: var(--muted);
-  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--ink);
+  border: 1px solid var(--line2);
 }
-.btn.secondary:hover { background: var(--paper2); color: var(--ink); }
-.btn.green { background: var(--green); border-color: var(--green); color: #fff; font-weight: 600; }
-.btn.danger { background: var(--red); border-color: var(--red); color: #fff; font-weight: 600; }
-.btn.sm { padding: 6px 10px; font-size: .75rem; border-radius: 6px; }
+.btn.secondary:hover { background: #f8fafc; border-color: var(--line2); }
+.btn.green { background: var(--green); }
+.btn.green:hover { background: #047857; }
+.btn.danger { background: var(--red); }
+.btn.sm { padding: 7px 12px; font-size: .76rem; border-radius: 10px; }
 
-.field { margin-bottom: 10px; }
+.field { margin-bottom: 12px; }
 .field label {
   display: block;
   font-size: .7rem;
-  font-weight: 600;
-  text-transform: none;
-  letter-spacing: .01em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
   color: var(--muted);
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 .field input, .field select, .field textarea,
 input, select, textarea {
   width: 100%;
-  border: 1px solid var(--line);
-  background: var(--paper);
-  border-radius: var(--radius-sm);
-  padding: 9px 11px;
+  border: 1px solid var(--line2);
+  background: #fff;
+  border-radius: 12px;
+  padding: 11px 14px;
   font-family: var(--font);
   font-size: .9rem;
   color: var(--ink);
   outline: none;
+  transition: border-color .15s, box-shadow .15s;
 }
 .field input:focus, .field select:focus, .field textarea:focus,
 input:focus, select:focus, textarea:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-soft);
+  box-shadow: 0 0 0 4px rgba(37,99,235,.12);
 }
-.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.filters { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.filters { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
 .hidden { display: none !important; }
-.page-enter { animation: rise .2s ease; }
+.page-enter { animation: rise .3s ease; }
 @keyframes rise {
-  from { opacity: 0; transform: translateY(4px); }
+  from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: none; }
 }
 
 .modal-bg {
   position: fixed; inset: 0;
-  background: rgba(37,42,31,.45);
-  backdrop-filter: blur(3px);
+  background: rgba(15,23,42,.45);
+  backdrop-filter: blur(8px);
   z-index: 100;
   display: none;
   align-items: center;
@@ -379,32 +363,32 @@ input:focus, select:focus, textarea:focus {
 }
 .modal-bg.open { display: flex; }
 .modal {
-  background: var(--paper);
-  border-radius: 14px;
-  padding: 20px;
-  width: min(420px, 100%);
+  background: #fff;
+  border-radius: 24px;
+  padding: 24px;
+  width: min(440px, 100%);
   max-height: 90vh;
   overflow: auto;
   box-shadow: var(--shadow-lg);
   border: 1px solid var(--line);
 }
-.modal h3 { font-family: var(--font-serif); font-size: 1.15rem; font-weight: 600; margin-bottom: 12px; color: var(--ink); }
-.modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 12px; }
+.modal h3 { font-size: 1.15rem; font-weight: 800; margin-bottom: 16px; letter-spacing: -0.02em; }
+.modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; }
 
 .toast {
   position: fixed;
-  bottom: 22px;
+  bottom: 28px;
   left: 50%;
   transform: translateX(-50%) translateY(16px);
   background: var(--ink);
-  color: var(--paper);
-  padding: 10px 16px;
+  color: #fff;
+  padding: 12px 20px;
   border-radius: 999px;
-  font-weight: 500;
-  font-size: .84rem;
+  font-weight: 600;
+  font-size: .85rem;
   opacity: 0;
   pointer-events: none;
-  transition: .2s ease;
+  transition: .25s ease;
   z-index: 200;
   box-shadow: var(--shadow-lg);
 }
@@ -412,104 +396,108 @@ input:focus, select:focus, textarea:focus {
 
 .shortcut-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
 }
 .shortcut {
   text-align: left;
   border: 1px solid var(--line);
-  background: var(--paper2);
-  border-radius: var(--radius);
-  padding: 12px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 16px;
   cursor: pointer;
   font-family: var(--font);
-  transition: .12s;
+  transition: .18s ease;
+  box-shadow: var(--shadow);
 }
-.shortcut:hover { border-color: var(--accent); background: var(--accent-soft); transform: translateY(-2px); box-shadow: var(--shadow-lg); }
-.shortcut { transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease, background .16s ease; }
-.s-ico { font-size: 1.1rem; margin-bottom: 6px; color: var(--accent); line-height: 1; }
-.s-ico svg.icon { width: 1.1em; height: 1.1em; }
-.s-title { font-weight: 500; font-size: .88rem; color: var(--ink); }
-.s-sub { font-size: .74rem; color: var(--muted); font-weight: 400; }
+.shortcut:hover {
+  border-color: #bfdbfe;
+  background: var(--accent-soft);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+.s-ico { font-size: 1.35rem; margin-bottom: 8px; }
+.s-title { font-weight: 700; font-size: .9rem; letter-spacing: -0.01em; }
+.s-sub { font-size: .75rem; color: var(--muted); font-weight: 500; margin-top: 2px; }
 .quick-actions { display: flex; flex-wrap: wrap; gap: 6px; }
 
-.day-col { padding: 12px; min-height: 80px; }
-.day-col h3 { font-size: .84rem; margin-bottom: 8px; font-weight: 600; color: var(--ink); }
-.mat-card { padding: 12px; margin-bottom: 8px; }
-.mini-lesson { padding: 8px 10px; border-radius: var(--radius-sm); background: var(--paper2); margin-bottom: 6px; border: 1px solid var(--line); }
+.day-col { padding: 14px; min-height: 88px; }
+.day-col h3 { font-size: .85rem; margin-bottom: 10px; font-weight: 700; }
+.mat-card { padding: 14px; margin-bottom: 10px; }
+.mini-lesson {
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #f8fafc;
+  margin-bottom: 6px;
+  border: 1px solid var(--line);
+}
 
-/* tables */
 .table-wrap {
   overflow-x: auto;
   border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
-  background: var(--paper);
+  border-radius: 16px;
+  background: #fff;
   margin-top: 8px;
 }
 .fin-table, .mag-table, .data-table, table {
   width: 100%;
   border-collapse: collapse;
-  font-size: .84rem;
+  font-size: .86rem;
 }
 .fin-table th, .mag-table th, .data-table th, table thead th {
-  background: var(--paper2);
+  background: #f8fafc;
   font-size: .68rem;
-  text-transform: none;
-  letter-spacing: .01em;
+  text-transform: uppercase;
+  letter-spacing: .04em;
   color: var(--muted);
-  font-weight: 600;
-  padding: 10px 12px;
+  font-weight: 700;
+  padding: 12px 14px;
   text-align: left;
   border-bottom: 1px solid var(--line);
   white-space: nowrap;
 }
 .fin-table td, .mag-table td, .data-table td, table tbody td {
-  padding: 10px 12px;
+  padding: 12px 14px;
   border-bottom: 1px solid var(--line);
   vertical-align: middle;
-  font-variant-numeric: tabular-nums;
 }
 .fin-table tr:last-child td, .data-table tr:last-child td { border-bottom: 0; }
-.fin-table tr:hover td, .data-table tr:hover td, table tbody tr:hover td { background: var(--paper2); }
-.fin-pos { color: var(--green); font-weight: 600; }
-.fin-neg { color: var(--red); font-weight: 600; }
+.fin-pos { color: var(--green); font-weight: 700; }
+.fin-neg { color: var(--red); font-weight: 700; }
 td.wrap { white-space: normal; max-width: 180px; }
 
-/* attendance colors (old full table, kept for the "полная таблица" fallback) */
 #att-body tr.row-byl td, tr.row-byl td { background: var(--green-soft) !important; }
 #att-body tr.row-nebyl td, tr.row-nebyl td { background: var(--red-soft) !important; }
 #att-body tr.row-ushyol td, tr.row-ushyol td { background: var(--orange-soft) !important; }
-#att-body tr.row-otmena td, tr.row-otmena td { background: var(--paper2) !important; opacity: .8; }
+#att-body tr.row-otmena td, tr.row-otmena td { background: #f1f5f9 !important; opacity: .9; }
 #att-body tr.today-row td { box-shadow: inset 3px 0 0 var(--accent); }
 #att-body .status-select {
   min-width: 110px;
-  border-radius: var(--radius-sm);
+  border-radius: 10px;
   border: 1px solid var(--line2);
-  padding: 6px 8px;
-  background: var(--paper);
+  padding: 7px 10px;
+  background: #fff;
   font-family: var(--font);
   font-size: .8rem;
-  font-weight: 500;
-  color: var(--ink);
+  font-weight: 600;
 }
-tr.row-byl .status-select { border-color: var(--green); color: var(--green); }
-tr.row-nebyl .status-select { border-color: var(--red); color: var(--red); }
-tr.row-ushyol .status-select { border-color: var(--orange); color: var(--orange); }
+tr.row-byl .status-select { border-color: #a7f3d0; background: #f0fdf4; }
+tr.row-nebyl .status-select { border-color: #fecaca; background: #fef2f2; }
+tr.row-ushyol .status-select { border-color: #fde68a; background: #fffbeb; }
 
-/* subject bars */
 .subj-row {
   display: grid;
   grid-template-columns: minmax(120px, 1.4fr) 2fr auto;
-  gap: 10px 12px;
+  gap: 12px 14px;
   align-items: center;
-  padding: 10px 0;
+  padding: 12px 0;
   border-bottom: 1px solid var(--line);
 }
 .subj-row:last-child { border-bottom: 0; }
-.subj-row .name { font-weight: 500; font-size: .86rem; min-width: 0; overflow: hidden; text-overflow: ellipsis; color: var(--ink); }
-.subj-row .bar { height: 6px; background: var(--paper2); border-radius: 999px; overflow: hidden; }
-.subj-row .bar i { display: block; height: 100%; border-radius: 999px; background: var(--accent); }
-.subj-row .pct { font-family: var(--mono); font-weight: 500; font-size: .8rem; color: var(--muted); text-align: right; min-width: 40px; }
+.subj-row .name { font-weight: 600; font-size: .88rem; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.subj-row .bar { height: 8px; background: #f1f5f9; border-radius: 999px; overflow: hidden; }
+.subj-row .bar i { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, #059669, #34d399); }
+.subj-row .pct { font-family: var(--mono); font-weight: 700; font-size: .8rem; color: var(--muted); text-align: right; min-width: 40px; }
 @media (max-width: 560px) {
   .subj-row { grid-template-columns: 1fr auto; grid-template-areas: "name pct" "bar bar"; }
   .subj-row .name { grid-area: name; }
@@ -517,83 +505,112 @@ tr.row-ushyol .status-select { border-color: var(--orange); color: var(--orange)
   .subj-row .bar { grid-area: bar; }
 }
 
-/* heatmap / calendar (moved into "ещё" on Today) */
-.heat-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.heat-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
 .heat-cell {
   aspect-ratio: 1;
-  border-radius: var(--radius-sm);
-  background: var(--paper2);
+  border-radius: 10px;
+  background: #f1f5f9;
   border: 1px solid var(--line);
   display: flex; align-items: center; justify-content: center;
-  font-size: .68rem; font-weight: 500; color: var(--muted);
-  font-family: var(--mono);
+  font-size: .7rem; font-weight: 700; color: var(--muted);
 }
-.heat-cell.good { background: var(--green-soft); color: var(--green); border-color: transparent; }
-.heat-cell.bad { background: var(--red-soft); color: var(--red); border-color: transparent; }
-.heat-cell.mixed { background: var(--orange-soft); color: var(--orange); border-color: transparent; }
-.heat-cell.today { outline: 1px solid var(--ink); outline-offset: 1px; }
-.heat-cell.has { font-weight: 700; }
+.heat-cell.good { background: var(--green-soft); color: var(--green); border-color: #a7f3d0; }
+.heat-cell.bad { background: var(--red-soft); color: var(--red); border-color: #fecaca; }
+.heat-cell.mixed { background: var(--orange-soft); color: var(--orange); }
+.heat-cell.today { outline: 2px solid var(--accent); outline-offset: 1px; }
+.heat-cell.has { font-weight: 800; }
 
 .progress-bar {
-  height: 6px;
-  background: var(--paper2);
+  height: 8px;
+  background: #f1f5f9;
   border-radius: 999px;
   overflow: hidden;
-  margin-top: 8px;
+  margin-top: 10px;
 }
 .progress-bar > div, .progress-bar > span, .progress-bar .fill {
   display: block; height: 100%;
-  background: var(--accent);
+  background: linear-gradient(90deg, var(--accent), #60a5fa);
   border-radius: 999px;
 }
 
-/* achievements */
 .ach-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
 }
-.ach { padding: 12px; text-align: center; opacity: .35; filter: grayscale(1); }
-.ach.on { opacity: 1; filter: none; background: var(--green-soft); border-color: var(--green); }
-.ach .ico { font-size: 1.3rem; margin-bottom: 4px; }
-.ach .name { font-weight: 600; font-size: .82rem; color: var(--ink); }
-.ach .desc { font-size: .7rem; color: var(--muted); }
+.ach { padding: 16px; text-align: center; opacity: .4; filter: grayscale(1); transition: .2s; }
+.ach.on {
+  opacity: 1; filter: none;
+  background: linear-gradient(160deg, #fff, var(--green-soft));
+  border-color: #a7f3d0;
+}
+.ach .ico { font-size: 1.5rem; margin-bottom: 6px; }
+.ach .name { font-weight: 700; font-size: .85rem; }
+.ach .desc { font-size: .72rem; color: var(--muted); margin-top: 4px; }
 
-/* finance wallets */
 .wallet-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  margin-bottom: 12px;
+  gap: 12px;
+  margin-bottom: 14px;
 }
 @media (max-width: 700px) { .wallet-grid { grid-template-columns: repeat(2, 1fr); } }
-.wallet-card { padding: 14px; }
-.wallet-card .w-label { font-size: .68rem; font-weight: 600; text-transform: none; letter-spacing: .01em; color: var(--muted); }
-.wallet-card .w-val { font-family: var(--mono); font-size: 1.15rem; font-weight: 500; margin-top: 4px; color: var(--ink); }
-.wallet-card input { margin-top: 8px; font-weight: 500; }
-.wallet-card.coral { background: var(--red-soft); }
-.wallet-card.sage { background: var(--green-soft); }
-.wallet-card.sky { background: var(--accent-soft); }
+.wallet-card { padding: 16px; }
+.wallet-card .w-label { font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+.wallet-card .w-val { font-size: 1.3rem; font-weight: 800; margin-top: 6px; letter-spacing: -0.03em; }
+.wallet-card input { margin-top: 10px; font-weight: 600; }
+.wallet-card.coral { background: linear-gradient(160deg, #fff, var(--red-soft)); }
+.wallet-card.sage { background: linear-gradient(160deg, #fff, var(--green-soft)); }
+.wallet-card.sky { background: linear-gradient(160deg, #fff, var(--accent-soft)); }
 
-/* docs checklist */
 .docs-checklist { display: flex; flex-direction: column; gap: 8px; }
 .doc-item {
-  display: flex; align-items: center; gap: 10px;
-  padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--radius-sm);
-  background: var(--paper2); margin: 0; font-size: .86rem; font-weight: 500; cursor: pointer; color: var(--ink);
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px;
+  background: #fff; margin: 0; font-size: .88rem; font-weight: 600; cursor: pointer;
+  transition: .15s;
 }
-.doc-item:hover { background: var(--paper3); }
-.doc-item input[type="checkbox"] { width: 18px; height: 18px; flex-shrink: 0; margin: 0; accent-color: var(--accent); }
-.doc-item.done { background: var(--green-soft); border-color: var(--green); }
+.doc-item:hover { background: #f8fafc; border-color: var(--line2); }
+.doc-item input[type="checkbox"] { width: 18px; height: 18px; flex-shrink: 0; margin: 0; accent-color: var(--green); }
+.doc-item.done { background: var(--green-soft); border-color: #a7f3d0; }
 .doc-item.done span { text-decoration: line-through; color: var(--muted); }
-#mag-panel-docs .grid-2 { align-items: start; }
-#mag-panel-docs .section { min-width: 0; }
 
-/* FAB */
+/* university cards - no random photos */
+.uni-photo-card {
+  overflow: hidden;
+  transition: transform .18s, box-shadow .18s;
+}
+.uni-photo-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+.uni-cover {
+  height: 100px;
+  background: linear-gradient(135deg, #1e293b 0%, #334155 50%, #2563eb 100%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px;
+  color: #fff;
+}
+.uni-flag { font-size: 1.8rem; }
+.uni-initials {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  opacity: .9;
+}
+.uni-photo-card .body { padding: 16px; }
+.uni-photo-card h3 { font-size: .95rem; font-weight: 700; letter-spacing: -0.02em; }
+.mag-list { margin: 0; padding-left: 1.2rem; }
+.mag-list li { margin-bottom: 8px; }
+.goal-box input[type="number"] { max-width: 140px; }
+#dash-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
+
 #fab, .fab {
   position: fixed;
-  right: 14px;
-  bottom: 14px;
+  right: 18px;
+  bottom: 18px;
   z-index: 80;
   display: flex;
   flex-direction: column;
@@ -604,374 +621,104 @@ tr.row-ushyol .status-select { border-color: var(--orange); color: var(--orange)
   display: none;
   flex-direction: column;
   align-items: flex-end;
-  gap: 6px;
+  gap: 8px;
 }
 #fab.open .fab-menu { display: flex; }
 .fab-menu button {
   border: 1px solid var(--line);
-  background: var(--paper);
+  background: #fff;
   color: var(--ink);
   font-family: var(--font);
-  font-weight: 500;
-  font-size: .78rem;
-  padding: 9px 12px;
+  font-weight: 600;
+  font-size: .8rem;
+  padding: 10px 14px;
   border-radius: 999px;
   cursor: pointer;
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow);
   white-space: nowrap;
 }
-.fab-menu button:hover { background: var(--paper2); }
+.fab-menu button:hover { background: #f8fafc; }
 .fab-main, .fab-btn {
-  width: 52px; height: 52px;
+  width: 56px; height: 56px;
   border-radius: 50%;
   border: none;
-  background: var(--accent);
-  color: var(--accent-ink);
-  font-size: 1.4rem;
+  background: var(--ink);
+  color: #fff;
+  font-size: 1.5rem;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 8px 28px rgba(15,23,42,.25);
   line-height: 1;
 }
-.uni-photo-card { overflow: hidden; transition: transform .2s ease, box-shadow .2s ease; }
-.uni-photo-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
-.uni-photo-card img { transition: transform .5s cubic-bezier(.2,.7,.3,1); }
-.uni-photo-card:hover img { transform: scale(1.07); }
-.uni-photo-card .body { padding: 12px; }
+.fab-main:hover { transform: scale(1.05); }
 
-.uni-teaser {
-  position: relative;
-  border-radius: var(--radius);
-  overflow: hidden;
-  min-height: 200px;
-  margin-bottom: 16px;
-  box-shadow: var(--shadow-lg);
+.btn-logout {
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--muted);
+  font-family: var(--font);
+  font-weight: 600;
+  font-size: .75rem;
+  padding: 8px 12px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: transform .2s ease, box-shadow .2s ease;
 }
-.uni-teaser:hover { transform: translateY(-3px); }
-.uni-teaser img {
-  position: absolute; inset: 0; width: 100%; height: 100%;
-  object-fit: cover; transition: transform .5s cubic-bezier(.2,.7,.3,1);
-}
-.uni-teaser:hover img { transform: scale(1.06); }
-.uni-teaser .scrim {
-  position: absolute; inset: 0;
-  background: linear-gradient(0deg, rgba(10,10,12,.94) 0%, rgba(10,10,12,.4) 50%, transparent 82%);
-}
-.uni-teaser .content {
-  position: relative; z-index: 1;
-  display: flex; flex-direction: column; justify-content: flex-end;
-  height: 100%; padding: 16px 18px; color: #f2f1ee;
-}
-.uni-teaser .tag {
-  font-family: var(--mono); font-size: .7rem; font-weight: 600; letter-spacing: .02em;
-  color: var(--accent); margin-bottom: 5px;
-}
-.uni-teaser h3 { font-family: var(--font-serif); font-size: 1.3rem; font-weight: 600; margin: 0 0 3px; color: #fff; }
-.uni-teaser p { font-size: .8rem; color: rgba(242,241,238,.8); margin: 0; }
+.btn-logout:hover { color: var(--red); border-color: #fecaca; background: #fef2f2; }
 
-/* Горизонтальная лента вузов со своим фото — как сторис */
-.uni-strip { display: flex; gap: 10px; overflow-x: auto; margin: 0 -14px 16px; padding: 0 14px 4px; scrollbar-width: none; }
-.uni-strip::-webkit-scrollbar { display: none; }
-.uni-mini {
-  position: relative; flex: 0 0 118px; height: 148px;
-  border-radius: var(--radius-sm); overflow: hidden; cursor: pointer;
-  transition: transform .18s ease;
-}
-.uni-mini:hover { transform: translateY(-2px); }
-.uni-mini img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.uni-mini .scrim3 { position: absolute; inset: 0; background: linear-gradient(0deg, rgba(10,10,12,.9), transparent 62%); }
-.uni-mini .t { position: absolute; left: 0; right: 0; bottom: 0; padding: 8px 9px; font-size: .74rem; font-weight: 600; line-height: 1.25; color: #fff; }
-
-/* Дуотон-обложка для разделов без реальных фото */
-.cover-band {
-  position: relative; overflow: hidden;
-  border-radius: var(--radius); min-height: 108px;
-  margin-bottom: 14px; padding: 16px 18px; display: flex;
-  flex-direction: column; justify-content: flex-end; color: #fff;
-}
-.cover-band .ic { position: absolute; right: 14px; top: 14px; font-size: 34px; opacity: .35; }
-.cover-band .ic svg.icon { width: 1em; height: 1em; }
-.cover-band h2 { font-family: var(--font-serif); font-size: 1.25rem; font-weight: 600; margin: 0; color: #fff; }
-.cover-band p { font-size: .78rem; color: rgba(255,255,255,.8); margin: 2px 0 0; }
-.cover-band.cv-study { background: linear-gradient(135deg, #1e3a5f, #0f2440); }
-.cover-band.cv-life  { background: linear-gradient(135deg, #6b3a1e, #3a1d0f); }
-.cover-band.cv-watch { background: linear-gradient(135deg, #4a1e5f, #200a2c); }
-.cover-band.cv-finance { background: linear-gradient(135deg, #1e5f45, #0d2b1f); }
-.uni-photo-card h3 { font-family: var(--font-serif); font-size: 1rem; font-weight: 600; color: var(--ink); }
-.mag-list { margin: 0; padding-left: 1.2rem; color: var(--ink); }
-.mag-list li { margin-bottom: 8px; }
-.goal-box input[type="number"] { max-width: 140px; }
-#dash-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(132px, 1fr)); gap: 10px; }
-::-webkit-scrollbar { width: 8px; height: 8px; }
-::-webkit-scrollbar-thumb { background: var(--line2); border-radius: 8px; }
-::-webkit-scrollbar-track { background: transparent; }
-
-/* icons */
-svg.icon {
-  width: 1em; height: 1em; flex: none; display: inline-block;
-  vertical-align: -.125em;
-  fill: none; stroke: currentColor; stroke-width: 1.6;
-  stroke-linecap: round; stroke-linejoin: round;
-}
-
-/* ============================================================
-   НОВОЕ — «Полевой журнал»: главный экран и посещаемость
-   ============================================================ */
-
-/* Заголовок дня на "Сегодня" */
-.today-head { margin-bottom: 4px; }
-.today-head .day { font-family: var(--font-serif); font-size: 1.55rem; font-weight: 600; letter-spacing: -.01em; }
-.today-head .rest { color: var(--muted); font-size: .85rem; margin-top: 2px; }
-
-/* Карточка "сейчас/дальше" — полноэкранное фото-обложка */
-.now-entry {
-  position: relative;
-  overflow: hidden;
-  min-height: 260px;
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-lg);
-  padding: 18px 18px 20px;
-  margin-bottom: 16px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  background-image:
-    linear-gradient(180deg, rgba(16,16,20,.12) 0%, rgba(16,16,20,.15) 32%, rgba(16,16,20,.72) 70%, rgba(16,16,20,.96) 100%),
-    url('https://commons.wikimedia.org/wiki/Special:FilePath/A%20student%20using%20a%20Theodolite%20in%20field.jpg?width=900');
-  background-size: cover;
-  background-position: center 30%;
-  color: #fff;
-}
-.now-entry .tag { display: block; font-family: var(--mono); font-size: .72rem; letter-spacing: .02em; color: var(--accent); font-weight: 600; margin-bottom: 8px; }
-.now-entry h2 { font-family: var(--font-serif); font-size: 1.6rem; font-weight: 600; margin: 0 0 4px; letter-spacing: -.01em; color: #fff; }
-.now-entry .where { color: rgba(255,255,255,.72); font-size: .85rem; margin-bottom: 8px; }
-.now-entry .when { font-family: var(--mono); font-size: .78rem; color: rgba(255,255,255,.9); }
-.now-entry .when b { color: var(--orange); font-weight: 600; }
-
-/* Компактный список дел на сегодня */
-.agenda-row {
-  display: flex; gap: 12px; padding: 9px 0;
-  border-bottom: 1px solid var(--line);
-  font-size: .88rem;
-}
-.agenda-row:last-child { border-bottom: 0; }
-.agenda-row time { font-family: var(--mono); font-size: .78rem; color: var(--muted); flex: none; width: 42px; padding-top: 1px; }
-.agenda-row .what { flex: 1; }
-.agenda-row .what b { font-weight: 600; }
-.agenda-row .what span { display: block; color: var(--muted); font-size: .78rem; }
-
-/* Тонкая строка-статистика вместо стены плиток */
-.stat-strip { display: flex; gap: 20px; flex-wrap: wrap; padding-top: 2px; }
-.stat-strip .stat { font-size: .82rem; color: var(--muted); }
-.stat-strip .stat b { font-family: var(--mono); color: var(--ink); font-weight: 600; font-size: .92rem; }
-
-/* Свёрнутый блок "Показать больше" */
-details.more { margin-top: 4px; }
-details.more > summary {
-  list-style: none; cursor: pointer;
-  display: flex; align-items: center; gap: 8px;
-  padding: 12px 14px; margin-bottom: 12px;
-  background: var(--paper2); border: 1px solid var(--line); border-radius: var(--radius);
-  font-size: .85rem; font-weight: 500; color: var(--muted);
-}
-details.more > summary::-webkit-details-marker { display: none; }
-details.more > summary::before { content: '▸'; color: var(--accent); }
-details.more[open] > summary::before { content: '▾'; }
-details.more[open] > summary { margin-bottom: 12px; }
-
-/* Посещаемость по неделям */
-.att-week-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
-.att-week-head h2 { margin-bottom: 0; }
-.wk-nav { display: flex; align-items: center; gap: 8px; }
-.wk-nav button {
-  width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--line);
-  background: var(--paper); color: var(--ink); cursor: pointer; font-size: .8rem; line-height: 1; padding: 0;
-}
-.wk-nav button:hover { border-color: var(--accent); color: var(--accent); }
-.wk-nav span { font-family: var(--mono); font-size: .78rem; color: var(--muted); }
-
-.att-legend { font-size: .78rem; color: var(--muted); margin: 6px 0 10px; }
-
-.day-block { padding: 11px 0; border-bottom: 1px solid var(--line); }
-.day-block:last-child { border-bottom: 0; }
-.day-block .d-head { display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px; }
-.day-block .d-name { font-weight: 600; font-size: .86rem; }
-.day-block .d-date { font-family: var(--mono); font-size: .76rem; color: var(--muted); }
-.day-block.is-today .d-name { color: var(--accent); }
-.day-block .d-empty { font-size: .8rem; color: var(--muted2); font-style: italic; }
-
-.att-chips { display: flex; flex-wrap: wrap; gap: 7px; }
-.att-chip {
-  display: inline-flex; align-items: center; gap: 7px;
-  border: 1px solid var(--line); background: var(--paper);
-  border-radius: var(--radius-sm); padding: 7px 10px; cursor: pointer;
-  font: inherit; font-size: .8rem; color: var(--ink);
-}
-.att-chip:hover { border-color: var(--accent); }
-.att-chip .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--line2); flex: none; }
-.att-chip.byl { background: var(--green-soft); border-color: transparent; }
-.att-chip.byl .dot { background: var(--green); }
-.att-chip.nebyl { background: var(--red-soft); border-color: transparent; }
-.att-chip.nebyl .dot { background: var(--red); }
-.att-chip.ushyol { background: var(--orange-soft); border-color: transparent; }
-.att-chip.ushyol .dot { background: var(--orange); }
-.att-chip time { font-family: var(--mono); font-size: .72rem; color: var(--muted); }
-
-/* === site auth gate === */
+/* auth gate */
 .auth-gate {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  position: fixed; inset: 0; z-index: 9999;
+  display: flex; align-items: center; justify-content: center;
   padding: 20px;
-  background:
-    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(47,77,99,.08), transparent 50%),
-    var(--bg);
+  background: linear-gradient(160deg, #f8fafc 0%, #eff6ff 50%, #f0fdf4 100%);
 }
 .auth-gate.hidden { display: none !important; }
 .auth-card {
-  width: min(380px, 100%);
-  background: var(--paper);
+  width: min(400px, 100%);
+  background: #fff;
   border: 1px solid var(--line);
-  border-radius: 16px;
-  padding: 28px 24px 24px;
+  border-radius: 28px;
+  padding: 32px 28px 28px;
   box-shadow: var(--shadow-lg);
   text-align: center;
 }
 .auth-logo {
   width: 56px; height: 56px;
-  margin: 0 auto 14px;
-  border-radius: 14px;
-  background: var(--accent);
-  color: var(--accent-ink);
-  font-family: var(--font-serif);
-  font-weight: 600;
+  margin: 0 auto 16px;
+  border-radius: 16px;
+  background: linear-gradient(145deg, #1e293b, #0f172a);
+  color: #fff;
+  font-weight: 800;
   font-size: 1.4rem;
-  display: grid;
-  place-items: center;
+  display: grid; place-items: center;
 }
-.auth-card h1 {
-  font-family: var(--font-serif);
-  font-size: 1.35rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  margin-bottom: 6px;
-  color: var(--ink);
+.auth-card h1 { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 6px; }
+.auth-sub { color: var(--muted); font-size: .9rem; margin-bottom: 20px; }
+.auth-card .field { text-align: left; }
+.auth-btn { width: 100%; margin-top: 8px; padding: 12px; font-size: .95rem; border-radius: 12px; }
+.auth-error { min-height: 1.25em; color: var(--red); font-size: .84rem; font-weight: 600; margin: 6px 0 0; }
+.auth-info { min-height: 1.2em; color: var(--green); font-size: .84rem; font-weight: 600; margin: 4px 0 0; }
+.auth-hint { margin-top: 16px; font-size: .75rem; color: var(--muted); line-height: 1.45; }
+.auth-tabs {
+  display: flex; gap: 4px; margin-bottom: 16px;
+  background: #f1f5f9; padding: 4px; border-radius: 12px;
 }
-.auth-sub {
-  color: var(--muted);
-  font-size: .9rem;
-  margin-bottom: 18px;
+.auth-tab {
+  flex: 1; border: none; background: transparent;
+  font-family: var(--font); font-weight: 600; font-size: .84rem;
+  padding: 9px; border-radius: 9px; cursor: pointer; color: var(--muted);
 }
-.auth-card .field { text-align: left; margin-bottom: 8px; }
-.auth-btn { width: 100%; margin-top: 8px; padding: 12px; font-size: .95rem; background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
-.auth-btn:hover { background: #253f52; }
-.auth-error {
-  min-height: 1.25em;
-  color: var(--red);
-  font-size: .84rem;
-  font-weight: 600;
-  margin: 4px 0 0;
-}
+.auth-tab.active { background: #fff; color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,.06); }
 body.site-locked .app { visibility: hidden; pointer-events: none; }
 body.site-locked #fab { display: none !important; }
 
-.auth-tabs {
-  display: flex;
-  gap: 6px;
-  margin-bottom: 14px;
-  background: var(--paper2);
-  padding: 4px;
-  border-radius: var(--radius-sm);
-}
-.auth-tab {
-  flex: 1;
-  border: none;
-  background: transparent;
-  font-family: var(--font);
-  font-weight: 500;
-  font-size: .84rem;
-  padding: 8px;
-  border-radius: 6px;
-  cursor: pointer;
-  color: var(--muted);
-}
-.auth-tab.active {
-  background: var(--paper);
-  color: var(--ink);
-}
-.auth-info {
-  min-height: 1.2em;
-  color: var(--green);
-  font-size: .84rem;
-  font-weight: 600;
-  margin: 4px 0 0;
-}
-.auth-hint {
-  margin-top: 14px;
-  font-size: .75rem;
-  color: var(--muted);
-  line-height: 1.4;
-}
-.btn-logout {
-  border: 1px solid var(--line);
-  background: transparent;
-  color: var(--muted);
-  font-family: var(--font);
-  font-weight: 500;
-  font-size: .75rem;
-  padding: 6px 10px;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  margin-left: auto;
-}
-.btn-logout:hover { color: var(--red); border-color: var(--red); background: var(--red-soft); }
-.topbar-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 12px;
-}
-.topbar-row .brand { margin-bottom: 0; flex: 1; }
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
 
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
-}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/appwrite@15.0.0"></script>
 </head>
 <body>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
-<symbol id="i-cap" viewBox="0 0 24 24"><path d="M3 9l9-4 9 4-9 4-9-4z"/><path d="M7 11v5c0 1 2.2 2.5 5 2.5s5-1.5 5-2.5v-5"/><path d="M21 9v5"/></symbol>
-<symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5.5A1.5 1.5 0 015.5 4H11v16H5.5A1.5 1.5 0 014 18.5z"/><path d="M20 5.5A1.5 1.5 0 0018.5 4H13v16h5.5a1.5 1.5 0 001.5-1.5z"/></symbol>
-<symbol id="i-task" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8.5 12l2.2 2.2L15.5 9.5"/></symbol>
-<symbol id="i-video" viewBox="0 0 24 24"><rect x="3" y="6" width="12" height="12" rx="2"/><path d="M15 10.5l6-3v9l-6-3z"/></symbol>
-<symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17M8 3.5v3M16 3.5v3"/></symbol>
-<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
-<symbol id="i-week" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17M8 13h2M14 13h2M8 16.5h2M14 16.5h2"/></symbol>
-<symbol id="i-case" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5.5A1.5 1.5 0 0110.5 4h3A1.5 1.5 0 0115 5.5V7"/><path d="M3 12h18"/></symbol>
-<symbol id="i-wallet" viewBox="0 0 24 24"><path d="M3 7.5A2.5 2.5 0 015.5 5H18v3"/><rect x="3" y="7.5" width="18" height="12" rx="2"/><circle cx="16.5" cy="13.5" r="1.1"/></symbol>
-<symbol id="i-coins" viewBox="0 0 24 24"><ellipse cx="12" cy="7" rx="7" ry="3"/><path d="M5 7v5c0 1.7 3.1 3 7 3s7-1.3 7-3V7"/><path d="M5 12v5c0 1.7 3.1 3 7 3s7-1.3 7-3v-5"/></symbol>
-<symbol id="i-trend" viewBox="0 0 24 24"><path d="M4 16l5-5 3.5 3.5L20 7"/><path d="M15.5 7H20v4.5"/></symbol>
-<symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r=".8"/></symbol>
-<symbol id="i-flag" viewBox="0 0 24 24"><path d="M6 21V4"/><path d="M6 5h11l-2 3.5L17 12H6"/></symbol>
-<symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
-<symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 4.5l8.5 15h-17l8.5-15z"/><path d="M12 10v4"/><path d="M12 17.2v.1"/></symbol>
-<symbol id="i-trophy" viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 01-8 0z"/><path d="M8 5.5H5.5V7a3 3 0 003 3M16 5.5h2.5V7a3 3 0 01-3 3"/><path d="M12 13v3M9 20h6M10 16.5h4"/></symbol>
-<symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.2 2.4 3.3 5.3 3.3 8.5s-1.1 6.1-3.3 8.5c-2.2-2.4-3.3-5.3-3.3-8.5S9.8 5.9 12 3.5z"/></symbol>
-<symbol id="i-film" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M8 5v14M16 5v14M3 12h18"/></symbol>
-<symbol id="i-doc" viewBox="0 0 24 24"><path d="M6 3.5h7l5 5V20a.5.5 0 01-.5.5h-11A.5.5 0 016 20V4a.5.5 0 01.5-.5z"/><path d="M13 3.5V9h5"/></symbol>
-<symbol id="i-pen" viewBox="0 0 24 24"><path d="M4 20l1-4L16.5 4.5a2.1 2.1 0 013 3L8 19l-4 1z"/></symbol>
-<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M15.8 15.8L20 20"/></symbol>
-<symbol id="i-save" viewBox="0 0 24 24"><path d="M5 4.5h11L19.5 8v11.5a.5.5 0 01-.5.5H5a.5.5 0 01-.5-.5v-15a.5.5 0 01.5-.5z"/><path d="M8 4.5v4h7v-4M8 20v-5h8v5"/></symbol>
-<symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3.5l1.1 2.2 2.4-.6 1.2 2.1-1.6 1.9 1.6 1.9-1.2 2.1-2.4-.6L12 20.5l-1.1-2.2-2.4.6-1.2-2.1 1.6-1.9-1.6-1.9 1.2-2.1 2.4.6z"/></symbol>
-<symbol id="i-lock" viewBox="0 0 24 24"><rect x="4.5" y="10" width="15" height="10" rx="2"/><path d="M8 10V7.5a4 4 0 018 0V10"/></symbol>
-<symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5.5h16v10.5H9l-4 3.5v-3.5H4z"/></symbol>
-</svg>
 <div class="orb a"></div>
 <div class="orb b"></div>
 <div class="orb c"></div>
@@ -981,7 +728,7 @@ body.site-locked #fab { display: none !important; }
   <div class="auth-card">
     <div class="auth-logo">М</div>
     <h1>Моя жизнь</h1>
-    <p class="auth-sub">Авторизация через Appwrite</p>
+    <p class="auth-sub">Авторизация через Appwrite · нужен hostname в Platforms</p>
     <div class="auth-tabs">
       <button type="button" class="auth-tab active" id="auth-tab-login" onclick="setAuthMode('login')">Вход</button>
       <button type="button" class="auth-tab" id="auth-tab-register" onclick="setAuthMode('register')">Регистрация</button>
@@ -1008,7 +755,7 @@ body.site-locked #fab { display: none !important; }
         <div class="logo">С</div>
         <div>
           <h1>Моя жизнь</h1>
-          <p>учёба · работа · деньги</p>
+          <p>личное пространство</p>
         </div>
       </div>
       <button type="button" class="btn-logout" onclick="siteLogout()" title="Выйти">Выйти</button>
@@ -1016,7 +763,9 @@ body.site-locked #fab { display: none !important; }
     <nav class="nav" id="nav">
       <button data-page="dashboard" class="active">Сегодня</button>
       <button data-page="study">Учёба</button>
-      <button data-page="life">Жизнь</button>
+      <button data-page="shifts">Смены</button>
+      <button data-page="finance">Деньги</button>
+      <button data-page="watch">Кино</button>
       <button data-page="magistr">Магистратура</button>
     </nav>
     <div class="subnav" id="study-subnav">
@@ -1025,162 +774,141 @@ body.site-locked #fab { display: none !important; }
       <button type="button" data-sub="tasks" onclick="goPage('tasks')">Задания</button>
       <button type="button" data-sub="materials" onclick="goPage('materials')">Материалы</button>
     </div>
-    <div class="subnav" id="life-subnav">
-      <button type="button" data-sub="shifts" onclick="goPage('shifts')">Смены</button>
-      <button type="button" data-sub="finance" onclick="goPage('finance')">Деньги</button>
-      <button type="button" data-sub="watch" onclick="goPage('watch')">Кино</button>
-    </div>
   </header>
 
   <main>
   <div id="page-dashboard" class="page-enter">
-
-    <div class="today-head">
-      <div class="day" id="today-day-title"></div>
-      <div class="rest" id="today-rest-label"></div>
-    </div>
-
-    <div class="now-entry" id="now-next"></div>
-
     <div class="tip" id="daily-tip"></div>
+    <div class="cards" id="dash-cards"></div>
 
     <div class="section">
-      <h2><svg class="icon"><use href="#i-cap"/></svg> Дальше сегодня <span class="sub" id="today-date-label"></span></h2>
-      <div id="today-lessons"></div>
-      <div class="stat-strip" id="today-strip" style="margin-top:10px"></div>
+      <h2>⚡ Быстрый доступ</h2>
+      <div class="shortcut-grid">
+        <button class="shortcut" type="button" onclick="goPage('attendance')">
+          <div class="s-ico">✅</div>
+          <div class="s-title">Отметить пары</div>
+          <div class="s-sub">Посещаемость</div>
+        </button>
+        <button class="shortcut" type="button" onclick="openShiftModal()">
+          <div class="s-ico">💼</div>
+          <div class="s-title">Добавить смену</div>
+          <div class="s-sub">После работы</div>
+        </button>
+        <button class="shortcut" type="button" onclick="goPage('materials')">
+          <div class="s-ico">📚</div>
+          <div class="s-title">Материалы</div>
+          <div class="s-sub">Видео и методички</div>
+        </button>
+        <button class="shortcut" type="button" onclick="goPage('tasks')">
+          <div class="s-ico">📝</div>
+          <div class="s-title">Задания</div>
+          <div class="s-sub">Дедлайны</div>
+        </button>
+        <button class="shortcut" type="button" onclick="goPage('schedule')">
+          <div class="s-ico">🗓️</div>
+          <div class="s-title">Расписание</div>
+          <div class="s-sub">Неделя</div>
+        </button>
+        <button class="shortcut" type="button" onclick="document.getElementById('import-file').click()">
+          <div class="s-ico">💾</div>
+          <div class="s-title">Backup</div>
+          <div class="s-sub">Загрузить JSON</div>
+        </button>
+      </div>
     </div>
 
-    <div class="quick-actions" style="margin-bottom:14px">
-      <button class="btn" type="button" onclick="goPage('attendance')"><svg class="icon"><use href="#i-check"/></svg> Отметить пары</button>
-      <button class="btn" type="button" onclick="openShiftModal()"><svg class="icon"><use href="#i-case"/></svg> Добавить смену</button>
+    <div class="section">
+      <h2>📆 Календарь посещаемости <span class="sub">текущий месяц</span></h2>
+      <div class="heat-grid" id="heat-grid"></div>
+      <p class="muted" style="margin-top:10px">Зелёный — был, красный — пропуск, оранжевый — смешанный день</p>
     </div>
 
-    <div id="today-uni-teaser"></div>
 
-    <details class="more">
-      <summary>Показать больше</summary>
-
+    <div class="grid-2">
       <div class="section">
-        <h2><svg class="icon"><use href="#i-target"/></svg> Быстрый доступ</h2>
-        <div class="shortcut-grid">
-          <button class="shortcut" type="button" onclick="goPage('materials')">
-            <div class="s-ico"><svg class="icon"><use href="#i-book"/></svg></div>
-            <div class="s-title">Материалы</div>
-            <div class="s-sub">Видео и методички</div>
-          </button>
-          <button class="shortcut" type="button" onclick="goPage('tasks')">
-            <div class="s-ico"><svg class="icon"><use href="#i-task"/></svg></div>
-            <div class="s-title">Задания</div>
-            <div class="s-sub">Дедлайны</div>
-          </button>
-          <button class="shortcut" type="button" onclick="goPage('schedule')">
-            <div class="s-ico"><svg class="icon"><use href="#i-week"/></svg></div>
-            <div class="s-title">Расписание</div>
-            <div class="s-sub">Неделя</div>
-          </button>
-          <button class="shortcut" type="button" onclick="document.getElementById('import-file').click()">
-            <div class="s-ico"><svg class="icon"><use href="#i-save"/></svg></div>
-            <div class="s-title">Backup</div>
-            <div class="s-sub">Загрузить JSON</div>
-          </button>
-        </div>
-      </div>
-
-      <div class="cards" id="dash-cards"></div>
-
-      <div class="section">
-        <h2><svg class="icon"><use href="#i-calendar"/></svg> Календарь посещаемости <span class="sub">текущий месяц</span></h2>
-        <div class="heat-grid" id="heat-grid"></div>
-        <p class="muted" style="margin-top:10px">Зелёный — был, красный — пропуск, оранжевый — смешанный день</p>
-      </div>
-
-      <div class="grid-2">
-        <div class="section">
-          <h2><svg class="icon"><use href="#i-target"/></svg> Цель по зарплате за месяц</h2>
-          <div class="goal-box">
-            <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px">
-              <span class="muted">Цель на текущий месяц:</span>
-              <input type="number" id="salary-goal" min="0" step="1000" onchange="saveGoal()" placeholder="30000">
-              <span class="muted">₽</span>
-            </div>
-            <div id="goal-progress"></div>
+        <h2>🎯 Цель по зарплате за месяц</h2>
+        <div class="goal-box">
+          <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px">
+            <span class="muted">Цель на текущий месяц:</span>
+            <input type="number" id="salary-goal" min="0" step="1000" onchange="saveGoal()" placeholder="30000">
+            <span class="muted">₽</span>
           </div>
-        </div>
-        <div class="section">
-          <h2><svg class="icon"><use href="#i-pen"/></svg> Заметка на сегодня</h2>
-          <textarea class="note-area" id="day-note" style="width:100%;min-height:90px" placeholder="Что важно сегодня? Что догнать после смены?"></textarea>
-          <div style="margin-top:8px"><button class="btn sm" onclick="saveDayNote()">Сохранить заметку</button></div>
+          <div id="goal-progress"></div>
         </div>
       </div>
-
-      <div class="grid-2">
-        <div class="section">
-          <h2><svg class="icon"><use href="#i-week"/></svg> Завтра</h2>
-          <div id="tomorrow-lessons"></div>
-          <h2 style="margin-top:16px"><svg class="icon"><use href="#i-case"/></svg> Ближайшая смена</h2>
-          <div id="next-shift" class="muted">—</div>
-        </div>
-        <div class="section">
-          <h2><svg class="icon"><use href="#i-flag"/></svg> Дедлайны на 7 дней</h2>
-          <div id="upcoming-deadlines" class="muted">Нет</div>
-        </div>
-      </div>
-
       <div class="section">
-        <h2><svg class="icon"><use href="#i-trend"/></svg> По предметам</h2>
-        <div id="subj-stats"></div>
+        <h2>📝 Заметка на сегодня</h2>
+        <textarea class="note-area" id="day-note" style="width:100%;min-height:90px" placeholder="Что важно сегодня? Что догнать после смены?"></textarea>
+        <div style="margin-top:8px"><button class="btn sm" onclick="saveDayNote()">Сохранить заметку</button></div>
       </div>
+    </div>
 
+    <div class="grid-2">
       <div class="section">
-        <h2><svg class="icon"><use href="#i-trophy"/></svg> Ачивки</h2>
-        <div class="ach-grid" id="achievements"></div>
-      </div>
-
-      <div class="section">
-        <h2><svg class="icon"><use href="#i-week"/></svg> Итог этой недели</h2>
-        <div class="week-summary" id="week-summary"></div>
-      </div>
-
-      <div class="section">
-        <h2><svg class="icon"><use href="#i-wallet"/></svg> Зарплата по месяцам</h2>
-        <div class="cards" id="dash-salary"></div>
-      </div>
-
-      <div class="section">
-        <h2><svg class="icon"><use href="#i-wallet"/></svg> Деньги <span class="sub">кошельки</span></h2>
-        <div id="dash-finance" class="muted">—</div>
+        <h2>📅 Пары сегодня <span class="sub" id="today-date-label"></span></h2>
+        <div id="today-lessons"></div>
       </div>
       <div class="section">
-        <h2><svg class="icon"><use href="#i-film"/></svg> Кино <span class="sub">кратко</span></h2>
-        <div id="dash-watch" class="muted">—</div>
+        <h2>🗓️ Завтра</h2>
+        <div id="tomorrow-lessons"></div>
+        <h2 style="margin-top:16px">💼 Ближайшая смена</h2>
+        <div id="next-shift" class="muted">—</div>
+        <h2 style="margin-top:16px">✅ Дедлайны на 7 дней</h2>
+        <div id="upcoming-deadlines" class="muted">Нет</div>
       </div>
+    </div>
 
-      <div class="section">
-        <h2><svg class="icon"><use href="#i-globe"/></svg> Магистратура <span class="sub">кратко</span></h2>
-        <div id="dash-magistr" class="muted">—</div>
-      </div>
+    <div class="section">
+      <h2>📈 По предметам</h2>
+      <div id="subj-stats"></div>
+    </div>
 
-      <div class="section">
-        <h2><svg class="icon"><use href="#i-alert"/></svg> Пары под угрозой из-за работы</h2>
-        <div id="dash-conflicts" class="muted">Нет</div>
-      </div>
+    <div class="section">
+      <h2>🏆 Ачивки</h2>
+      <div class="ach-grid" id="achievements"></div>
+    </div>
 
-      <div class="section">
-        <h2><svg class="icon"><use href="#i-gear"/></svg> Данные</h2>
-        <p class="muted" style="margin-bottom:10px">Сохраняется в браузере. Скачай backup, если меняешь устройство.</p>
-        <button class="btn secondary" onclick="exportData()">Скачать backup</button>
-        <button class="btn secondary" onclick="document.getElementById('import-file').click()">Загрузить backup</button>
-        <input type="file" id="import-file" accept=".json" class="hidden" onchange="importData(event)">
-      </div>
-    </details>
+    <div class="section">
+      <h2>📅 Итог этой недели</h2>
+      <div class="week-summary" id="week-summary"></div>
+    </div>
+
+    <div class="section">
+      <h2>💰 Зарплата по месяцам</h2>
+      <div class="cards" id="dash-salary"></div>
+    </div>
+
+
+
+    <div class="section">
+      <h2>💰 Деньги <span class="sub">кошельки</span></h2>
+      <div id="dash-finance" class="muted">—</div>
+    </div>
+    <div class="section">
+      <h2>🎬 Кино <span class="sub">кратко</span></h2>
+      <div id="dash-watch" class="muted">—</div>
+    </div>
+
+    <div class="section">
+      <h2>🎓 Магистратура <span class="sub">кратко</span></h2>
+      <div id="dash-magistr" class="muted">—</div>
+    </div>
+
+    <div class="section">
+      <h2>⚠️ Пары под угрозой из-за работы</h2>
+      <div id="dash-conflicts" class="muted">Нет</div>
+    </div>
+
+    <div class="section">
+      <h2>⚙️ Данные</h2>
+      <p class="muted" style="margin-bottom:10px">Сохраняется в браузере. Скачай backup, если меняешь устройство.</p>
+      <button class="btn secondary" onclick="exportData()">Скачать backup</button>
+      <button class="btn secondary" onclick="document.getElementById('import-file').click()">Загрузить backup</button>
+      <input type="file" id="import-file" accept=".json" class="hidden" onchange="importData(event)">
+    </div>
   </div>
 
   <div id="page-schedule" class="hidden">
-    <div class="cover-band cv-study">
-      <span class="ic"><svg class="icon"><use href="#i-cap"/></svg></span>
-      <h2>Учёба</h2>
-      <p>Расписание, посещаемость, задания и материалы</p>
-    </div>
     <div class="section">
       <h2>Расписание на неделю <span class="sub" id="week-label"></span></h2>
       <div class="filters">
@@ -1199,60 +927,40 @@ body.site-locked #fab { display: none !important; }
 
   <div id="page-attendance" class="hidden">
     <div class="section">
-      <div class="att-week-head">
-        <h2>Посещаемость</h2>
-        <div class="wk-nav">
-          <button type="button" aria-label="Прошлая неделя" onclick="shiftAttWeek(-1)">‹</button>
-          <span id="att-week-label"></span>
-          <button type="button" aria-label="Следующая неделя" onclick="shiftAttWeek(1)">›</button>
-        </div>
+      <h2>Посещаемость</h2>
+      <div class="filters">
+        <label>Месяц</label>
+        <select id="att-month">
+          <option value="">Все</option>
+          <option value="Сентябрь">Сентябрь</option>
+          <option value="Октябрь">Октябрь</option>
+          <option value="Ноябрь">Ноябрь</option>
+          <option value="Декабрь">Декабрь</option>
+        </select>
+        <label>Статус</label>
+        <select id="att-status">
+          <option value="">Все</option>
+          <option value="Был">Был</option>
+          <option value="Не был">Не был</option>
+          <option value="Ушёл">Ушёл</option>
+          <option value="Отменена">Отменена</option>
+          <option value="__empty">Не отмечено</option>
+          <option value="__work">Из-за работы</option>
+        </select>
+        <input type="search" id="att-search" placeholder="Поиск по предмету..." style="min-width:180px">
       </div>
-      <div class="att-legend">Тап по паре меняет статус: не отмечено → был → не был → ушёл</div>
-      <div id="att-week-body"></div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Дата</th><th>Время</th><th>Предмет</th><th>Тип</th><th>Преподаватель</th><th>Статус</th><th>Причина</th><th>Работа</th></tr>
+          </thead>
+          <tbody id="att-body"></tbody>
+        </table>
+      </div>
     </div>
-
-    <details class="more">
-      <summary>Полная таблица и фильтры</summary>
-      <div class="section">
-        <div class="filters">
-          <label>Месяц</label>
-          <select id="att-month">
-            <option value="">Все</option>
-            <option value="Сентябрь">Сентябрь</option>
-            <option value="Октябрь">Октябрь</option>
-            <option value="Ноябрь">Ноябрь</option>
-            <option value="Декабрь">Декабрь</option>
-          </select>
-          <label>Статус</label>
-          <select id="att-status">
-            <option value="">Все</option>
-            <option value="Был">Был</option>
-            <option value="Не был">Не был</option>
-            <option value="Ушёл">Ушёл</option>
-            <option value="Отменена">Отменена</option>
-            <option value="__empty">Не отмечено</option>
-            <option value="__work">Из-за работы</option>
-          </select>
-          <input type="search" id="att-search" placeholder="Поиск по предмету..." style="min-width:180px">
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr><th>Дата</th><th>Время</th><th>Предмет</th><th>Тип</th><th>Преподаватель</th><th>Статус</th><th>Причина</th><th>Работа</th></tr>
-            </thead>
-            <tbody id="att-body"></tbody>
-          </table>
-        </div>
-      </div>
-    </details>
   </div>
 
   <div id="page-shifts" class="hidden">
-    <div class="cover-band cv-life">
-      <span class="ic"><svg class="icon"><use href="#i-case"/></svg></span>
-      <h2>Жизнь</h2>
-      <p>Смены, деньги и кино — вне учёбы</p>
-    </div>
     <div class="cards" id="shift-cards"></div>
     <div class="section">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
@@ -1300,7 +1008,7 @@ body.site-locked #fab { display: none !important; }
 
   <div id="page-materials" class="hidden">
     <div class="section">
-      <h2><svg class="icon"><use href="#i-search"/></svg> Найти материалы по теме</h2>
+      <h2>🔍 Найти материалы по теме</h2>
       <div class="filters">
         <select id="find-subject"></select>
         <input type="text" id="find-topic" placeholder="Введи тему пары..." style="min-width:220px">
@@ -1310,7 +1018,7 @@ body.site-locked #fab { display: none !important; }
     </div>
     <div class="section">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
-        <h2 style="margin:0"><svg class="icon"><use href="#i-book"/></svg> Материалы к учёбе</h2>
+        <h2 style="margin:0">📚 Материалы к учёбе</h2>
         <button class="btn green" onclick="openMaterialModal()">+ Добавить материал</button>
       </div>
       <p class="muted" style="margin-bottom:12px">Видео, конспекты, методички — по предмету и теме.</p>
@@ -1322,14 +1030,12 @@ body.site-locked #fab { display: none !important; }
       <div id="materials-list"></div>
     </div>
     <div class="section">
-      <h2><svg class="icon"><use href="#i-doc"/></svg> Подборка по предметам</h2>
+      <h2>🗂 Подборка по предметам</h2>
       <div id="materials-by-subject"></div>
     </div>
   </div>
   
   <div id="page-magistr" class="hidden">
-    <div id="magistr-hero"></div>
-    <div class="uni-strip" id="magistr-strip"></div>
     <div class="tip">Геодезия / геоинформатика abroad · 11 вузов из твоего гайда + личный трекер подачи. Учёба в СамГТУ — во вкладках рядом.</div>
     <div class="cards" id="mag-stats"></div>
     <div class="filters" style="margin-bottom:12px">
@@ -1342,13 +1048,13 @@ body.site-locked #fab { display: none !important; }
       <div class="grid-2">
         <div class="section">
           <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px">
-            <h2 style="margin:0"><svg class="icon"><use href="#i-target"/></svg> Трекер подачи</h2>
+            <h2 style="margin:0">🎯 Трекер подачи</h2>
             <button class="btn green sm" type="button" onclick="openUniModal()">+ Своя программа</button>
           </div>
           <div id="uni-list" class="muted">Пока пусто</div>
         </div>
         <div class="section">
-          <h2><svg class="icon"><use href="#i-chat"/></svg> Язык</h2>
+          <h2>🗣️ Язык</h2>
           <div class="field-row">
             <div class="field"><label>Экзамен</label>
               <select id="lang-exam"><option>IELTS</option><option>TOEFL</option><option>Duolingo</option><option>Другой</option></select>
@@ -1371,7 +1077,7 @@ body.site-locked #fab { display: none !important; }
     </div>
     <div id="mag-panel-catalog" class="hidden">
       <div class="section">
-        <h2><svg class="icon"><use href="#i-globe"/></svg> Каталог · геодезия и геоинформатика</h2>
+        <h2>🌍 Каталог · геодезия и геоинформатика</h2>
         <p class="muted" style="margin-bottom:10px">Данные из твоего гайда на Диске. Нажми «В трекер», чтобы вести статус подачи.</p>
         <div id="catalog-list"></div>
       </div>
@@ -1391,11 +1097,11 @@ body.site-locked #fab { display: none !important; }
     <div id="mag-panel-docs" class="hidden">
       <div class="grid-2">
         <div class="section">
-          <h2><svg class="icon"><use href="#i-doc"/></svg> Документы</h2>
+          <h2>📄 Документы</h2>
           <div id="docs-list"></div>
         </div>
         <div class="section">
-          <h2><svg class="icon"><use href="#i-pen"/></svg> SOP / мотивация</h2>
+          <h2>✍️ SOP / мотивация</h2>
           <div class="field"><label>Почему программа</label><textarea id="sop-why" rows="3"></textarea></div>
           <div class="field"><label>Опыт</label><textarea id="sop-exp" rows="3"></textarea></div>
           <div class="field"><label>Планы после</label><textarea id="sop-future" rows="3"></textarea></div>
@@ -1407,11 +1113,7 @@ body.site-locked #fab { display: none !important; }
 
   
   <div id="page-watch" class="hidden">
-    <div class="cover-band cv-watch">
-      <span class="ic"><svg class="icon"><use href="#i-film"/></svg></span>
-      <h2>Кино</h2>
-      <p>Хочу / Смотрю / Посмотрел / Бросил</p>
-    </div>
+    <div class="tip">Трекер фильмов, сериалов и аниме. Статусы: Хочу / Смотрю / Посмотрел / Бросил. Оценка 1–10.</div>
     <div class="cards" id="watch-stats"></div>
     <div class="filters" style="margin-bottom:12px;flex-wrap:wrap;gap:6px;display:flex">
       <button class="btn sm" type="button" id="wf-all" onclick="setWatchFilter('all')">Все</button>
@@ -1426,7 +1128,7 @@ body.site-locked #fab { display: none !important; }
     </div>
     <div class="section">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px">
-        <h2 style="margin:0"><svg class="icon"><use href="#i-film"/></svg> Список</h2>
+        <h2 style="margin:0">🎬 Список</h2>
         <button class="btn green sm" type="button" onclick="openWatchModal()">+ Добавить</button>
       </div>
       <div id="watch-list" class="muted">Загрузка…</div>
@@ -1437,11 +1139,6 @@ body.site-locked #fab { display: none !important; }
   
   
   <div id="page-finance" class="hidden">
-    <div class="cover-band cv-finance">
-      <span class="ic"><svg class="icon"><use href="#i-wallet"/></svg></span>
-      <h2>Деньги</h2>
-      <p>Кошельки, аванс, зарплата и дневной лимит</p>
-    </div>
     <div class="tip">Мелочь, карты, наличные, размен. Аванс и зарплата — разные платежи: укажи дни месяца и вноси «+ Аванс» / «+ Зарплата», чтобы считать, сколько можно тратить в день.</div>
 
     <div class="section">
@@ -1716,7 +1413,7 @@ body.site-locked #fab { display: none !important; }
 
 <div class="modal-bg" id="lock-modal">
   <div class="modal">
-    <h3><svg class="icon"><use href="#i-lock"/></svg> Закрытый раздел</h3>
+    <h3>🔒 Закрытый раздел</h3>
     <p class="muted" style="margin-bottom:12px">Введите пароль для доступа к <span id="lock-section-name">разделу</span></p>
     <div class="field">
       <label>Пароль</label>
@@ -1857,7 +1554,6 @@ if (!state.watch) state.watch = defaultWatch();
 if (!state.finance) state.finance = defaultFinance();
 if (!state.magistr) state.magistr = defaultMagistr();
 let weekOffset = 0;
-let attWeekOffset = 0;
 
 function save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
 
@@ -2141,80 +1837,6 @@ function renderDashboard() {
     : 'Нет пересечений впереди';
 }
 
-function renderTodayHero() {
-  const today = todayISO();
-  const tDate = new Date(today + 'T12:00:00');
-  const dEl = document.getElementById('today-day-title');
-  if (dEl) dEl.textContent = DAY_NAMES_FULL[tDate.getDay()] + ', ' + fmtDate(today);
-
-  const lessonsToday = classesOn(today);
-  const shiftsToday = state.shifts.filter(s => s.startDate === today);
-  const rEl = document.getElementById('today-rest-label');
-  if (rEl) {
-    const parts = [];
-    if (lessonsToday.length) parts.push(lessonsToday.length + (lessonsToday.length === 1 ? ' пара' : ' пары'));
-    if (shiftsToday.length) parts.push('смена');
-    rEl.textContent = parts.length ? parts.join(' · ') : 'Свободный день';
-  }
-
-  const items = [
-    ...lessonsToday.map(c => ({ start: c.start, end: c.end, title: c.subject, where: [c.type, c.teacher].filter(Boolean).join(' · ') })),
-    ...shiftsToday.map(s => ({ start: s.startTime, end: s.endTime, title: 'Смена «' + (s.type || 'Смена') + '»', where: (s.endDate && s.endDate !== s.startDate) ? ('до ' + fmtDate(s.endDate) + ' ' + s.endTime) : '' }))
-  ].sort((a, b) => timeToMin(a.start) - timeToMin(b.start));
-
-  function overlapNote(item) {
-    const clash = items.find(x => x !== item && timeToMin(x.start) < timeToMin(item.end) && timeToMin(x.end) > timeToMin(item.start));
-    return clash ? ('пересекается с «' + clash.title + '», ' + clash.start + '–' + clash.end) : '';
-  }
-
-  const nowMin = nowMinutes();
-  const current = items.find(i => timeToMin(i.start) <= nowMin && nowMin < timeToMin(i.end));
-  const next = items.find(i => timeToMin(i.start) > nowMin);
-  const nEl = document.getElementById('now-next');
-  if (nEl) {
-    if (current) {
-      const left = timeToMin(current.end) - nowMin;
-      const ov = overlapNote(current);
-      nEl.innerHTML = `<span class="tag">Сейчас идёт${left > 0 ? ' · ' + left + ' мин до конца' : ''}</span>
-        <h2>${current.title}</h2>
-        ${current.where ? `<div class="where">${current.where}</div>` : ''}
-        <div class="when">${current.start}–${current.end}${ov ? ' <b>· ' + ov + '</b>' : ''}</div>`;
-    } else if (next) {
-      const until = timeToMin(next.start) - nowMin;
-      const untilTxt = until >= 60 ? Math.round(until / 60) + ' ч' : until + ' мин';
-      const ov = overlapNote(next);
-      nEl.innerHTML = `<span class="tag">Дальше сегодня · через ${untilTxt}</span>
-        <h2>${next.title}</h2>
-        ${next.where ? `<div class="where">${next.where}</div>` : ''}
-        <div class="when">${next.start}–${next.end}${ov ? ' <b>· ' + ov + '</b>' : ''}</div>`;
-    } else {
-      nEl.innerHTML = `<span class="tag">На сегодня всё</span><h2>Пар и смен больше нет</h2><div class="where">Можно выдохнуть.</div>`;
-    }
-  }
-
-  const sEl = document.getElementById('today-strip');
-  if (sEl) {
-    try {
-      const was = state.classes.filter(c => c.status === 'Был').length;
-      const miss = state.classes.filter(c => c.status === 'Не был' || c.status === 'Ушёл').length;
-      const pct = (was + miss) ? Math.round(was / (was + miss) * 100) : 0;
-      let dailyTxt = '—';
-      try { const dbi = dailyBudgetInfo(); dailyTxt = fmtMoney(dbi.dailyRemain) + ' ₽'; } catch (e) {}
-      let magTxt = '—';
-      try {
-        ensureMagistr();
-        const M = state.magistr;
-        const docsDone = (M.docs || []).filter(d => d.done).length;
-        magTxt = docsDone + ' / ' + ((M.docs || []).length || 9);
-      } catch (e) {}
-      sEl.innerHTML = `
-        <span class="stat">Посещаемость <b>${pct}%</b></span>
-        <span class="stat">В день можно <b>${dailyTxt}</b></span>
-        <span class="stat">Магистратура <b>${magTxt}</b></span>`;
-    } catch (e) {}
-  }
-}
-
 // Schedule week view
 function mondayOf(offsetWeeks) {
   const d = new Date();
@@ -2338,52 +1960,6 @@ function setReason(id, val) {
 document.getElementById('att-month').addEventListener('change', renderAttendance);
 document.getElementById('att-status').addEventListener('change', renderAttendance);
 document.getElementById('att-search').addEventListener('input', renderAttendance);
-
-function shiftAttWeek(dir) {
-  attWeekOffset += dir;
-  renderAttendanceWeek();
-}
-
-function cycleAttStatus(id) {
-  const c = state.classes.find(x => x.id === id);
-  if (!c) return;
-  const order = ['', 'Был', 'Не был', 'Ушёл'];
-  const idx = order.indexOf(c.status || '');
-  const next = order[(idx + 1) % order.length];
-  setStatus(id, next);
-}
-
-function renderAttendanceWeek() {
-  const labelEl = document.getElementById('att-week-label');
-  const bodyEl = document.getElementById('att-week-body');
-  if (!bodyEl) return;
-
-  const mon = mondayOf(attWeekOffset);
-  const days = [];
-  for (let i = 0; i < 7; i++) {
-    const d = new Date(mon);
-    d.setDate(mon.getDate() + i);
-    const iso = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
-    days.push({ d, iso });
-  }
-  if (labelEl) labelEl.textContent = fmtDate(days[0].iso) + '–' + fmtDate(days[6].iso);
-
-  const today = todayISO();
-  bodyEl.innerHTML = days.map(({ d, iso }) => {
-    const list = classesOn(iso);
-    const isToday = iso === today;
-    const chips = list.map(c => {
-      const stClass = c.status === 'Был' ? 'byl' : c.status === 'Не был' ? 'nebyl' : c.status === 'Ушёл' ? 'ushyol' : '';
-      return `<button type="button" class="att-chip ${stClass}" onclick="cycleAttStatus(${c.id})">
-        <span class="dot"></span>${c.subject} <time>${c.start}</time>
-      </button>`;
-    }).join('');
-    return `<div class="day-block ${isToday ? 'is-today' : ''}">
-      <div class="d-head"><span class="d-name">${isToday ? 'Сегодня, ' + DAY_NAMES_FULL[d.getDay()].toLowerCase() : DAY_NAMES_FULL[d.getDay()]}</span><span class="d-date">${fmtDate(iso)}</span></div>
-      ${list.length ? `<div class="att-chips">${chips}</div>` : '<div class="d-empty">Пар нет</div>'}
-    </div>`;
-  }).join('');
-}
 
 function renderShifts() {
   const byMonth = { 9:0, 10:0, 11:0, 12:0 };
@@ -2595,10 +2171,14 @@ function isAppwriteConfigured() {
 }
 
 function initAppwrite() {
+  const hint = document.getElementById('auth-setup-hint');
+  const host = (typeof location !== 'undefined' && location.hostname) ? location.hostname : '';
+  if (hint && host) {
+    hint.innerHTML = 'Текущий сайт: <code>' + host + '</code> — этот hostname должен быть в Appwrite → Auth → Settings → Platforms (Web).';
+  }
   if (!isAppwriteConfigured()) {
-    const hint = document.getElementById('auth-setup-hint');
     if (hint) {
-      hint.innerHTML = '⚠️ Appwrite не настроен. Впиши <code>APPWRITE_PROJECT_ID</code> в index.html (Project ID из cloud.appwrite.io). Добавь Web-платформу с hostname твоего сайта.';
+      hint.innerHTML = '⚠️ Appwrite не настроен. Впиши <code>APPWRITE_PROJECT_ID</code> в index.html.';
     }
     return null;
   }
@@ -2708,14 +2288,18 @@ async function submitSiteAuth() {
     if (passEl) passEl.value = '';
   } catch (e) {
     let msg = (e && e.message) ? e.message : 'Ошибка авторизации';
-    // дружелюбнее типичные ошибки Appwrite
+    const host = (typeof location !== 'undefined' && location.hostname) ? location.hostname : '';
     if (typeof msg === 'string') {
-      if (msg.includes('Invalid credentials') || msg.includes('invalid_credentials')) {
+      if (msg === 'Failed to fetch' || msg.includes('NetworkError') || msg.includes('Network request failed') || msg.includes('Load failed')) {
+        msg = 'Нет связи с Appwrite (Failed to fetch). В консоли Appwrite → Auth → Settings → Add platform → Web добавь hostname: «' + host + '» (и localhost). Без этого браузер блокирует запрос.';
+      } else if (msg.includes('Invalid credentials') || msg.includes('invalid_credentials')) {
         msg = 'Неверный email или пароль';
       } else if (msg.includes('already exists') || msg.includes('user_already_exists')) {
         msg = 'Такой email уже зарегистрирован — войди во вкладке «Вход»';
       } else if (msg.includes('Password') && msg.includes('8')) {
         msg = 'Пароль должен быть не короче 8 символов';
+      } else if (msg.includes('CORS') || msg.includes('origin')) {
+        msg = 'CORS: добавь hostname «' + host + '» в Appwrite → Auth → Platforms.';
       }
     }
     if (err) err.textContent = msg;
@@ -2764,46 +2348,26 @@ function goPage(p, skipLock) {
     return;
   }
   if (p === 'study') p = 'schedule';
-  if (p === 'life') p = 'shifts';
   // Смены и Деньги доступны после входа на сайт (тот же пароль)
 
-  function applyPageSwitch() {
-    const STUDY = ['schedule','attendance','tasks','materials'];
-    const LIFE = ['shifts','finance','watch'];
-    const isStudy = STUDY.includes(p);
-    const isLife = LIFE.includes(p);
-    document.querySelectorAll('#nav button').forEach(b => {
-      const page = b.dataset.page;
-      const active = page === p || (page === 'study' && isStudy) || (page === 'life' && isLife);
-      b.classList.toggle('active', active);
-    });
-    const sub = document.getElementById('study-subnav');
-    if (sub) {
-      sub.classList.toggle('show', isStudy);
-      sub.querySelectorAll('button').forEach(b => {
-        b.classList.toggle('active', b.dataset.sub === p);
-      });
-    }
-    const subLife = document.getElementById('life-subnav');
-    if (subLife) {
-      subLife.classList.toggle('show', isLife);
-      subLife.querySelectorAll('button').forEach(b => {
-        b.classList.toggle('active', b.dataset.sub === p);
-      });
-    }
-    ['dashboard','schedule','attendance','shifts','tasks','materials','magistr','watch','finance'].forEach(id => {
-      const el = document.getElementById('page-' + id);
-      if (el) el.classList.toggle('hidden', id !== p);
+  const STUDY = ['schedule','attendance','tasks','materials'];
+  const isStudy = STUDY.includes(p);
+  document.querySelectorAll('#nav button').forEach(b => {
+    const page = b.dataset.page;
+    const active = page === p || (page === 'study' && isStudy);
+    b.classList.toggle('active', active);
+  });
+  const sub = document.getElementById('study-subnav');
+  if (sub) {
+    sub.classList.toggle('show', isStudy);
+    sub.querySelectorAll('button').forEach(b => {
+      b.classList.toggle('active', b.dataset.sub === p);
     });
   }
-
-  // Плавный переход между страницами (нативный API, без сторонних библиотек).
-  // Там где браузер не поддерживает — просто применяем переключение мгновенно.
-  if (document.startViewTransition) {
-    document.startViewTransition(applyPageSwitch);
-  } else {
-    applyPageSwitch();
-  }
+  ['dashboard','schedule','attendance','shifts','tasks','materials','magistr','watch','finance'].forEach(id => {
+    const el = document.getElementById('page-' + id);
+    if (el) el.classList.toggle('hidden', id !== p);
+  });
   render();
 }
 
@@ -3320,13 +2884,12 @@ function renderCatalog() {
   if (!box || typeof MAGISTR_CATALOG === 'undefined') return;
   box.innerHTML = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px">` + MAGISTR_CATALOG.map(u => {
     const f = u.facts || {};
-    const img = u.img
-      ? `<img src="${u.img}" alt="" loading="lazy" referrerpolicy="no-referrer" style="width:100%;height:120px;object-fit:cover;display:block;background:#c5d0e0" onerror="this.style.display='none'">`
-      : `<div style="height:72px;background:linear-gradient(135deg,#0d7c6f,#3d7ea6)"></div>`;
+    const initials = (u.name || '?').split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase();
+    const cover = `<div class="uni-cover"><span class="uni-flag">${u.flag || '🎓'}</span><span class="uni-initials">${initials}</span></div>`;
     return `<div class="uni-photo-card">
-      ${img}
+      ${cover}
       <div class="body">
-        <h3 style="margin:0 0 4px;font-size:.9rem">${u.flag||''} ${u.name}</h3>
+        <h3 style="margin:0 0 4px;font-size:.95rem;font-weight:700;letter-spacing:-0.02em">${u.flag||''} ${u.name}</h3>
         <div class="muted" style="font-size:.78rem">${u.sub||''}</div>
         <div class="muted" style="margin-top:4px;font-size:.75rem">${f['Язык']||''} · ${f['Стоимость / год']||''}</div>
         <div class="quick-actions" style="margin-top:8px">
@@ -3408,69 +2971,9 @@ function showGuide(key) {
   body.innerHTML = `<h3 style="margin:0 0 12px;font-weight:800">${titles[key]||key}</h3>${inner}`;
 }
 
-function findCatalogImg(catalogId) {
-  if (!catalogId || typeof MAGISTR_CATALOG === 'undefined') return null;
-  const c = MAGISTR_CATALOG.find(x => x.id === catalogId);
-  return c ? c.img : null;
-}
-
-function buildUniTeaserHTML(featuredOnly) {
-  ensureMagistr();
-  const M = state.magistr;
-  const withDeadline = (M.unis || [])
-    .filter(u => u.deadline && findCatalogImg(u.catalogId))
-    .sort((a, b) => a.deadline.localeCompare(b.deadline));
-
-  let pick = withDeadline[0];
-  let tag, sub;
-  if (pick) {
-    const left = daysLeft(pick.deadline);
-    tag = left !== null ? (left >= 0 ? `Дедлайн через ${left} дн.` : 'Дедлайн прошёл') : 'Ближайшая программа';
-    sub = pick.program || pick.country || '';
-  } else if (!featuredOnly && typeof MAGISTR_CATALOG !== 'undefined' && MAGISTR_CATALOG.length) {
-    // ничего не отслеживается — просто показываем один вуз из каталога, чтобы фото были на виду
-    const c = MAGISTR_CATALOG[Math.floor(Date.now() / 86400000) % MAGISTR_CATALOG.length];
-    pick = { name: c.name, catalogId: c.id };
-    tag = 'Из каталога';
-    sub = c.sub || '';
-  }
-  if (!pick) return '';
-
-  const img = findCatalogImg(pick.catalogId);
-  if (!img) return '';
-
-  return `<div class="uni-teaser" onclick="goPage('magistr'); setTimeout(()=>setMagTab('catalog'),0)">
-    <img src="${img}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.closest('.uni-teaser').style.display='none'">
-    <div class="scrim"></div>
-    <div class="content">
-      <span class="tag">${tag}</span>
-      <h3>${pick.name}</h3>
-      ${sub ? `<p>${sub}</p>` : ''}
-    </div>
-  </div>`;
-}
-
-function renderUniStrip() {
-  const box = document.getElementById('magistr-strip');
-  if (!box || typeof MAGISTR_CATALOG === 'undefined') return;
-  box.innerHTML = MAGISTR_CATALOG.map(u => {
-    if (!u.img) return '';
-    return `<div class="uni-mini" onclick="showCatalogDetail('${u.id}')">
-      <img src="${u.img}" alt="" loading="lazy" referrerpolicy="no-referrer">
-      <div class="scrim3"></div>
-      <div class="t">${u.flag || ''} ${u.name}</div>
-    </div>`;
-  }).join('');
-}
-
 function renderMagistr() {
   ensureMagistr();
   const M = state.magistr;
-  const teaserToday = document.getElementById('today-uni-teaser');
-  if (teaserToday) teaserToday.innerHTML = buildUniTeaserHTML(false);
-  const teaserHero = document.getElementById('magistr-hero');
-  if (teaserHero) teaserHero.innerHTML = buildUniTeaserHTML(false);
-  renderUniStrip();
   const docsDone = M.docs.filter(d => d.done).length;
   document.getElementById('mag-stats').innerHTML = `
     <div class="card"><div class="label">Программ</div><div class="value blue">${M.unis.length}</div></div>
@@ -3479,9 +2982,7 @@ function renderMagistr() {
     <div class="card"><div class="label">Офферы</div><div class="value green">${M.unis.filter(u=>u.status==='Оффер').length}</div></div>`;
   document.getElementById('uni-list').innerHTML = M.unis.length ? M.unis.slice().sort((a,b)=>(a.deadline||'9999').localeCompare(b.deadline||'9999')).map(u => {
     const left = daysLeft(u.deadline);
-    const img = findCatalogImg(u.catalogId);
-    return `<div class="lesson-card" style="align-items:center">
-      ${img ? `<img src="${img}" alt="" loading="lazy" referrerpolicy="no-referrer" style="width:48px;height:48px;border-radius:10px;object-fit:cover;flex:none" onerror="this.style.display='none'">` : ''}
+    return `<div class="lesson-card" style="flex-direction:column">
       <div style="display:flex;justify-content:space-between;gap:8px;width:100%">
         <div>
           <div class="lesson-title">${u.name}</div>
@@ -4108,10 +3609,8 @@ function delFinOp(id) {
 
 function render() {
   renderDashboard();
-  renderTodayHero();
   renderSchedule();
   renderAttendance();
-  renderAttendanceWeek();
   renderShifts();
   renderTasks();
   renderMaterials();
