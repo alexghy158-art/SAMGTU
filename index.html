@@ -713,6 +713,46 @@ body.site-locked #fab { display: none !important; }
 ::-webkit-scrollbar { width: 8px; height: 8px; }
 ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
 
+
+/* thematic page heroes — decorative, non-blocking */
+.page-hero {
+  position: relative;
+  height: 120px;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+.page-hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: brightness(0.72);
+}
+.page-hero .hero-caption {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  padding: 14px 18px;
+  background: linear-gradient(transparent, rgba(15,23,42,.75));
+  color: #fff;
+}
+.page-hero .hero-caption strong {
+  display: block;
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.page-hero .hero-caption span {
+  font-size: .78rem;
+  opacity: .9;
+  font-weight: 500;
+}
+@media (max-width: 600px) {
+  .page-hero { height: 96px; }
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/appwrite@15.0.0"></script>
 </head>
@@ -776,6 +816,11 @@ body.site-locked #fab { display: none !important; }
 
   <main>
   <div id="page-dashboard" class="page-enter">
+    <div class="page-hero">
+      <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1200&q=80&auto=format&fit=crop" alt="" loading="lazy" referrerpolicy="no-referrer">
+      <div class="hero-caption"><strong>Сегодня</strong><span>Учёба, смены и планы на день</span></div>
+    </div>
+
     <div class="tip" id="daily-tip"></div>
     <div class="cards" id="dash-cards"></div>
 
@@ -830,6 +875,11 @@ body.site-locked #fab { display: none !important; }
   </div>
 
   <div id="page-schedule" class="hidden">
+    <div class="page-hero">
+      <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1200&q=80&auto=format&fit=crop" alt="" loading="lazy" referrerpolicy="no-referrer">
+      <div class="hero-caption"><strong>Расписание</strong><span>Пары на неделю</span></div>
+    </div>
+
     <div class="section">
       <h2>Расписание на неделю <span class="sub" id="week-label"></span></h2>
       <div class="filters">
@@ -847,6 +897,11 @@ body.site-locked #fab { display: none !important; }
   </div>
 
   <div id="page-attendance" class="hidden">
+    <div class="page-hero">
+      <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1200&q=80&auto=format&fit=crop" alt="" loading="lazy" referrerpolicy="no-referrer">
+      <div class="hero-caption"><strong>Посещаемость</strong><span>Отметки и пропуски</span></div>
+    </div>
+
     <div class="section">
       <h2>Посещаемость</h2>
       <div class="filters">
@@ -882,6 +937,11 @@ body.site-locked #fab { display: none !important; }
   </div>
 
   <div id="page-shifts" class="hidden">
+    <div class="page-hero">
+      <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=1200&q=80&auto=format&fit=crop" alt="" loading="lazy" referrerpolicy="no-referrer">
+      <div class="hero-caption"><strong>Смены</strong><span>Работа и зарплата</span></div>
+    </div>
+
     <div class="cards" id="shift-cards"></div>
     <div class="section">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
@@ -911,6 +971,11 @@ body.site-locked #fab { display: none !important; }
   </div>
 
   <div id="page-tasks" class="hidden">
+    <div class="page-hero">
+      <img src="https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=1200&q=80&auto=format&fit=crop" alt="" loading="lazy" referrerpolicy="no-referrer">
+      <div class="hero-caption"><strong>Задания</strong><span>Дедлайны и дела</span></div>
+    </div>
+
     <div class="section">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
         <h2 style="margin:0">Задания</h2>
@@ -928,6 +993,11 @@ body.site-locked #fab { display: none !important; }
   </div>
 
   <div id="page-materials" class="hidden">
+    <div class="page-hero">
+      <img src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=1200&q=80&auto=format&fit=crop" alt="" loading="lazy" referrerpolicy="no-referrer">
+      <div class="hero-caption"><strong>Материалы</strong><span>Видео и методички</span></div>
+    </div>
+
     <div class="section">
       <h2>🔍 Найти материалы по теме</h2>
       <div class="filters">
@@ -957,6 +1027,11 @@ body.site-locked #fab { display: none !important; }
   </div>
   
   <div id="page-magistr" class="hidden">
+    <div class="page-hero">
+      <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1200&q=80&auto=format&fit=crop" alt="" loading="lazy" referrerpolicy="no-referrer">
+      <div class="hero-caption"><strong>Магистратура</strong><span>Вузы и документы</span></div>
+    </div>
+
     <div class="tip">Геодезия / геоинформатика abroad · 11 вузов из твоего гайда + личный трекер подачи. Учёба в СамГТУ — во вкладках рядом.</div>
     <div class="cards" id="mag-stats"></div>
     <div class="filters" style="margin-bottom:12px">
@@ -1034,6 +1109,11 @@ body.site-locked #fab { display: none !important; }
 
   
   <div id="page-watch" class="hidden">
+    <div class="page-hero">
+      <img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3dd?w=1200&q=80&auto=format&fit=crop" alt="" loading="lazy" referrerpolicy="no-referrer">
+      <div class="hero-caption"><strong>Кино</strong><span>Фильмы и сериалы</span></div>
+    </div>
+
     <div class="tip">Трекер фильмов, сериалов и аниме. Статусы: Хочу / Смотрю / Посмотрел / Бросил. Оценка 1–10.</div>
     <div class="cards" id="watch-stats"></div>
     <div class="filters" style="margin-bottom:12px;flex-wrap:wrap;gap:6px;display:flex">
@@ -1060,6 +1140,11 @@ body.site-locked #fab { display: none !important; }
   
   
   <div id="page-finance" class="hidden">
+    <div class="page-hero">
+      <img src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=1200&q=80&auto=format&fit=crop" alt="" loading="lazy" referrerpolicy="no-referrer">
+      <div class="hero-caption"><strong>Деньги</strong><span>Кошельки и расходы</span></div>
+    </div>
+
     <div class="tip">Мелочь, карты, наличные, размен. Аванс и зарплата — разные платежи: укажи дни месяца и вноси «+ Аванс» / «+ Зарплата», чтобы считать, сколько можно тратить в день.</div>
 
     <div class="section">
@@ -3530,18 +3615,25 @@ function delFinOp(id) {
 }
 
 function render() {
-  renderDashboard();
-  renderSchedule();
-  renderAttendance();
-  renderShifts();
-  renderTasks();
-  renderMaterials();
-  renderMagistr();
-  renderWatch();
-  hydrateWikiSlots();
-  renderHeatmap();
+  const safe = (fn, name) => { try { fn(); } catch (e) { console.error(name, e); } };
+  safe(renderDashboard, 'dashboard');
+  safe(renderSchedule, 'schedule');
+  safe(renderAttendance, 'attendance');
+  safe(renderShifts, 'shifts');
+  safe(renderTasks, 'tasks');
+  safe(renderMaterials, 'materials');
+  safe(renderMagistr, 'magistr');
+  safe(renderWatch, 'watch');
+  safe(renderFinance, 'finance');
+  safe(renderHeatmap, 'heatmap');
+  try { hydrateWikiSlots(); } catch (e) { console.error('wiki', e); }
 }
-render();
+// первичная отрисовка после готовности DOM/авторизации
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => { try { render(); } catch(e) {} });
+} else {
+  try { render(); } catch(e) {}
+}
 
 // page transition helper
 (function() {
