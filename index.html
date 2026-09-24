@@ -843,6 +843,53 @@ body.site-locked #fab { display: none !important; }
   100% { transform: scale(1); }
 }
 
+
+/* subject attendance chart */
+.subj-chart-list { display: flex; flex-direction: column; gap: 10px; }
+.subj-chart-row {
+  display: grid;
+  grid-template-columns: minmax(100px, 1.6fr) 2.2fr auto;
+  gap: 10px 12px;
+  align-items: center;
+}
+.subj-chart-row .name {
+  font-weight: 600;
+  font-size: .84rem;
+  line-height: 1.25;
+  min-width: 0;
+}
+.subj-chart-row .bar-wrap {
+  height: 12px;
+  background: #f1f5f9;
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+}
+.subj-chart-row .bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width .45s ease;
+  min-width: 0;
+}
+.subj-chart-row .meta {
+  font-family: var(--mono);
+  font-size: .78rem;
+  font-weight: 700;
+  color: var(--muted);
+  white-space: nowrap;
+  text-align: right;
+}
+.subj-chart-row .meta strong { color: var(--ink); }
+@media (max-width: 560px) {
+  .subj-chart-row {
+    grid-template-columns: 1fr auto;
+    grid-template-areas: "name meta" "bar bar";
+  }
+  .subj-chart-row .name { grid-area: name; }
+  .subj-chart-row .meta { grid-area: meta; }
+  .subj-chart-row .bar-wrap { grid-area: bar; }
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/appwrite@15.0.0"></script>
 </head>
@@ -990,6 +1037,12 @@ body.site-locked #fab { display: none !important; }
     <div class="page-hero">
       <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1200&q=80&auto=format&fit=crop" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.opacity=\'0.3\'" onerror="this.style.opacity='0.25'">
       <div class="hero-caption"><strong>Посещаемость</strong><span>Отметки и пропуски</span></div>
+    </div>
+
+    <div class="section">
+      <h2>📊 По предметам</h2>
+      <p class="muted" style="margin:-8px 0 12px">Процент посещений (без отменённых пар). Учитывается фильтр месяца ниже.</p>
+      <div id="subj-chart"></div>
     </div>
 
     <div class="section">
@@ -2007,7 +2060,58 @@ function renderSchedule() {
     </div>`;
 }
 
+
+function renderSubjChart() {
+  const box = document.getElementById('subj-chart');
+  if (!box) return;
+  const monthSel = document.getElementById('att-month');
+  const month = monthSel ? monthSel.value : '';
+  let rows = state.classes || [];
+  if (month) rows = rows.filter(c => c.month === month);
+
+  const map = {};
+  rows.forEach(c => {
+    const name = (c.subject || 'Без названия').trim();
+    if (!map[name]) map[name] = { byl: 0, nebyl: 0, ushyol: 0, otmena: 0, empty: 0, total: 0 };
+    const m = map[name];
+    if (c.status === 'Отменена') { m.otmena++; return; }
+    m.total++;
+    if (c.status === 'Был') m.byl++;
+    else if (c.status === 'Не был') m.nebyl++;
+    else if (c.status === 'Ушёл') m.ushyol++;
+    else m.empty++;
+  });
+
+  const list = Object.entries(map)
+    .map(([name, s]) => {
+      // посещаемость: был / (всего отмеченных кроме отмен); пустые не в знаменателе для %
+      const marked = s.byl + s.nebyl + s.ushyol;
+      const pct = marked > 0 ? Math.round((s.byl / marked) * 100) : 0;
+      return { name, ...s, marked, pct };
+    })
+    .filter(x => x.total + x.otmena > 0)
+    .sort((a, b) => b.pct - a.pct || a.name.localeCompare(b.name, 'ru'));
+
+  if (!list.length) {
+    box.innerHTML = '<p class="muted">Нет пар за выбранный период.</p>';
+    return;
+  }
+
+  box.innerHTML = '<div class="subj-chart-list">' + list.map(s => {
+    let color = 'var(--green)';
+    if (s.pct < 50) color = 'var(--red)';
+    else if (s.pct < 75) color = 'var(--orange)';
+    const short = s.name.length > 42 ? s.name.slice(0, 40) + '…' : s.name;
+    return `<div class="subj-chart-row" title="${s.name.replace(/"/g,'&quot;')}">
+      <div class="name">${short}</div>
+      <div class="bar-wrap"><div class="bar-fill" style="width:${s.pct}%;background:${color}"></div></div>
+      <div class="meta"><strong>${s.pct}%</strong> · ${s.byl}/${s.marked || s.total}</div>
+    </div>`;
+  }).join('') + '</div>';
+}
+
 function renderAttendance() {
+  try { renderSubjChart(); } catch (e) { console.error(e); }
   const month = document.getElementById('att-month').value;
   const st = document.getElementById('att-status').value;
   const q = (document.getElementById('att-search').value || '').toLowerCase();
