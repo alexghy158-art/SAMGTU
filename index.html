@@ -64,6 +64,10 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 body::before, .orb { display: none !important; }
+::view-transition-old(root) { animation: vt-out .18s ease both; }
+::view-transition-new(root) { animation: vt-in .24s ease both; }
+@keyframes vt-out { to { opacity: 0; transform: translateY(-4px); } }
+@keyframes vt-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
 .app {
   max-width: 1120px;
   margin: 0 auto;
@@ -117,47 +121,51 @@ body::before, .orb { display: none !important; }
 }
 /* Плавающий нижний таб-бар вместо строки текстовых кнопок */
 .nav {
-  position: fixed;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: calc(14px + env(safe-area-inset-bottom, 0px));
-  z-index: 60;
+  position: relative;
   display: flex;
   gap: 2px;
-  padding: 6px;
-  background: rgba(255,255,255,.88);
-  backdrop-filter: blur(16px) saturate(1.5);
-  -webkit-backdrop-filter: blur(16px) saturate(1.5);
-  border: 1px solid var(--line);
+  padding: 5px;
+  background: var(--sand-soft);
   border-radius: 999px;
-  box-shadow: var(--shadow-lg);
-  width: min(420px, calc(100vw - 24px));
+  margin-bottom: 10px;
 }
 .nav button {
+  position: relative;
+  z-index: 1;
   flex: 1;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 2px;
+  justify-content: center;
+  gap: 6px;
   border: none;
   background: transparent;
   color: var(--muted);
   font-family: var(--font);
-  font-weight: 600;
-  font-size: .64rem;
-  padding: 8px 4px 7px;
+  font-weight: 700;
+  font-size: .78rem;
+  padding: 10px 6px;
   border-radius: 999px;
   cursor: pointer;
-  transition: .18s ease;
+  transition: color .25s ease;
   white-space: nowrap;
 }
-.nav button svg.icon { width: 19px; height: 19px; }
+.nav button svg.icon { width: 16px; height: 16px; transition: transform .25s ease; }
 .nav button:hover { color: var(--ink); }
-.nav button:active { transform: scale(.94); }
-.nav button.active {
-  background: var(--accent);
-  color: #fff;
+.nav button:active svg.icon { transform: scale(.85); }
+.nav button.active { color: #fff; }
+/* плашка-индикатор, которая плавно скользит под активную вкладку */
+.nav .nav-indicator {
+  position: absolute;
+  top: 5px; bottom: 5px;
+  border-radius: 999px;
+  background: linear-gradient(150deg, #ff8a5c, var(--accent));
   box-shadow: 0 6px 16px -4px rgba(255,90,54,.5);
+  transition: left .28s cubic-bezier(.4,0,.2,1), width .28s cubic-bezier(.4,0,.2,1);
+  z-index: 0;
+}
+@media (max-width: 420px) {
+  .nav button span.lbl { display: none; }
+  .nav button svg.icon { width: 19px; height: 19px; }
 }
 .subnav {
   display: none;
@@ -639,7 +647,7 @@ tr.row-ushyol .status-select { border-color: #fde68a; background: #fffbeb; }
 #fab, .fab {
   position: fixed;
   right: 18px;
-  bottom: calc(78px + env(safe-area-inset-bottom, 0px));
+  bottom: calc(18px + env(safe-area-inset-bottom, 0px));
   z-index: 80;
   display: flex;
   flex-direction: column;
@@ -1011,10 +1019,11 @@ svg.icon{width:1em;height:1em;flex:none;display:inline-block;vertical-align:-.12
       <button type="button" class="btn-logout" onclick="siteLogout()" title="Выйти">Выйти</button>
     </div>
     <nav class="nav" id="nav">
-      <button data-page="dashboard" class="active"><svg class="icon"><use href="#i-home"/></svg>Сегодня</button>
-      <button data-page="study"><svg class="icon"><use href="#i-cap"/></svg>Учёба</button>
-      <button data-page="life"><svg class="icon"><use href="#i-case"/></svg>Жизнь</button>
-      <button data-page="magistr"><svg class="icon"><use href="#i-globe"/></svg>Магистр.</button>
+      <div class="nav-indicator" id="nav-indicator"></div>
+      <button data-page="dashboard" class="active"><svg class="icon"><use href="#i-home"/></svg><span class="lbl">Сегодня</span></button>
+      <button data-page="study"><svg class="icon"><use href="#i-cap"/></svg><span class="lbl">Учёба</span></button>
+      <button data-page="life"><svg class="icon"><use href="#i-case"/></svg><span class="lbl">Жизнь</span></button>
+      <button data-page="magistr"><svg class="icon"><use href="#i-globe"/></svg><span class="lbl">Магистр.</span></button>
     </nav>
     <div class="subnav" id="study-subnav">
       <button type="button" data-sub="schedule" onclick="goPage('schedule')">Расписание</button>
@@ -2673,6 +2682,16 @@ function submitLockPassword() { submitSiteAuth(); }
   if (login && !isSiteAuthed()) setTimeout(function(){ login.focus(); }, 100);
 })();
 
+function positionNavIndicator() {
+  const nav = document.getElementById('nav');
+  const ind = document.getElementById('nav-indicator');
+  const active = nav && nav.querySelector('button.active');
+  if (!nav || !ind || !active) return;
+  ind.style.left = active.offsetLeft + 'px';
+  ind.style.width = active.offsetWidth + 'px';
+}
+window.addEventListener('resize', positionNavIndicator);
+
 function goPage(p, skipLock) {
   if (!isSiteAuthed()) {
     applySiteAuthUI();
@@ -2682,34 +2701,45 @@ function goPage(p, skipLock) {
   if (p === 'life') p = 'shifts';
   // Смены и Деньги доступны после входа на сайт (тот же пароль)
 
-  const STUDY = ['schedule','attendance','tasks','materials'];
-  const LIFE = ['shifts','finance','watch'];
-  const isStudy = STUDY.includes(p);
-  const isLife = LIFE.includes(p);
-  document.querySelectorAll('#nav button').forEach(b => {
-    const page = b.dataset.page;
-    const active = page === p || (page === 'study' && isStudy) || (page === 'life' && isLife);
-    b.classList.toggle('active', active);
-  });
-  const sub = document.getElementById('study-subnav');
-  if (sub) {
-    sub.classList.toggle('show', isStudy);
-    sub.querySelectorAll('button').forEach(b => {
-      b.classList.toggle('active', b.dataset.sub === p);
+  function applyPageSwitch() {
+    const STUDY = ['schedule','attendance','tasks','materials'];
+    const LIFE = ['shifts','finance','watch'];
+    const isStudy = STUDY.includes(p);
+    const isLife = LIFE.includes(p);
+    document.querySelectorAll('#nav button').forEach(b => {
+      const page = b.dataset.page;
+      const active = page === p || (page === 'study' && isStudy) || (page === 'life' && isLife);
+      b.classList.toggle('active', active);
+    });
+    const sub = document.getElementById('study-subnav');
+    if (sub) {
+      sub.classList.toggle('show', isStudy);
+      sub.querySelectorAll('button').forEach(b => {
+        b.classList.toggle('active', b.dataset.sub === p);
+      });
+    }
+    const subLife = document.getElementById('life-subnav');
+    if (subLife) {
+      subLife.classList.toggle('show', isLife);
+      subLife.querySelectorAll('button').forEach(b => {
+        b.classList.toggle('active', b.dataset.sub === p);
+      });
+    }
+    ['dashboard','schedule','attendance','shifts','tasks','materials','magistr','watch','finance'].forEach(id => {
+      const el = document.getElementById('page-' + id);
+      if (el) el.classList.toggle('hidden', id !== p);
     });
   }
-  const subLife = document.getElementById('life-subnav');
-  if (subLife) {
-    subLife.classList.toggle('show', isLife);
-    subLife.querySelectorAll('button').forEach(b => {
-      b.classList.toggle('active', b.dataset.sub === p);
-    });
+
+  // Плавный переход между страницами (нативный браузерный API, без библиотек;
+  // там, где не поддерживается, просто переключает мгновенно).
+  if (document.startViewTransition) {
+    document.startViewTransition(applyPageSwitch);
+  } else {
+    applyPageSwitch();
   }
-  ['dashboard','schedule','attendance','shifts','tasks','materials','magistr','watch','finance'].forEach(id => {
-    const el = document.getElementById('page-' + id);
-    if (el) el.classList.toggle('hidden', id !== p);
-  });
   render();
+  positionNavIndicator();
 }
 
 function confetti() {
@@ -4099,7 +4129,7 @@ function render() {
 }
 // первичная отрисовка после готовности DOM/авторизации
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => { try { render(); } catch(e) {} });
+  document.addEventListener('DOMContentLoaded', () => { try { render(); positionNavIndicator(); } catch(e) {} });
 } else {
   try { render(); } catch(e) {}
 }
