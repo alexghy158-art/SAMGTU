@@ -2,7 +2,7 @@
 import { classesWithStatus } from '../store.js';
 import { calcPay, shiftHours, shiftConflicts, PAY } from '../logic.js';
 import { esc, todayISO, addDays, fmtShort, weekday, monthKey, monthLabel, rub, num, nextId, relDays, plural } from '../utils.js';
-import { openForm, empty } from '../ui.js';
+import { openForm, empty, groupTabs } from '../ui.js';
 
 const TYPES = ['ПОЛЕВАЯ', 'МСК', 'Другая'];
 
@@ -49,8 +49,9 @@ export function shiftForm(ctx, shift, preset = {}) {
 
 export default {
   id: 'work',
+  group: 'work',
   title: 'Работа',
-  icon: '◷',
+  icon: 'work',
   render(ctx, v) {
     const s = ctx.state;
     const t = todayISO();
@@ -81,6 +82,7 @@ export default {
         <div><p class="eyebrow">Смены</p><h1>Работа</h1></div>
         <div class="head-actions"><button class="btn primary" data-act="add">+ Смена</button></div>
       </header>
+      ${groupTabs([['work', 'Смены'], ['money', 'Деньги']], 'work')}
 
       <div class="toolbar wrap">
         <select data-change="month" aria-label="Месяц">${months.map((m) => `<option value="${m}" ${m === mk ? 'selected' : ''}>${monthLabel(m)}</option>`).join('')}</select>

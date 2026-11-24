@@ -1,0 +1,10 @@
+{
+  "name": "samgtu-tracker",
+  "private": true,
+  "description": "Личный трекер: статический сайт + плановая функция Netlify для push-напоминаний",
+  "type": "module",
+  "dependencies": {
+    "@netlify/blobs": "11.1.7",
+    "web-push": "3.6.7"
+  }
+}

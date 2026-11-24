@@ -4,6 +4,7 @@ import { attendanceStats, classConflict } from '../logic.js';
 import { esc, todayISO, addDays, mondayOf, fmtShort, fmtLong, DAY_SHORT, parseISO, timeToMin, monthKey, monthLabel, relDays, nextId } from '../utils.js';
 import { openForm, segmented, empty } from '../ui.js';
 import { lessonRow, setStatus } from './today.js';
+import { sessionView, sessionActions, sessionSummary } from './session.js';
 
 const TASK_STATUS = ['Не начато', 'В процессе', 'Сдано', 'Отменено'];
 const PRIO = ['Низкий', 'Средний', 'Высокий'];
@@ -227,19 +228,22 @@ function materialsView(ctx, v) {
 
 export default {
   id: 'study',
+  group: 'study',
   title: 'Учёба',
-  icon: '✎',
+  icon: 'study',
   render(ctx, v) {
     const tab = v.tab || 'week';
     const classes = classesWithStatus(ctx.state);
-    const body = { week: weekView, att: attendanceView, tasks: tasksView, mat: materialsView }[tab](ctx, v, classes);
+    const body = { week: weekView, att: attendanceView, tasks: tasksView, mat: materialsView, session: sessionView }[tab](ctx, v, classes);
+    const ses = sessionSummary(ctx.state.exams);
     const open = ctx.state.tasks.filter((x) => x.status !== 'Сдано' && x.status !== 'Отменено').length;
     return `
       <header class="page-head"><div><p class="eyebrow">СамГТУ · осень 2026</p><h1>Учёба</h1></div></header>
-      ${segmented([['week', 'Неделя'], ['att', 'Посещаемость'], ['tasks', `Задания${open ? ` · ${open}` : ''}`], ['mat', 'Материалы']], tab, 'tab')}
+      ${segmented([['week', 'Неделя'], ['att', 'Посещаемость'], ['tasks', `Задания${open ? ` · ${open}` : ''}`], ['session', `Сессия${ses.upcoming.length ? ` · ${ses.upcoming.length}` : ''}`], ['mat', 'Материалы']], tab, 'tab')}
       ${body}`;
   },
   actions: {
+    ...sessionActions,
     tab: (el, ctx, v) => ((v.tab = el.dataset.v), ctx.rerender()),
     week: (el, ctx, v) => ((v.week = el.dataset.d === '0' ? 0 : (v.week || 0) + Number(el.dataset.d)), ctx.rerender()),
     month: (el, ctx, v) => ((v.month = el.value), ctx.rerender()),

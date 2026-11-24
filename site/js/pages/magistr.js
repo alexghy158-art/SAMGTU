@@ -179,9 +179,10 @@ function guidesView() {
 
 export default {
   id: 'magistr',
+  group: 'more',
   title: 'Магистратура',
   short: 'Вузы',
-  icon: '✈',
+  icon: 'plane',
   render(ctx, v) {
     const tab = v.tab || 'my';
     const body = { my: myView, cat: catalogView, dl: deadlinesView, docs: docsView, guides: guidesView }[tab](ctx);

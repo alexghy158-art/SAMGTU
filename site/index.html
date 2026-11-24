@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Трекер</title>
   <meta name="description" content="Личный трекер: пары СамГТУ, смены, деньги, магистратура, кино">
-  <meta name="theme-color" content="#f6f5f1" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#151618" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f4f5fa" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f1115" media="(prefers-color-scheme: dark)">
   <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -21,11 +21,15 @@
 <body>
   <div class="layout">
     <aside class="side">
-      <a class="brand" href="#today"><span class="logo">T</span><span>Трекер</span></a>
+      <a class="brand" href="#today"><img src="icons/icon-192.png" alt="" width="32" height="32"><span>Трекер</span></a>
       <nav id="nav" aria-label="Разделы"></nav>
+      <div id="sync-slot" class="sync-slot"></div>
     </aside>
     <main id="main"><p class="empty">Загрузка…</p></main>
   </div>
+  <button id="fab" class="fab" type="button" aria-label="Быстро добавить">
+    <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+  </button>
   <dialog id="modal"></dialog>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <noscript><p class="empty">Для работы трекера нужен JavaScript.</p></noscript>

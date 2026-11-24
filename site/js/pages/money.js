@@ -1,7 +1,7 @@
 // «Деньги»: кошельки, дневной лимит до выплаты, операции, категории.
 import { WALLETS, walletName, walletTotal, spendable, budget } from '../logic.js';
 import { esc, todayISO, fmtShort, fmtLong, monthKey, monthLabel, rub, num, nextId } from '../utils.js';
-import { openForm, segmented, empty } from '../ui.js';
+import { openForm, segmented, empty, groupTabs } from '../ui.js';
 
 const QUICK_CATS = ['еда', 'транспорт', 'кафе', 'сигареты', 'связь', 'учёба', 'одежда', 'прочее'];
 
@@ -54,8 +54,9 @@ export function opForm(ctx, preset = {}, op = null) {
 
 export default {
   id: 'money',
-  title: 'Деньги',
-  icon: '₽',
+  group: 'work',
+  title: 'Работа',
+  icon: 'work',
   render(ctx, v) {
     const f = ctx.state.finance;
     const t = todayISO();
@@ -85,6 +86,7 @@ export default {
           <button class="btn primary" data-act="add" data-type="expense">− Расход</button>
         </div>
       </header>
+      ${groupTabs([['work', 'Смены'], ['money', 'Деньги']], 'money')}
 
       <div class="grid2">
         <section class="card">

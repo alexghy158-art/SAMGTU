@@ -102,3 +102,17 @@ export function segmented(items, active, act) {
 export function empty(text) {
   return `<p class="empty">${esc(text)}</p>`;
 }
+
+/** Вкладки-ссылки внутри группы разделов (например, Смены | Деньги). */
+export function groupTabs(items, active) {
+  return `<nav class="seg seg-nav" aria-label="Подразделы">${items
+    .map(([id, l]) => `<a href="#${id}" class="${id === active ? 'on' : ''}" ${id === active ? 'aria-current="page"' : ''}>${esc(l)}</a>`)
+    .join('')}</nav>`;
+}
+
+/** Заголовок страницы в стиле приложения. */
+export function pageHead(title, eyebrow = '', actions = '') {
+  return `<header class="page-head"><div>${eyebrow ? `<p class="eyebrow">${esc(eyebrow)}</p>` : ''}<h1>${esc(title)}</h1></div>${
+    actions ? `<div class="head-actions">${actions}</div>` : ''
+  }</header>`;
+}

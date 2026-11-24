@@ -1,6 +1,6 @@
 // Хранилище: состояние в localStorage, миграция со старой версии, бэкап.
 import { CLASSES } from '../data/schedule.js';
-import { SEED_SHIFTS, SEED_WATCH, SEED_UNIS } from '../data/seed.js';
+import { SEED_SHIFTS, SEED_WATCH, SEED_UNIS, SEED_POSTS, SEED_HABITS } from '../data/seed.js';
 import { CATALOG } from '../data/catalog.js';
 import { DEFAULT_LINKS } from './links.js';
 import { todayISO, subjHue } from './utils.js';
@@ -46,6 +46,17 @@ function fresh() {
     watch: withIds(SEED_WATCH),
     links: withIds(DEFAULT_LINKS),
     profile: { name: '' },
+    // Сессия: зачёты, экзамены, курсовые и оценки.
+    exams: [],
+    // Жизнь
+    habits: withIds(SEED_HABITS),
+    habitLog: {}, // { 'YYYY-MM-DD': [habitId, …] }
+    goals: [],
+    todos: [],
+    diary: {}, // { 'YYYY-MM-DD': { mood: 1..5, text } }
+    // «Твой ход»
+    posts: withIds(SEED_POSTS),
+    settings: { remindTodos: true, remindClasses: false, classLead: 10, remindShifts: true, shiftLead: 60, remindExams: true, remindPosts: true },
     updatedAt: null,
   };
 }
@@ -100,9 +111,17 @@ function normalize(s) {
   out.finance = { ...base.finance, ...(s.finance || {}), wallets: { ...base.finance.wallets, ...(s.finance?.wallets || {}) } };
   out.magistr = { ...base.magistr, ...(s.magistr || {}) };
   out.magistr.unis = fixUnis(Array.isArray(out.magistr.unis) ? out.magistr.unis : base.magistr.unis);
-  for (const k of ['shifts', 'tasks', 'materials', 'watch', 'links']) if (!Array.isArray(out[k])) out[k] = base[k];
+  for (const k of ['shifts', 'tasks', 'materials', 'watch', 'links', 'exams', 'habits', 'goals', 'todos', 'posts']) if (!Array.isArray(out[k])) out[k] = base[k];
   out.profile = { ...base.profile, ...(s.profile || {}) };
-  for (const k of ['attendance', 'notes', 'salaryGoals']) if (!out[k] || typeof out[k] !== 'object') out[k] = {};
+  out.settings = { ...base.settings, ...(s.settings || {}) };
+  for (const k of ['attendance', 'notes', 'salaryGoals', 'habitLog', 'diary']) if (!out[k] || typeof out[k] !== 'object' || Array.isArray(out[k])) out[k] = {};
+  // Старые «заметки дня» переезжают в дневник.
+  for (const [d, text] of Object.entries(out.notes)) {
+    if (!text) continue;
+    const e = out.diary[d] || { mood: 0, text: '' };
+    if (!e.text) out.diary[d] = { ...e, text };
+  }
+  out.notes = {};
   out.version = 6;
   return out;
 }
@@ -135,11 +154,24 @@ export function load() {
 }
 
 let saveFailed = false;
+let onPersist = null;
+/** Подписка на каждое сохранение (для облачной синхронизации). */
+export function setPersistHook(fn) {
+  onPersist = fn;
+}
+/** Записать состояние, пришедшее из облака, без повторной отправки. */
+export function persistQuiet(state) {
+  try {
+    localStorage.setItem(KEY, JSON.stringify(state));
+  } catch {}
+}
+export { normalize };
 export function persist(state) {
   state.updatedAt = new Date().toISOString();
   try {
     localStorage.setItem(KEY, JSON.stringify(state));
     saveFailed = false;
+    onPersist?.(state);
     return true;
   } catch {
     saveFailed = true;

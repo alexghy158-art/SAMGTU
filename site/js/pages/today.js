@@ -1,10 +1,12 @@
-// «Сегодня»: пары, смена, бюджет, ближайшие дедлайны, заметка дня.
+// «Главная»: живая карточка дня, сервисы, пары, дела, настроение, привычки, смена, дедлайны.
 import { classesWithStatus, persist, subjStyle } from '../store.js';
 import { linkTiles } from '../links.js';
 import { calcPay, classConflict, shiftHours, attendanceStats, streak, budget, STATUSES } from '../logic.js';
 import { esc, todayISO, addDays, fmtLong, DAY_FULL, parseISO, nowMin, timeToMin, rub, relDays, monthKey, num, fmtShort, daysBetween, plural, greeting, fmtDur } from '../utils.js';
 import { shiftForm } from './work.js';
 import { opForm } from './money.js';
+import { todoRow, toggleTodo, todoForm, quickTodoForm, mountQuickTodo, habitChips, toggleHabit, moodPicker, setMood } from './life.js';
+import { sessionSummary } from './session.js';
 
 export function lessonRow(c, shifts, { live = false } = {}) {
   const now = nowMin();
@@ -98,8 +100,9 @@ function hero(s, todays, nextDay, nextList, upNext) {
 
 export default {
   id: 'today',
-  title: 'Сегодня',
-  icon: '◎',
+  group: 'today',
+  title: 'Главная',
+  icon: 'home',
   render(ctx) {
     const s = ctx.state;
     const t = todayISO();
@@ -133,11 +136,78 @@ export default {
     const soon = [
       ...s.tasks
         .filter((x) => x.deadline && x.status !== 'Сдано' && x.status !== 'Отменено' && daysBetween(t, x.deadline) <= 7)
-        .map((x) => ({ date: x.deadline, title: x.what || 'Задание', sub: x.subject, href: '#study' })),
+        .map((x) => ({ date: x.deadline, title: x.what || 'Задание', sub: x.subject, href: '#study', icon: '📝' })),
+      ...s.exams
+        .filter((x) => x.date && x.date >= t && !x.grade && daysBetween(t, x.date) <= 14)
+        .map((x) => ({ date: x.date, title: `${x.kind}: ${x.subject}`, sub: x.time ? `в ${x.time}${x.room ? ' · ' + x.room : ''}` : 'Сессия', href: '#study', icon: '🎓' })),
+      ...s.posts
+        .filter((x) => x.date && x.date >= t && x.status !== 'Опубликован' && daysBetween(t, x.date) <= 3)
+        .map((x) => ({ date: x.date, title: x.title, sub: `Пост «Твой ход» · ${x.status}`, href: '#tvoyhod', icon: '📣' })),
       ...s.magistr.deadlines
         .filter((x) => x.date && x.date >= t && daysBetween(t, x.date) <= 30)
-        .map((x) => ({ date: x.date, title: x.title, sub: `Магистратура · ${x.type || ''}`, href: '#magistr' })),
+        .map((x) => ({ date: x.date, title: x.title, sub: `Магистратура · ${x.type || ''}`, href: '#magistr', icon: '✈️' })),
     ].sort((a, b) => a.date.localeCompare(b.date));
+
+    const todoToday = s.todos
+      .filter((x) => !x.done && x.due && x.due <= t)
+      .sort((a, b) => (a.due + (a.time || '99')).localeCompare(b.due + (b.time || '99')));
+    const todoNoDate = s.todos.filter((x) => !x.done && !x.due).length;
+    const ses = sessionSummary(s.exams);
+    const diaryToday = s.diary[t] || {};
+
+    const lessonsCard = `<section class="card w-lessons">
+        <div class="sec-head"><h2>📚 Пары сегодня</h2><a href="#study" class="muted small">Неделя ›</a></div>
+        ${
+          todays.length
+            ? `<ul class="lessons">${todays.map((c) => lessonRow(c, s.shifts, { live: true })).join('')}</ul>`
+            : nextDay
+              ? `<p class="muted">Сегодня пар нет. Следующие — ${relDays(nextDay)}, ${fmtLong(nextDay)}:</p><ul class="lessons compact">${nextList
+                  .map((c) => `<li class="lesson" style="${subjStyle(c.subject)}"><div class="l-time"><b>${esc(c.start)}</b></div><div class="l-body"><div class="l-title">${esc(c.subject)}</div><div class="l-meta"><span class="tag t-${esc(c.type)}">${esc(c.type)}</span></div></div></li>`)
+                  .join('')}</ul>`
+              : '<p class="muted">Пар в расписании больше нет. Добавьте расписание нового семестра в <code>data/schedule.js</code>.</p>'
+        }
+      </section>`;
+
+    const todoCard = `<section class="card w-todos">
+        <div class="sec-head"><h2>✅ Дела на сегодня</h2><a href="#life" class="muted small">Все дела ›</a></div>
+        ${todoToday.length ? `<ul class="todos">${todoToday.slice(0, 7).map(todoRow).join('')}</ul>` : '<p class="muted">На сегодня дел нет 🎉</p>'}
+        ${todoToday.length > 7 ? `<p class="muted small">и ещё ${todoToday.length - 7}…</p>` : ''}
+        ${todoNoDate ? `<p class="muted small">${todoNoDate} ${plural(todoNoDate, 'дело', 'дела', 'дел')} без даты</p>` : ''}
+        ${quickTodoForm('Быстро добавить дело…')}
+      </section>`;
+
+    const dayCard = `<section class="card w-day">
+        <div class="sec-head"><h2>Как день?</h2><a href="#diary" class="muted small">Дневник ›</a></div>
+        ${moodPicker(s, t)}
+        <textarea class="note" rows="2" placeholder="Пара слов о дне…" data-input="diaryText">${esc(diaryToday.text || '')}</textarea>
+        <div class="sec-head" style="margin-top:14px"><h3>Привычки</h3><a href="#habits" class="muted small">Все ›</a></div>
+        ${habitChips(s)}
+      </section>`;
+
+    const shiftCard = `<section class="card w-shift">
+        <div class="sec-head"><h2>💼 Смена</h2><a href="#work" class="muted small">Все смены ›</a></div>
+        ${
+          shift
+            ? `<div class="shift-mini">
+                <div><b>${shift.startDate === t ? 'Сегодня' : esc(relDays(shift.startDate))}</b>, ${fmtShort(shift.startDate)} · ${esc(shift.startTime)}–${esc(shift.endTime)} <span class="tag">${esc(shift.type)}</span></div>
+                <small class="muted">${shiftHours(shift).toFixed(1).replace('.0', '')} ч${shift.guests !== '' && shift.guests != null ? ` · ${esc(shift.guests)} гостей · ${rub(calcPay(shift).total)}` : ''}</small>
+                <button class="btn sm" data-act="editShift" data-id="${shift.id}">Открыть</button>
+              </div>`
+            : '<p class="muted">Ближайших смен нет.</p>'
+        }
+      </section>`;
+
+    const soonCard = `<section class="card w-soon">
+        <h2>⏰ Скоро</h2>
+        ${
+          soon.length
+            ? `<ul class="list">${soon
+                .slice(0, 8)
+                .map((x) => `<li><a href="${x.href}"><b>${x.icon} ${esc(x.title)}</b><small>${esc(x.sub)}</small></a><span class="badge ${x.date <= addDays(t, 2) ? 'warn' : ''}">${esc(relDays(x.date))}</span></li>`)
+                .join('')}</ul>`
+            : '<p class="muted">Горящих дедлайнов нет.</p>'
+        }
+      </section>`;
 
     return `
     ${hero(s, todays, nextDay, nextList, upNext)}
@@ -148,65 +218,40 @@ export default {
     </section>
 
     <section class="stats">
-      <div class="stat"><span>Посещаемость</span><b>${st.pct == null ? '—' : st.pct + '%'}</b><small>${st.was} был · ${st.miss} пропуск${st.unmarked ? ` · ${st.unmarked} без отметки` : ''}</small></div>
-      <div class="stat"><span>Серия без пропусков</span><b>${str}</b><small>${str ? 'учебных дней подряд' : 'отмечайте пары'}</small></div>
-      <div class="stat"><span>Заработано в месяце</span><b>${rub(earned)}</b><small>${monthShifts.length} ${plural(monthShifts.length, 'смена', 'смены', 'смен')}${goal ? ` · цель ${rub(goal)}` : ''}</small>${
+      <div class="stat"><span>Можно потратить</span><b class="${b.leftToday < 0 ? 'neg-text' : ''}">${rub(b.leftToday)}</b><small>сегодня · до ${b.nextKind === 'аванс' ? 'аванса' : 'зарплаты'} ${b.daysLeft} дн.</small></div>
+      <div class="stat"><span>Заработано в ${['январе','феврале','марте','апреле','мае','июне','июле','августе','сентябре','октябре','ноябре','декабре'][new Date().getMonth()]}</span><b>${rub(earned)}</b><small>${monthShifts.length} ${plural(monthShifts.length, 'смена', 'смены', 'смен')}${goal ? ` · цель ${rub(goal)}` : ''}</small>${
         goal ? `<div class="bar"><i style="width:${Math.min(100, (earned / goal) * 100)}%"></i></div>` : ''
       }</div>
-      <div class="stat ${b.leftToday < 0 ? 'neg' : ''}"><span>Можно потратить сегодня</span><b>${rub(b.leftToday)}</b><small>до ${b.nextKind === 'аванс' ? 'аванса' : 'зарплаты'} ${b.daysLeft} дн. · ${rub(b.dailyToday)}/день</small></div>
+      <div class="stat"><span>Посещаемость</span><b>${st.pct == null ? '—' : st.pct + '%'}</b><small>${str ? `🔥 ${str} ${plural(str, 'день', 'дня', 'дней')} без пропусков` : `${st.was} был · ${st.miss} пропуск`}</small></div>
+      <a class="stat" href="#study"><span>Сессия</span><b>${ses.next ? `${daysBetween(t, ses.next.date)} дн.` : ses.avg ? ses.avg.toFixed(2) : '—'}</b><small>${ses.next ? `до: ${esc(ses.next.subject)}` : ses.avg ? 'средний балл' : 'добавьте экзамены'}</small></a>
     </section>
 
-    <div class="grid2">
-      <section class="card">
-        <h2>Пары сегодня</h2>
-        ${
-          todays.length
-            ? `<ul class="lessons">${todays.map((c) => lessonRow(c, s.shifts, { live: true })).join('')}</ul>`
-            : nextDay
-              ? `<p class="muted">Сегодня пар нет. Следующие — ${relDays(nextDay)}, ${fmtLong(nextDay)}:</p><ul class="lessons compact">${nextList
-                  .map((c) => `<li class="lesson" style="${subjStyle(c.subject)}"><div class="l-time"><b>${esc(c.start)}</b></div><div class="l-body"><div class="l-title">${esc(c.subject)}</div><div class="l-meta"><span class="tag t-${esc(c.type)}">${esc(c.type)}</span></div></div></li>`)
-                  .join('')}</ul>`
-              : '<p class="muted">Пар в расписании больше нет. Добавьте расписание нового семестра в <code>data/schedule.js</code>.</p>'
-        }
-      </section>
-
-      <div class="stack">
-        <section class="card">
-          <h2>Смена</h2>
-          ${
-            shift
-              ? `<div class="shift-mini">
-                  <div><b>${shift.startDate === t ? 'Сегодня' : esc(relDays(shift.startDate))}</b>, ${fmtShort(shift.startDate)} · ${esc(shift.startTime)}–${esc(shift.endTime)} <span class="tag">${esc(shift.type)}</span></div>
-                  <small class="muted">${shiftHours(shift).toFixed(1).replace('.0', '')} ч${shift.guests !== '' && shift.guests != null ? ` · ${esc(shift.guests)} гостей · ${rub(calcPay(shift).total)}` : ''}</small>
-                  <button class="btn sm" data-act="editShift" data-id="${shift.id}">Открыть</button>
-                </div>`
-              : '<p class="muted">Ближайших смен нет.</p>'
-          }
-        </section>
-
-        <section class="card">
-          <h2>Скоро</h2>
-          ${
-            soon.length
-              ? `<ul class="list">${soon
-                  .map((x) => `<li><a href="${x.href}"><b>${esc(x.title)}</b><small>${esc(x.sub)}</small></a><span class="badge ${x.date <= addDays(t, 2) ? 'warn' : ''}">${esc(relDays(x.date))}</span></li>`)
-                  .join('')}</ul>`
-              : '<p class="muted">Горящих дедлайнов нет.</p>'
-          }
-        </section>
-
-        <section class="card">
-          <h2>Заметка дня</h2>
-          <textarea class="note" rows="3" placeholder="Что важно сегодня…" data-input="note">${esc(s.notes[t] || '')}</textarea>
-        </section>
-      </div>
+    <div class="home-grid">
+      <div class="stack">${lessonsCard}${todoCard}</div>
+      <div class="stack">${dayCard}${shiftCard}${soonCard}</div>
     </div>`;
   },
+  mount: (root, ctx) => mountQuickTodo(root, ctx),
   actions: {
     status: setStatus,
     addShift: (el, ctx) => shiftForm(ctx),
     editShift: (el, ctx) => shiftForm(ctx, ctx.state.shifts.find((x) => x.id === Number(el.dataset.id))),
     addExpense: (el, ctx) => opForm(ctx, { type: 'expense' }),
+    toggleTodo: (el, ctx) => toggleTodo(ctx, el.dataset.id),
+    editTodo: (el, ctx) => todoForm(ctx, ctx.state.todos.find((x) => x.id === Number(el.dataset.id))),
+    habit: (el, ctx) => toggleHabit(ctx, Number(el.dataset.id)),
+    mood: (el, ctx) => setMood(ctx, el.dataset.d, Number(el.dataset.v)),
+    diaryText(el, ctx) {
+      clearTimeout(el._t);
+      el._t = setTimeout(() => {
+        const t = todayISO();
+        const e = ctx.state.diary[t] || { mood: 0, text: '' };
+        e.text = el.value;
+        if (!e.mood && !e.text) delete ctx.state.diary[t];
+        else ctx.state.diary[t] = e;
+        ctx.saveQuiet();
+      }, 500);
+    },
     note(el, ctx) {
       clearTimeout(el._t);
       el._t = setTimeout(() => {

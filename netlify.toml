@@ -1,7 +1,11 @@
-# Статический сайт без сборки: Netlify отдаёт файлы из корня репозитория как есть.
+# Сайт — статика из папки site/ (без сборки). Функция напоминаний — netlify/functions/.
 [build]
-  publish = "."
+  publish = "site"
   command = ""
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
 
 [[headers]]
   for = "/*"
@@ -10,7 +14,7 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
     X-Frame-Options = "DENY"
 
-# JS/CSS всегда проверяются на свежесть, чтобы после пуша сразу видеть новую версию.
+# JS/CSS/данные всегда проверяются на свежесть, чтобы после пуша сразу видеть новую версию.
 [[headers]]
   for = "/js/*"
   [headers.values]

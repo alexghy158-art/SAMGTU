@@ -34,8 +34,9 @@ function itemForm(ctx, it) {
 
 export default {
   id: 'watch',
+  group: 'more',
   title: 'Кино',
-  icon: '▶',
+  icon: 'film',
   render(ctx, v) {
     const st = v.st || 'Хочу';
     const ty = v.ty || 'all';
