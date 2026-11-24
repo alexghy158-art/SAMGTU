@@ -6,12 +6,16 @@ import webpush from 'web-push';
 const KEY = 'vapid';
 
 export async function getVapidKeys() {
-  const store = getStore('push');
-  let keys = await store.get(KEY, { type: 'json' });
-  if (keys?.publicKey && keys?.privateKey) return keys;
+  // strong: только что записанное значение сразу видно при чтении (по умолчанию — eventual).
+  const store = getStore({ name: 'push', consistency: 'strong' });
+  const existing = await store.get(KEY, { type: 'json' });
+  if (existing?.publicKey && existing?.privateKey) return existing;
+
   const fresh = webpush.generateVAPIDKeys();
-  // onlyIfNew: если два вызова пришли одновременно, победит первый, остальные перечитают.
-  await store.setJSON(KEY, fresh, { onlyIfNew: true });
-  keys = await store.get(KEY, { type: 'json' });
-  return keys;
+  // onlyIfNew: если два вызова пришли одновременно, запишется только первый.
+  const res = await store.setJSON(KEY, fresh, { onlyIfNew: true });
+  if (res?.modified) return fresh;
+  const winner = await store.get(KEY, { type: 'json' });
+  if (!winner?.publicKey) throw new Error('Не удалось получить VAPID-ключи из Netlify Blobs');
+  return winner;
 }
