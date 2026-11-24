@@ -1,0 +1,9 @@
+{
+  "name": "Трекер",
+  "short_name": "Трекер",
+  "start_url": "./#today",
+  "display": "standalone",
+  "background_color": "#f6f5f1",
+  "theme_color": "#2f6f5e",
+  "lang": "ru"
+}
