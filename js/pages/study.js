@@ -1,5 +1,5 @@
 // «Учёба»: неделя, посещаемость по предметам, задания, материалы.
-import { classesWithStatus, SUBJECTS } from '../store.js';
+import { classesWithStatus, SUBJECTS, subjStyle } from '../store.js';
 import { attendanceStats, classConflict } from '../logic.js';
 import { esc, todayISO, addDays, mondayOf, fmtShort, fmtLong, DAY_SHORT, parseISO, timeToMin, monthKey, monthLabel, relDays, nextId } from '../utils.js';
 import { openForm, segmented, empty } from '../ui.js';
@@ -22,7 +22,7 @@ function weekView(ctx, v, classes) {
           list.length
             ? list
                 .map(
-                  (c) => `<div class="slot st-${c.status === 'Был' ? 'ok' : c.status === 'Отменена' ? 'off' : c.status ? 'bad' : 'none'}" title="${esc(c.teacher || '')}">
+                  (c) => `<div class="slot st-${c.status === 'Был' ? 'ok' : c.status === 'Отменена' ? 'off' : c.status ? 'bad' : 'none'}" style="${subjStyle(c.subject)}" title="${esc(c.teacher || '')}">
               <span class="slot-t">${esc(c.start)}–${esc(c.end)}</span>
               <span class="slot-s">${esc(c.subject)}</span>
               <span class="slot-m"><span class="tag t-${esc(c.type)}">${esc(c.type)}</span>${classConflict(c, ctx.state.shifts) ? ' <span class="badge warn">смена</span>' : ''}${c.status ? ` <span class="muted">${esc(c.status)}</span>` : ''}</span>
@@ -77,7 +77,7 @@ function attendanceView(ctx, v, classes) {
         ${rows
           .map(
             (r) => `<button type="button" class="subj-row ${subj === r.s ? 'on' : ''}" data-act="pickSubj" data-v="${esc(r.s)}">
-          <span class="subj-name">${esc(r.s)}</span>
+          <span class="subj-name"><i class="sdot" style="${subjStyle(r.s)}"></i>${esc(r.s)}</span>
           <span class="bar ${r.pct != null && r.pct < 70 ? 'low' : ''}"><i style="width:${r.pct ?? 0}%"></i></span>
           <span class="subj-num">${r.pct == null ? '—' : r.pct + '%'}</span>
           <small class="muted">${r.was}/${r.was + r.miss}${r.unmarked ? ` · ${r.unmarked} ?` : ''}</small>

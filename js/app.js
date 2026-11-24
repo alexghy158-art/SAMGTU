@@ -53,6 +53,7 @@ function render() {
   document.title = `${page.title} · Трекер`;
   const root = document.getElementById('main');
   const scroll = window.scrollY;
+  document.body.classList.toggle('no-anim', render.lastPage === page.id);
   root.innerHTML = page.render(ctx, ctx.view[page.id]);
   page.mount?.(root, ctx, ctx.view[page.id]);
   if (render.lastPage === page.id) window.scrollTo(0, scroll);
@@ -90,4 +91,9 @@ render();
 if (migrated) {
   persist(ctx.state);
   toast('Данные из старой версии трекера перенесены');
+}
+
+// Офлайн-режим и установка на главный экран телефона.
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
 }

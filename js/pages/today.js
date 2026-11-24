@@ -1,7 +1,8 @@
 // «Сегодня»: пары, смена, бюджет, ближайшие дедлайны, заметка дня.
-import { classesWithStatus, persist } from '../store.js';
+import { classesWithStatus, persist, subjStyle } from '../store.js';
+import { linkTiles } from '../links.js';
 import { calcPay, classConflict, shiftHours, attendanceStats, streak, budget, STATUSES } from '../logic.js';
-import { esc, todayISO, addDays, fmtLong, DAY_FULL, parseISO, nowMin, timeToMin, rub, relDays, monthKey, num, fmtShort, daysBetween, plural } from '../utils.js';
+import { esc, todayISO, addDays, fmtLong, DAY_FULL, parseISO, nowMin, timeToMin, rub, relDays, monthKey, num, fmtShort, daysBetween, plural, greeting, fmtDur } from '../utils.js';
 import { shiftForm } from './work.js';
 import { opForm } from './money.js';
 
@@ -12,7 +13,7 @@ export function lessonRow(c, shifts, { live = false } = {}) {
   const st = STATUSES.map(
     (s) => `<button type="button" class="chip st-${s === 'Был' ? 'ok' : s === 'Отменена' ? 'off' : 'bad'} ${c.status === s ? 'on' : ''}" data-act="status" data-key="${esc(c.key)}" data-v="${esc(s)}">${esc(s)}</button>`
   ).join('');
-  return `<li class="lesson ${isNow ? 'now' : ''} ${c.status === 'Отменена' ? 'cancelled' : ''}">
+  return `<li class="lesson ${isNow ? 'now' : ''} ${c.status === 'Отменена' ? 'cancelled' : ''}" style="${subjStyle(c.subject)}">
     <div class="l-time"><b>${esc(c.start)}</b><span>${esc(c.end)}</span></div>
     <div class="l-body">
       <div class="l-title">${esc(c.subject)}</div>
@@ -34,6 +35,67 @@ export function setStatus(el, ctx) {
   ctx.save(status ? `Отмечено: ${status}` : 'Отметка снята');
 }
 
+function hero(s, todays, nextDay, nextList, upNext) {
+  const [hello, part] = greeting();
+  const name = (s.profile?.name || '').trim();
+  const now = nowMin();
+  const live = todays.filter((c) => c.status !== 'Отменена');
+  const cur = live.find((c) => timeToMin(c.start) <= now && now < timeToMin(c.end));
+  const next = live.find((c) => timeToMin(c.start) > now);
+  const done = live.filter((c) => timeToMin(c.end) <= now).length;
+
+  let label;
+  let title;
+  let sub;
+  let pct = null;
+  if (cur) {
+    const a = timeToMin(cur.start);
+    const b = timeToMin(cur.end);
+    label = 'Сейчас идёт';
+    title = cur.subject;
+    sub = `${cur.type} · до конца ${fmtDur(b - now)}${next ? ` · дальше ${next.subject} в ${next.start}` : ' · последняя на сегодня'}`;
+    pct = ((now - a) / (b - a)) * 100;
+  } else if (next) {
+    label = `Через ${fmtDur(timeToMin(next.start) - now)}`;
+    title = next.subject;
+    sub = `${next.type} · ${next.start}–${next.end}${next.teacher ? ' · ' + next.teacher : ''}`;
+  } else if (live.length) {
+    label = 'На сегодня всё';
+    title = 'Пары закончились 🎉';
+    sub = upNext ? `Дальше ${relDays(upNext.date)} в ${upNext.start} · ${upNext.subject}` : 'Можно отдыхать';
+  } else {
+    label = 'Свободный день';
+    title = nextList.length ? `Следующая пара ${relDays(nextDay)}` : 'Пар нет';
+    sub = nextList.length ? `${nextList[0].start} · ${nextList[0].subject}` : 'Семестр в расписании закончился';
+  }
+  const dots = live
+    .map((c) => {
+      const st = timeToMin(c.end) <= now ? 'past' : c === cur ? 'cur' : '';
+      return `<i class="${st}" style="${subjStyle(c.subject)}" title="${esc(c.start)} ${esc(c.subject)}"></i>`;
+    })
+    .join('');
+  const d = parseISO(todayISO());
+  return `<section class="hero hero-${part}">
+    <div class="hero-top">
+      <div>
+        <p class="hero-hello">${hello}${name ? ', ' + esc(name) : ''}</p>
+        <p class="hero-date">${DAY_FULL[d.getDay()]}, ${fmtLong(todayISO())}</p>
+      </div>
+      <div class="hero-actions">
+        <button class="hbtn" data-act="addExpense" aria-label="Добавить расход">− ₽</button>
+        <button class="hbtn" data-act="addShift" aria-label="Добавить смену">+ Смена</button>
+      </div>
+    </div>
+    <div class="hero-now">
+      <span class="hero-label">${esc(label)}</span>
+      <b class="hero-title">${esc(title)}</b>
+      <span class="hero-sub">${esc(sub)}</span>
+      ${pct != null ? `<span class="hero-bar"><i style="width:${pct.toFixed(1)}%"></i></span>` : ''}
+    </div>
+    ${live.length ? `<div class="hero-day"><span class="dots">${dots}</span><small>${done} из ${live.length} ${plural(live.length, 'пары', 'пар', 'пар')} позади</small></div>` : ''}
+  </section>`;
+}
+
 export default {
   id: 'today',
   title: 'Сегодня',
@@ -48,6 +110,9 @@ export default {
       const fut = classes.filter((c) => c.date > t).sort((a, b) => (a.date + a.start).localeCompare(b.date + b.start));
       if (fut.length) nextDay = fut[0].date;
     }
+    const upNext = classes
+      .filter((c) => c.date > t && c.status !== 'Отменена')
+      .sort((a, b) => (a.date + a.start).localeCompare(b.date + b.start))[0];
     const nextList = nextDay ? classes.filter((c) => c.date === nextDay).sort((a, b) => timeToMin(a.start) - timeToMin(b.start)) : [];
 
     // Смены: текущая/сегодняшняя или ближайшая.
@@ -74,15 +139,13 @@ export default {
         .map((x) => ({ date: x.date, title: x.title, sub: `Магистратура · ${x.type || ''}`, href: '#magistr' })),
     ].sort((a, b) => a.date.localeCompare(b.date));
 
-    const d = parseISO(t);
     return `
-    <header class="page-head">
-      <div><p class="eyebrow">${DAY_FULL[d.getDay()]}</p><h1>${fmtLong(t)}</h1></div>
-      <div class="head-actions">
-        <button class="btn" data-act="addExpense">− Расход</button>
-        <button class="btn primary" data-act="addShift">+ Смена</button>
-      </div>
-    </header>
+    ${hero(s, todays, nextDay, nextList, upNext)}
+
+    <section class="services">
+      <div class="sec-head"><h2>Сервисы</h2><a href="#data" class="muted small">Настроить</a></div>
+      ${linkTiles(s.links)}
+    </section>
 
     <section class="stats">
       <div class="stat"><span>Посещаемость</span><b>${st.pct == null ? '—' : st.pct + '%'}</b><small>${st.was} был · ${st.miss} пропуск${st.unmarked ? ` · ${st.unmarked} без отметки` : ''}</small></div>
@@ -101,7 +164,7 @@ export default {
             ? `<ul class="lessons">${todays.map((c) => lessonRow(c, s.shifts, { live: true })).join('')}</ul>`
             : nextDay
               ? `<p class="muted">Сегодня пар нет. Следующие — ${relDays(nextDay)}, ${fmtLong(nextDay)}:</p><ul class="lessons compact">${nextList
-                  .map((c) => `<li class="lesson"><div class="l-time"><b>${esc(c.start)}</b></div><div class="l-body"><div class="l-title">${esc(c.subject)}</div><div class="l-meta"><span class="tag t-${esc(c.type)}">${esc(c.type)}</span></div></div></li>`)
+                  .map((c) => `<li class="lesson" style="${subjStyle(c.subject)}"><div class="l-time"><b>${esc(c.start)}</b></div><div class="l-body"><div class="l-title">${esc(c.subject)}</div><div class="l-meta"><span class="tag t-${esc(c.type)}">${esc(c.type)}</span></div></div></li>`)
                   .join('')}</ul>`
               : '<p class="muted">Пар в расписании больше нет. Добавьте расписание нового семестра в <code>data/schedule.js</code>.</p>'
         }

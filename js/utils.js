@@ -96,3 +96,26 @@ export function relDays(iso) {
   if (d > 0) return `через ${d} ${plural(d, 'день', 'дня', 'дней')}`;
   return `${-d} ${plural(-d, 'день', 'дня', 'дней')} назад`;
 }
+
+/** Стабильный цвет для предмета: один и тот же предмет — один и тот же оттенок. */
+export function subjHue(name) {
+  let h = 0;
+  for (const ch of String(name)) h = (h * 31 + ch.codePointAt(0)) % 360;
+  return h;
+}
+
+export function greeting(d = new Date()) {
+  const h = d.getHours();
+  if (h < 5) return ['Доброй ночи', 'night'];
+  if (h < 12) return ['Доброе утро', 'morning'];
+  if (h < 18) return ['Добрый день', 'day'];
+  return ['Добрый вечер', 'evening'];
+}
+
+export function fmtDur(min) {
+  min = Math.max(0, Math.round(min));
+  const h = Math.floor(min / 60);
+  const m = min % 60;
+  if (!h) return `${m} мин`;
+  return m ? `${h} ч ${m} мин` : `${h} ч`;
+}

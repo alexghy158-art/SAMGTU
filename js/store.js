@@ -2,7 +2,8 @@
 import { CLASSES } from '../data/schedule.js';
 import { SEED_SHIFTS, SEED_WATCH, SEED_UNIS } from '../data/seed.js';
 import { CATALOG } from '../data/catalog.js';
-import { todayISO } from './utils.js';
+import { DEFAULT_LINKS } from './links.js';
+import { todayISO, subjHue } from './utils.js';
 
 const KEY = 'samgtu_v6';
 const OLD_KEYS = ['tracker_ucheba_rabota_v5', 'tracker_ucheba_rabota_v4', 'tracker_ucheba_rabota_v3', 'tracker_ucheba_rabota_v2', 'tracker_ucheba_rabota_v1'];
@@ -43,6 +44,8 @@ function fresh() {
       docs: DEFAULT_DOCS.map((d) => ({ ...d })),
     },
     watch: withIds(SEED_WATCH),
+    links: withIds(DEFAULT_LINKS),
+    profile: { name: '' },
     updatedAt: null,
   };
 }
@@ -97,7 +100,8 @@ function normalize(s) {
   out.finance = { ...base.finance, ...(s.finance || {}), wallets: { ...base.finance.wallets, ...(s.finance?.wallets || {}) } };
   out.magistr = { ...base.magistr, ...(s.magistr || {}) };
   out.magistr.unis = fixUnis(Array.isArray(out.magistr.unis) ? out.magistr.unis : base.magistr.unis);
-  for (const k of ['shifts', 'tasks', 'materials', 'watch']) if (!Array.isArray(out[k])) out[k] = base[k];
+  for (const k of ['shifts', 'tasks', 'materials', 'watch', 'links']) if (!Array.isArray(out[k])) out[k] = base[k];
+  out.profile = { ...base.profile, ...(s.profile || {}) };
   for (const k of ['attendance', 'notes', 'salaryGoals']) if (!out[k] || typeof out[k] !== 'object') out[k] = {};
   out.version = 6;
   return out;
@@ -169,3 +173,10 @@ export function classesWithStatus(state) {
 }
 
 export const SUBJECTS = [...new Set(CLASSES.map((c) => c.subject))].sort((a, b) => a.localeCompare(b, 'ru'));
+
+/** CSS-переменная оттенка предмета: известные предметы разнесены по «золотому углу». */
+export function subjStyle(name) {
+  const i = SUBJECTS.indexOf(name);
+  const h = i >= 0 ? Math.round((i * 137.5 + 150) % 360) : subjHue(name);
+  return `--h:${h}`;
+}

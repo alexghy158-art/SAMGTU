@@ -63,7 +63,7 @@ function catalogDetail(ctx, c) {
   const tracked = ctx.state.magistr.unis.some((u) => u.catalogId === c.id);
   const dlg = openView(
     `${c.flag || ''} ${c.name}`,
-    `${c.img ? `<img class="hero" src="${esc(c.img)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}
+    `${c.img ? `<img class="cat-hero" src="${esc(c.img)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}
      <p class="muted">${esc(c.sub)}</p>
      <dl class="facts">${Object.entries(c.facts || {}).map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>
      ${(c.sections || []).map((s) => `<h4>${esc(s.h)}</h4><p>${esc(s.t)}</p>`).join('')}
